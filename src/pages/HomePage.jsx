@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeSpaceIllustration, HeadphonesListeningIllustration, ArchTestimonialGraphic, HoldingHandsBannerIllustration } from '../components/EditorialIllustrations';
-import { Calendar, Video, ArrowRight, CheckCircle2, Sparkles, Baby, HeartPulse, ClipboardCheck, Activity, GraduationCap, ShieldCheck, Heart } from 'lucide-react';
+import { Calendar, Video, ArrowRight, CheckCircle2, Sparkles, Baby, HeartPulse, ClipboardCheck, Activity, GraduationCap } from 'lucide-react';
 
 export const HomePage = ({ onNavigate, onOpenBooking }) => {
   return (
@@ -57,15 +57,25 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
                 </span>
               </div>
 
-              {/* Action Buttons */}
+              {/* Two Aesthetic Action Buttons */}
               <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
-                <button className="btn-black" onClick={() => onOpenBooking('In-Person Consultation')} style={{ padding: '14px 28px' }}>
+                {/* In-Person Consultation Button */}
+                <button 
+                  className="btn-black" 
+                  onClick={() => onOpenBooking('In-Person Consultation')} 
+                  style={{ padding: '14px 28px', fontSize: '0.938rem', fontWeight: 800 }}
+                >
                   <Calendar size={18} />
                   <span>Book In-Person Consultation</span>
                 </button>
 
-                <button className="btn-outline-black" onClick={() => onOpenBooking('Online Tele-Health')} style={{ padding: '13px 24px' }}>
-                  <Video size={18} />
+                {/* Proper Aesthetic Online Consultation Button */}
+                <button 
+                  className="btn-outline-theme" 
+                  onClick={() => onOpenBooking('Online Tele-Health')} 
+                  style={{ padding: '13px 26px', fontSize: '0.938rem', fontWeight: 800, border: '2px solid #0E0E10' }}
+                >
+                  <Video size={18} color="#FF497C" />
                   <span>Book Online Consultation</span>
                 </button>
               </div>
