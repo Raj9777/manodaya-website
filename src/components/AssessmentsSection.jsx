@@ -1,0 +1,360 @@
+import React, { useState } from 'react';
+import { ClipboardCheck, HeartPulse, Activity, GraduationCap, ArrowRight, Clock, Wrench, X, CheckCircle2 } from 'lucide-react';
+import { ASSESSMENTS } from '../data/content';
+
+export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
+  const [filterCategory, setFilterCategory] = useState('all');
+  const [activeModalItem, setActiveModalItem] = useState(null);
+
+  const filteredList = ASSESSMENTS.filter(item => {
+    if (filterCategory === 'child') return item.category === 'child';
+    if (filterCategory === 'adult') return item.category === 'adult';
+    if (currentMode === 'child') return item.category === 'child';
+    if (currentMode === 'adult') return item.category === 'adult';
+    return true;
+  });
+
+  return (
+    <section id="assessments" className="section-padding" style={{ backgroundColor: '#FFFFFF' }}>
+      <div className="container">
+        {/* Section Header */}
+        <div className="section-header reveal-element">
+          <span className="section-badge" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF' }}>
+            <ClipboardCheck size={14} /> Comprehensive Clinical Care
+          </span>
+          <h2 className="section-title">
+            Our Core Clinical Services
+          </h2>
+          <p className="section-subtitle">
+            Multidisciplinary psychological assessment, psychotherapy, cognitive rehabilitation, and professional student training.
+          </p>
+        </div>
+
+        {/* 4 Core Services Grid Cards */}
+        <div 
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '24px',
+            marginBottom: '64px'
+          }}
+        >
+          {/* Card 1: Assessments */}
+          <div className="minimal-card reveal-element" style={{ borderTop: '4px solid #FF5E8E' }}>
+            <div 
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '16px',
+                backgroundColor: '#FFE4EC',
+                color: '#FF5E8E',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '16px'
+              }}
+            >
+              <ClipboardCheck size={26} />
+            </div>
+            <h3 style={{ fontSize: '1.35rem', marginBottom: '10px', color: '#0E0E10' }}>
+              1. Assessments
+            </h3>
+            <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '20px', lineHeight: 1.5 }}>
+              ADHD, Autism, IQ, Learning Disability (SLD), Neuropsychological & Memory assessments.
+            </p>
+            <a href="#assessments-list" style={{ fontWeight: 700, fontSize: '0.875rem', color: '#FF5E8E', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span>View All Batteries</span>
+              <ArrowRight size={14} />
+            </a>
+          </div>
+
+          {/* Card 2: Therapies */}
+          <div className="minimal-card reveal-element" style={{ borderTop: '4px solid #8A4FFF' }}>
+            <div 
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '16px',
+                backgroundColor: '#EDE9FE',
+                color: '#8A4FFF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '16px'
+              }}
+            >
+              <HeartPulse size={26} />
+            </div>
+            <h3 style={{ fontSize: '1.35rem', marginBottom: '10px', color: '#0E0E10' }}>
+              2. Therapies
+            </h3>
+            <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '20px', lineHeight: 1.5 }}>
+              CBT, DBT, ACT, Mindfulness, Child & Adolescent Therapy, Couples & Family Therapy.
+            </p>
+            <a href="#therapies" style={{ fontWeight: 700, fontSize: '0.875rem', color: '#8A4FFF', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span>Explore Therapies</span>
+              <ArrowRight size={14} />
+            </a>
+          </div>
+
+          {/* Card 3: Cognitive Remediation */}
+          <div className="minimal-card reveal-element" style={{ borderTop: '4px solid #10B981' }}>
+            <div 
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '16px',
+                backgroundColor: '#D1FAE5',
+                color: '#10B981',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '16px'
+              }}
+            >
+              <Activity size={26} />
+            </div>
+            <h3 style={{ fontSize: '1.35rem', marginBottom: '10px', color: '#0E0E10' }}>
+              3. Cognitive Remediation
+            </h3>
+            <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '20px', lineHeight: 1.5 }}>
+              Attention, Memory, and Executive Function Training for ADHD, Stroke, and Dementia.
+            </p>
+            <a href="#rehab" style={{ fontWeight: 700, fontSize: '0.875rem', color: '#10B981', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span>Explore Toolkit</span>
+              <ArrowRight size={14} />
+            </a>
+          </div>
+
+          {/* Card 4: Support & Training */}
+          <div className="minimal-card reveal-element" style={{ borderTop: '4px solid #FFB800' }}>
+            <div 
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '16px',
+                backgroundColor: '#FEF3C7',
+                color: '#D97706',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '16px'
+              }}
+            >
+              <GraduationCap size={26} />
+            </div>
+            <h3 style={{ fontSize: '1.35rem', marginBottom: '10px', color: '#0E0E10' }}>
+              4. Support & Training
+            </h3>
+            <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '20px', lineHeight: 1.5 }}>
+              Support Groups, Internships for Psychology Students, and Clinical Workshops.
+            </p>
+            <a href="#support-groups" style={{ fontWeight: 700, fontSize: '0.875rem', color: '#D97706', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span>Join Groups & Internships</span>
+              <ArrowRight size={14} />
+            </a>
+          </div>
+        </div>
+
+        {/* Detailed Assessment Batteries Section with Fixed Perfect Alignment */}
+        <div id="assessments-list" style={{ paddingTop: '20px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+            <h3 style={{ fontSize: '2rem', fontWeight: 900, color: '#0E0E10', marginBottom: '8px' }}>
+              Standardized Psychometric & Diagnostic Batteries
+            </h3>
+            <p style={{ color: '#6B7280', fontSize: '1rem', maxWidth: '600px', margin: '0 auto' }}>
+              Standardized clinical evaluation tools administered by certified neuropsychologists.
+            </p>
+
+            {/* Filter Pills */}
+            <div 
+              style={{
+                display: 'inline-flex',
+                gap: '8px',
+                marginTop: '20px',
+                backgroundColor: '#FAFAFD',
+                padding: '6px',
+                borderRadius: '9999px',
+                border: '1px solid #E2E8F0'
+              }}
+            >
+              <button 
+                onClick={() => setFilterCategory('all')}
+                style={{
+                  padding: '8px 20px',
+                  borderRadius: '9999px',
+                  fontWeight: 700,
+                  fontSize: '0.813rem',
+                  backgroundColor: filterCategory === 'all' ? '#0E0E10' : 'transparent',
+                  color: filterCategory === 'all' ? '#FFFFFF' : '#0E0E10',
+                  transition: 'all 0.2s ease',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                All Batteries ({ASSESSMENTS.length})
+              </button>
+
+              <button 
+                onClick={() => setFilterCategory('child')}
+                style={{
+                  padding: '8px 20px',
+                  borderRadius: '9999px',
+                  fontWeight: 700,
+                  fontSize: '0.813rem',
+                  backgroundColor: filterCategory === 'child' ? '#FF497C' : 'transparent',
+                  color: filterCategory === 'child' ? '#FFFFFF' : '#0E0E10',
+                  transition: 'all 0.2s ease',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Child & Adolescent
+              </button>
+
+              <button 
+                onClick={() => setFilterCategory('adult')}
+                style={{
+                  padding: '8px 20px',
+                  borderRadius: '9999px',
+                  fontWeight: 700,
+                  fontSize: '0.813rem',
+                  backgroundColor: filterCategory === 'adult' ? '#0F3832' : 'transparent',
+                  color: filterCategory === 'adult' ? '#FFFFFF' : '#0E0E10',
+                  transition: 'all 0.2s ease',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Adult & Geriatric
+              </button>
+            </div>
+          </div>
+
+          {/* Cards Grid with Equal Heights & Clean Alignment */}
+          <div 
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gap: '24px',
+              alignItems: 'stretch'
+            }}
+          >
+            {filteredList.map((item) => (
+              <div 
+                key={item.id}
+                className="minimal-card reveal-element"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  backgroundColor: '#FAFAFD',
+                  borderColor: '#E2E8F0'
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                    <span className="badge-status" style={{ backgroundColor: item.category === 'child' ? '#FFE4EC' : '#EDE9FE', color: item.category === 'child' ? '#FF497C' : '#7C3AED' }}>
+                      {item.badge}
+                    </span>
+                    <span style={{ fontSize: '0.813rem', color: '#6B7280', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Clock size={14} /> {item.duration}
+                    </span>
+                  </div>
+
+                  <h4 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '10px', color: '#0E0E10' }}>
+                    {item.title}
+                  </h4>
+
+                  <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '18px', lineHeight: 1.5, minHeight: '60px' }}>
+                    {item.description}
+                  </p>
+
+                  <div 
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      padding: '12px 14px',
+                      borderRadius: '12px',
+                      marginBottom: '20px',
+                      fontSize: '0.813rem',
+                      border: '1px solid #E2E8F0',
+                      minHeight: '70px'
+                    }}
+                  >
+                    <div style={{ fontWeight: 700, marginBottom: '4px', color: '#8A4FFF', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Wrench size={13} /> Standardized Batteries & Tools:
+                    </div>
+                    <span style={{ color: '#0E0E10' }}>{item.tools}</span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px', marginTop: 'auto' }}>
+                  <button 
+                    className="btn-black"
+                    onClick={() => onSelectAssessment(item.title)}
+                    style={{ flex: 1, padding: '10px 14px', fontSize: '0.875rem', border: '2px solid #0E0E10' }}
+                  >
+                    <span>Book Assessment</span>
+                  </button>
+
+                  <button 
+                    className="btn-outline-theme"
+                    onClick={() => setActiveModalItem(item)}
+                    style={{ padding: '10px 14px', fontSize: '0.875rem', border: '1.5px solid #0E0E10' }}
+                  >
+                    Info
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Info Modal */}
+        {activeModalItem && (
+          <div className="modal-overlay" onClick={() => setActiveModalItem(null)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close-btn" onClick={() => setActiveModalItem(null)}>
+                <X size={20} />
+              </button>
+
+              <span className="section-badge" style={{ backgroundColor: '#EDE9FE', color: '#7C3AED' }}>
+                {activeModalItem.badge}
+              </span>
+
+              <h2 style={{ fontSize: '1.75rem', color: '#0E0E10', margin: '12px 0' }}>
+                {activeModalItem.title}
+              </h2>
+
+              <p style={{ color: '#6B7280', marginBottom: '24px', lineHeight: 1.6 }}>
+                {activeModalItem.description}
+              </p>
+
+              <div style={{ backgroundColor: '#FAFAFD', padding: '20px', borderRadius: '16px', marginBottom: '24px', border: '1px solid #E2E8F0' }}>
+                <h4 style={{ color: '#0E0E10', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Wrench size={16} color="#8A4FFF" /> Standardized Clinical Batteries:
+                </h4>
+                <p style={{ fontSize: '0.938rem', color: '#0E0E10', margin: 0 }}>{activeModalItem.tools}</p>
+                <div style={{ marginTop: '12px', fontSize: '0.875rem', color: '#6B7280' }}>
+                  Expected Evaluation Duration: <strong>{activeModalItem.duration}</strong>
+                </div>
+              </div>
+
+              <button 
+                className="btn-black"
+                onClick={() => {
+                  const title = activeModalItem.title;
+                  setActiveModalItem(null);
+                  onSelectAssessment(title);
+                }}
+                style={{ width: '100%', border: '2px solid #0E0E10' }}
+              >
+                Book {activeModalItem.title}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
