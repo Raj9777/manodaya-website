@@ -1,4 +1,4 @@
-/* MANODAYA Design System - Aesthetic Button Styling & Vector Animations */
+/* MANODAYA Design System - Aesthetic Button Styling & Interactive Vector Animations */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap');
 
@@ -119,12 +119,64 @@ button {
 }
 
 /* ==========================================================================
-   BI-DIRECTIONAL SCROLL IN & OUT ANIMATIONS (Dynamic Viewport Triggers)
+   VECTOR OVERLAP FIX & INTERACTIVE MOUSE ANIMATIONS
+   ========================================================================== */
+
+/* Prevent Overlapping & Ensure Clean Isolation */
+.vector-container {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  overflow: visible;
+  padding: 12px;
+}
+
+/* Base Vector SVG Styling & Floating Animation */
+.section-svg-graphic {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-width: 100%;
+  overflow: visible;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  animation: floatContinuous 4.5s ease-in-out infinite;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Interactive Mouse Hover Animation: Scale, Rotate, Soft Glow Shadow */
+.section-svg-graphic:hover {
+  transform: scale(1.05) translateY(-8px) rotate(1.2deg);
+  filter: drop-shadow(0 16px 32px rgba(138, 79, 255, 0.18));
+}
+
+/* Interactive Active Click Bounce */
+.section-svg-graphic:active {
+  transform: scale(0.96) translateY(0);
+}
+
+/* Sub-element Interactive Hover Wobble inside SVGs */
+.section-svg-graphic g, 
+.section-svg-graphic path {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), fill 0.3s ease;
+}
+
+.section-svg-graphic:hover .pulse-heart {
+  animation: pulseHeartContinuous 1.2s ease-in-out infinite;
+}
+
+.section-svg-graphic:hover .float-element {
+  animation: floatContinuous 2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   BI-DIRECTIONAL SCROLL REVEAL & EXIT TRANSFORMS
    ========================================================================== */
 
 .reveal-element {
   opacity: 0;
-  transform: translateY(36px) scale(0.92);
+  transform: translateY(32px) scale(0.94);
   transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
@@ -135,10 +187,9 @@ button {
 }
 
 /* ==========================================================================
-   CONTINUOUS VECTOR GRAPHIC IN-AND-OUT KEYFRAME ANIMATIONS
+   CONTINUOUS VECTOR KEYFRAME ANIMATIONS
    ========================================================================== */
 
-/* Smooth Continuous Up & Down Floating Animation */
 @keyframes floatContinuous {
   0% {
     transform: translateY(0px);
@@ -163,14 +214,13 @@ button {
   }
 }
 
-/* Breathing Pulse Animation for Hearts & Icons */
 @keyframes pulseHeartContinuous {
   0% {
     transform: scale(1);
     opacity: 0.9;
   }
   50% {
-    transform: scale(1.12);
+    transform: scale(1.14);
     opacity: 1;
   }
   100% {
@@ -179,7 +229,6 @@ button {
   }
 }
 
-/* Soft Wave Tilt Animation */
 @keyframes waveContinuous {
   0% {
     transform: rotate(-3deg);
@@ -192,23 +241,6 @@ button {
   }
 }
 
-/* In-and-Out Scale & Opacity Fade Animation */
-@keyframes inOutScaleFade {
-  0% {
-    transform: scale(0.96);
-    opacity: 0.85;
-  }
-  50% {
-    transform: scale(1.04);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0.96);
-    opacity: 0.85;
-  }
-}
-
-/* Animation Helper Classes */
 .float-element {
   animation: floatContinuous 3.5s ease-in-out infinite;
 }
@@ -227,28 +259,10 @@ button {
   transform-origin: bottom center;
 }
 
-.in-out-fade {
-  animation: inOutScaleFade 3s ease-in-out infinite;
-}
-
-/* Vector SVG Interactive Hover & Base Floating */
-.section-svg-graphic {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  animation: floatContinuous 4.5s ease-in-out infinite;
-}
-
-.section-svg-graphic:hover {
-  transform: scale(1.03) translateY(-6px);
-}
-
 /* ==========================================================================
    AESTHETIC BUTTON SYSTEM
    ========================================================================== */
 
-/* Primary Black CTA Button */
 .btn-black {
   display: inline-flex;
   align-items: center;
@@ -279,7 +293,6 @@ button {
   transform: translateY(0) scale(0.98);
 }
 
-/* Vibrant Pink CTA Button */
 .btn-pink {
   display: inline-flex;
   align-items: center;
@@ -307,7 +320,6 @@ button {
   transform: translateY(0) scale(0.98);
 }
 
-/* Vibrant Purple Specialty Button */
 .btn-purple {
   display: inline-flex;
   align-items: center;
@@ -330,7 +342,6 @@ button {
   box-shadow: 0 12px 28px rgba(138, 79, 255, 0.38);
 }
 
-/* Outline Ghost Button */
 .btn-outline-theme {
   display: inline-flex;
   align-items: center;
@@ -357,7 +368,6 @@ button {
   transform: translateY(0) scale(0.98);
 }
 
-/* Theme Primary Button Fallback */
 .btn-primary-theme {
   display: inline-flex;
   align-items: center;
