@@ -1,58 +1,88 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  ShieldCheck, Lock, Unlock, Search, Filter, MessageSquare, Mail, Phone, 
-  Calendar, UserCheck, RefreshCw, X, PlusCircle, Trash2, Send, Download, 
-  FileText, CheckCircle2, History, Award, Clock
+  ShieldCheck, Lock, Search, Download, Printer, LogOut, CheckCircle2, 
+  Clock, MessageSquare, Mail, RefreshCw, Home, Users, Calendar, PlusCircle, Sparkles, GraduationCap 
 } from 'lucide-react';
 import { INITIAL_CRM_LEADS } from '../data/content';
+
+export const INITIAL_WORKSHOPS = [
+  {
+    id: "ws-101",
+    title: "Clinical Neuropsychology & Battery Administration Masterclass",
+    date: "15th August 2026",
+    time: "10:00 AM - 04:00 PM",
+    mode: "In-Person (Bhubaneswar Clinic)",
+    instructor: "Dr. Certified Neuropsychologist",
+    fee: "₹2,500",
+    seats: "15 Seats",
+    description: "Hands-on training in administering NIMHANS Battery, WISC-V, VSMS, and reporting clinical formulations for psychology students."
+  },
+  {
+    id: "ws-102",
+    title: "ADOS-2 & Pediatric Autism Screening Practicum",
+    date: "28th August 2026",
+    time: "02:00 PM - 06:00 PM",
+    mode: "Hybrid / Live Interactive",
+    instructor: "Senior Clinical Child Psychologist",
+    fee: "₹1,800",
+    seats: "20 Seats",
+    description: "Diagnostic screening protocols, behavioral observations, and CARS-2 scoring workshops for child developmental assessments."
+  }
+];
 
 export const FullCrmDashboard = ({ onNavigateHome }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [passcodeError, setPasscodeError] = useState(false);
 
-  const [activeTab, setActiveTab] = useState('leads'); // 'leads' | 'history' | 'reminders' | 'analytics' | 'add'
+  // Tab State: 'patients' | 'internships' | 'post-workshop' | 'archives'
+  const [activeTab, setActiveTab] = useState('patients');
+
+  // Leads Data
   const [leads, setLeads] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [internships, setInternships] = useState([]);
+  const [workshops, setWorkshops] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  // Reminder modal state
-  const [selectedLeadForReminder, setSelectedLeadForReminder] = useState(null);
-  const [reminderTemplate, setReminderTemplate] = useState('appointment');
-  const [customMsg, setCustomMsg] = useState('');
-
-  // New offline lead state
-  const [newLeadForm, setNewLeadForm] = useState({
-    patientName: '',
-    phone: '',
-    email: '',
-    category: 'adult',
-    service: 'Comprehensive Neuropsychological Assessment',
-    type: 'In-Person Consultation',
-    date: new Date().toISOString().split('T')[0],
-    time: '10:30 AM',
-    notes: ''
+  // New Workshop Form State
+  const [newWorkshop, setNewWorkshop] = useState({
+    title: '',
+    date: '',
+    time: '',
+    mode: 'In-Person (Bhubaneswar Clinic)',
+    instructor: 'MANODAYA Clinical Faculty',
+    fee: '',
+    seats: '15 Seats',
+    description: ''
   });
+  const [workshopPostedSuccess, setWorkshopPostedSuccess] = useState(false);
 
-  // Load leads from localStorage
+  // Load from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('manodaya_crm_leads');
-    if (stored) {
-      try {
-        setLeads(JSON.parse(stored));
-      } catch (e) {
-        setLeads(INITIAL_CRM_LEADS);
-      }
+    const savedLeads = JSON.parse(localStorage.getItem('manodaya_crm_leads') || 'null');
+    if (savedLeads && savedLeads.length > 0) {
+      setLeads(savedLeads);
     } else {
-      localStorage.setItem('manodaya_crm_leads', JSON.stringify(INITIAL_CRM_LEADS));
       setLeads(INITIAL_CRM_LEADS);
+      localStorage.setItem('manodaya_crm_leads', JSON.stringify(INITIAL_CRM_LEADS));
+    }
+
+    const savedInternships = JSON.parse(localStorage.getItem('manodaya_crm_internships') || '[]');
+    setInternships(savedInternships);
+
+    const savedWorkshops = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
+    if (savedWorkshops && savedWorkshops.length > 0) {
+      setWorkshops(savedWorkshops);
+    } else {
+      setWorkshops(INITIAL_WORKSHOPS);
+      localStorage.setItem('manodaya_workshops', JSON.stringify(INITIAL_WORKSHOPS));
     }
   }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (passcode === '1234' || passcode === 'admin' || passcode === '') {
+    if (passcode === '1234') {
       setIsAuthenticated(true);
       setPasscodeError(false);
     } else {
@@ -61,99 +91,57 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
   };
 
   const handleUpdateStatus = (id, newStatus) => {
-    const updated = leads.map(l => l.id === id ? { ...l, status: newStatus } : l);
+    const updated = leads.map(lead => lead.id === id ? { ...lead, status: newStatus } : lead);
     setLeads(updated);
     localStorage.setItem('manodaya_crm_leads', JSON.stringify(updated));
   };
 
-  const handleDeleteLead = (id) => {
-    if (window.confirm("Are you sure you want to delete this patient record?")) {
-      const updated = leads.filter(l => l.id !== id);
-      setLeads(updated);
-      localStorage.setItem('manodaya_crm_leads', JSON.stringify(updated));
-    }
+  const handleUpdateInternshipStatus = (id, newStatus) => {
+    const updated = internships.map(app => app.id === id ? { ...app, status: newStatus } : app);
+    setInternships(updated);
+    localStorage.setItem('manodaya_crm_internships', JSON.stringify(updated));
   };
 
-  const handleAddOfflineLead = (e) => {
+  const handlePostWorkshop = (e) => {
     e.preventDefault();
-    const newLead = {
-      id: `MAN-${Math.floor(1000 + Math.random() * 9000)}`,
-      patientName: newLeadForm.patientName,
-      phone: newLeadForm.phone,
-      email: newLeadForm.email || 'N/A',
-      category: newLeadForm.category,
-      service: newLeadForm.service,
-      type: newLeadForm.type,
-      date: newLeadForm.date,
-      time: newLeadForm.time,
-      status: 'New',
-      notes: newLeadForm.notes || 'Offline walk-in registration.',
-      createdAt: new Date().toLocaleString('en-IN')
-    };
+    const wsId = `ws-${Math.floor(100 + Math.random() * 900)}`;
+    const createdWS = { id: wsId, ...newWorkshop };
+    const updatedWSList = [createdWS, ...workshops];
 
-    const updated = [newLead, ...leads];
-    setLeads(updated);
-    localStorage.setItem('manodaya_crm_leads', JSON.stringify(updated));
-    setActiveTab('leads');
-    alert("New patient record registered!");
+    setWorkshops(updatedWSList);
+    localStorage.setItem('manodaya_workshops', JSON.stringify(updatedWSList));
+    setWorkshopPostedSuccess(true);
+
+    setNewWorkshop({
+      title: '',
+      date: '',
+      time: '',
+      mode: 'In-Person (Bhubaneswar Clinic)',
+      instructor: 'MANODAYA Clinical Faculty',
+      fee: '',
+      seats: '15 Seats',
+      description: ''
+    });
+
+    setTimeout(() => setWorkshopPostedSuccess(false), 4000);
   };
 
-  // ITEM 4: Export Excel / CSV Functionality
-  const handleExportCSV = () => {
-    const headers = ["Patient ID,Patient Name,Phone,Email,Category,Service Requested,Consultation Type,Date,Time,Status,Notes\n"];
-    const rows = leads.map(l => 
-      `"${l.id}","${l.patientName}","${l.phone}","${l.email}","${l.category}","${l.service}","${l.type}","${l.date}","${l.time}","${l.status}","${l.notes.replace(/"/g, '""')}"\n`
-    );
-
-    const blob = new Blob([headers.concat(rows).join('')], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `MANODAYA_Patient_Leads_${new Date().toISOString().split('T')[0]}.csv`);
+  // CSV Export
+  const handleExportCSV = (dataList, filename) => {
+    if (!dataList.length) return;
+    const headers = Object.keys(dataList[0]).join(',');
+    const rows = dataList.map(obj => Object.values(obj).map(v => `"${v}"`).join(','));
+    const csvContent = "data:text/csv;charset=utf-8," + [headers, ...rows].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `${filename}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  // ITEM 4: Export PDF Print Summary
-  const handleExportPDF = () => {
-    window.print();
-  };
-
-  const getReminderText = (lead) => {
-    if (reminderTemplate === 'appointment') {
-      return `Hello ${lead.patientName}, this is a gentle reminder from MANODAYA Care regarding your appointment for ${lead.service} on ${lead.date} at ${lead.time} (Old Town, Bhubaneswar). Reply YES to confirm.`;
-    } else if (reminderTemplate === 'followUp') {
-      return `Dear ${lead.patientName}, hope you are doing well. This is MANODAYA follow-up care regarding your ${lead.service}. Please let us know if you require further assistance.`;
-    }
-    return customMsg || `Hello ${lead.patientName}, message from MANODAYA Care.`;
-  };
-
-  const handleLaunchWhatsApp = (lead) => {
-    const cleanPhone = lead.phone.replace(/[^0-9]/g, '');
-    const msg = encodeURIComponent(getReminderText(lead));
-    window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
-  };
-
-  const handleLaunchEmail = (lead) => {
-    const subject = encodeURIComponent(`MANODAYA Appointment Reminder - ${lead.service}`);
-    const body = encodeURIComponent(getReminderText(lead));
-    window.open(`mailto:${lead.email}?subject=${subject}&body=${body}`, '_blank');
-  };
-
-  const filteredLeads = leads.filter(l => {
-    const matchesSearch = l.patientName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          l.phone.includes(searchTerm) ||
-                          l.service.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = categoryFilter === 'all' || l.category === categoryFilter;
-    const matchesStatus = statusFilter === 'all' || l.status === statusFilter;
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
-
-  // ITEM 5: Completed Patient History list
-  const completedHistoryLeads = leads.filter(l => l.status === 'Completed');
-
-  // Password Lock Screen
+  // Lock Screen View
   if (!isAuthenticated) {
     return (
       <div 
@@ -168,13 +156,14 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       >
         <div 
           style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: '24px',
-            maxWidth: '440px',
+            maxWidth: '420px',
             width: '100%',
-            padding: '40px',
-            textAlign: 'center',
-            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)'
+            backgroundColor: '#1E293B',
+            borderRadius: '24px',
+            padding: '40px 32px',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+            border: '1.5px solid #334155',
+            textAlign: 'center'
           }}
         >
           <div 
@@ -182,8 +171,8 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
               width: '64px',
               height: '64px',
               borderRadius: '50%',
-              backgroundColor: '#EDE9FE',
-              color: '#8A4FFF',
+              backgroundColor: 'rgba(138, 79, 255, 0.15)',
+              color: '#A78BFA',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -193,616 +182,552 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
             <Lock size={32} />
           </div>
 
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0F172A', marginBottom: '8px' }}>
-            MANODAYA CRM Portal
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#FFFFFF', marginBottom: '8px' }}>
+            MANODAYA Staff Portal
           </h2>
-          <p style={{ fontSize: '0.875rem', color: '#64748B', marginBottom: '24px' }}>
-            Restricted Staff Access. Please enter the passcode to access patient submissions and records.
+
+          <p style={{ color: '#94A3B8', fontSize: '0.875rem', marginBottom: '28px' }}>
+            Protected Clinical Dashboard. Enter staff passcode to continue.
           </p>
 
           <form onSubmit={handleLogin}>
-            <div className="form-group">
+            <div style={{ marginBottom: '20px' }}>
               <input 
-                type="password" 
-                className="form-input"
-                placeholder="Enter Passcode (e.g. 1234)..." 
+                type="password"
+                placeholder="Enter Staff Passcode (1234)"
                 value={passcode}
                 onChange={(e) => setPasscode(e.target.value)}
-                style={{ textAlign: 'center', fontSize: '1.125rem', letterSpacing: '0.2em' }}
-                autoFocus
+                style={{
+                  width: '100%',
+                  padding: '14px 18px',
+                  borderRadius: '14px',
+                  border: passcodeError ? '2px solid #EF4444' : '1.5px solid #475569',
+                  backgroundColor: '#0F172A',
+                  color: '#FFFFFF',
+                  fontSize: '1rem',
+                  textAlign: 'center',
+                  letterSpacing: '0.2em'
+                }}
               />
+              {passcodeError && (
+                <div style={{ color: '#EF4444', fontSize: '0.813rem', marginTop: '6px', fontWeight: 600 }}>
+                  Incorrect Passcode. Try 1234.
+                </div>
+              )}
             </div>
 
-            {passcodeError && (
-              <p style={{ color: '#EF4444', fontSize: '0.813rem', marginBottom: '16px' }}>
-                Incorrect passcode. (Demo passcode: 1234)
-              </p>
-            )}
-
-            <button className="btn-black" type="submit" style={{ width: '100%', border: '2px solid #0E0E10', marginBottom: '12px' }}>
-              <Unlock size={18} /> Unlock Staff Dashboard
-            </button>
-
-            <button type="button" onClick={onNavigateHome} style={{ fontSize: '0.813rem', color: '#64748B', textDecoration: 'underline' }}>
-              Return to Public Website
+            <button 
+              className="btn-purple"
+              type="submit"
+              style={{ width: '100%', padding: '14px', borderRadius: '14px' }}
+            >
+              Unlock Dashboard
             </button>
           </form>
+
+          <button 
+            onClick={onNavigateHome}
+            style={{
+              marginTop: '20px',
+              color: '#94A3B8',
+              fontSize: '0.813rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <Home size={14} /> Back to Website
+          </button>
         </div>
       </div>
     );
   }
 
-  // Render Full-Page CRM Dashboard
+  // Active leads filter
+  const activeLeads = leads.filter(l => l.status !== 'Completed Archive');
+  const archivedLeads = leads.filter(l => l.status === 'Completed Archive');
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#F8FAFC', color: '#0F172A' }}>
-      {/* Header */}
-      <header 
-        style={{
-          backgroundColor: '#0F172A',
-          color: '#FFFFFF',
-          padding: '16px 32px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '16px'
-        }}
-      >
+      {/* Top Header */}
+      <header style={{ backgroundColor: '#0F172A', color: '#FFFFFF', padding: '16px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#8A4FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF' }}>
-            <ShieldCheck size={20} />
-          </div>
-          <div>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#FFF', margin: 0 }}>
-              MANODAYA Staff CRM
-            </h1>
-            <p style={{ fontSize: '0.75rem', color: '#94A3B8', margin: 0 }}>
-              Patient Management, History & Export Center
-            </p>
-          </div>
+          <ShieldCheck size={26} color="#A78BFA" />
+          <span style={{ fontSize: '1.25rem', fontWeight: 900, letterSpacing: '-0.02em' }}>
+            MANODAYA Staff CRM Portal
+          </span>
         </div>
 
-        {/* Dashboard Tabs */}
-        <div style={{ display: 'flex', gap: '6px', backgroundColor: '#1E293B', padding: '4px', borderRadius: '9999px', flexWrap: 'wrap' }}>
-          <button 
-            onClick={() => setActiveTab('leads')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '9999px',
-              fontSize: '0.813rem',
-              fontWeight: 700,
-              backgroundColor: activeTab === 'leads' ? '#8A4FFF' : 'transparent',
-              color: activeTab === 'leads' ? '#FFF' : '#94A3B8',
-              border: 'none'
-            }}
-          >
-            Submissions ({leads.length})
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button onClick={onNavigateHome} className="btn-outline-theme" style={{ color: '#FFF', borderColor: '#475569', padding: '8px 16px', fontSize: '0.813rem' }}>
+            <Home size={14} /> Back to Main Site
           </button>
 
-          {/* ITEM 5: Separate Section for Completed Patient History */}
-          <button 
-            onClick={() => setActiveTab('history')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '9999px',
-              fontSize: '0.813rem',
-              fontWeight: 700,
-              backgroundColor: activeTab === 'history' ? '#10B981' : 'transparent',
-              color: activeTab === 'history' ? '#FFF' : '#94A3B8',
-              border: 'none'
-            }}
-          >
-            Completed History ({completedHistoryLeads.length})
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('analytics')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '9999px',
-              fontSize: '0.813rem',
-              fontWeight: 700,
-              backgroundColor: activeTab === 'analytics' ? '#8A4FFF' : 'transparent',
-              color: activeTab === 'analytics' ? '#FFF' : '#94A3B8',
-              border: 'none'
-            }}
-          >
-            Analytics
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('add')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '9999px',
-              fontSize: '0.813rem',
-              fontWeight: 700,
-              backgroundColor: activeTab === 'add' ? '#8A4FFF' : 'transparent',
-              color: activeTab === 'add' ? '#FFF' : '#94A3B8',
-              border: 'none'
-            }}
-          >
-            + Add Walk-In
-          </button>
-        </div>
-
-        {/* ITEM 4: Export Buttons & Lock Action */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-          <button 
-            onClick={handleExportCSV}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              backgroundColor: '#10B981',
-              color: '#FFF',
-              padding: '7px 14px',
-              borderRadius: '8px',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              border: 'none',
-              cursor: 'pointer'
-            }}
-            title="Export Excel CSV File"
-          >
-            <Download size={14} /> Export Excel/CSV
-          </button>
-
-          <button 
-            onClick={handleExportPDF}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              backgroundColor: '#FF497C',
-              color: '#FFF',
-              padding: '7px 14px',
-              borderRadius: '8px',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              border: 'none',
-              cursor: 'pointer'
-            }}
-            title="Export PDF Summary View"
-          >
-            <FileText size={14} /> Export PDF
-          </button>
-
-          <button 
-            onClick={() => setIsAuthenticated(false)}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              backgroundColor: 'rgba(255,255,255,0.1)',
-              color: '#FFF',
-              padding: '7px 14px',
-              borderRadius: '8px',
-              fontSize: '0.75rem',
-              fontWeight: 600
-            }}
-          >
-            <Lock size={13} /> Lock
+          <button onClick={() => setIsAuthenticated(false)} className="btn-black" style={{ backgroundColor: '#EF4444', borderColor: '#EF4444', padding: '8px 16px', fontSize: '0.813rem' }}>
+            <LogOut size={14} /> Lock Dashboard
           </button>
         </div>
       </header>
 
-      {/* Main Workspace */}
-      <div className="container" style={{ padding: '36px 24px' }}>
-        {/* Tab 1: Submissions Table */}
-        {activeTab === 'leads' && (
+      {/* Main Content Area */}
+      <div className="container" style={{ padding: '32px 24px' }}>
+        {/* Navigation Tabs */}
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '28px', borderBottom: '2px solid #E2E8F0', paddingBottom: '12px', flexWrap: 'wrap' }}>
+          <button 
+            onClick={() => setActiveTab('patients')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: '9999px',
+              fontWeight: 800,
+              fontSize: '0.875rem',
+              backgroundColor: activeTab === 'patients' ? '#0F172A' : '#FFFFFF',
+              color: activeTab === 'patients' ? '#FFFFFF' : '#64748B',
+              border: '1.5px solid #E2E8F0',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <Users size={16} /> Patient Inquiries ({activeLeads.length})
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('internships')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: '9999px',
+              fontWeight: 800,
+              fontSize: '0.875rem',
+              backgroundColor: activeTab === 'internships' ? '#8A4FFF' : '#FFFFFF',
+              color: activeTab === 'internships' ? '#FFFFFF' : '#64748B',
+              border: '1.5px solid #E2E8F0',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <GraduationCap size={16} /> Internships & Workshops ({internships.length})
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('post-workshop')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: '9999px',
+              fontWeight: 800,
+              fontSize: '0.875rem',
+              backgroundColor: activeTab === 'post-workshop' ? '#FF497C' : '#FFFFFF',
+              color: activeTab === 'post-workshop' ? '#FFFFFF' : '#64748B',
+              border: '1.5px solid #E2E8F0',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <PlusCircle size={16} /> Post Upcoming Workshop ({workshops.length})
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('archives')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: '9999px',
+              fontWeight: 800,
+              fontSize: '0.875rem',
+              backgroundColor: activeTab === 'archives' ? '#10B981' : '#FFFFFF',
+              color: activeTab === 'archives' ? '#FFFFFF' : '#64748B',
+              border: '1.5px solid #E2E8F0',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <CheckCircle2 size={16} /> Completed Archives ({archivedLeads.length})
+          </button>
+        </div>
+
+        {/* TAB 1: PATIENT INQUIRIES */}
+        {activeTab === 'patients' && (
           <div>
-            {/* Filters Bar */}
-            <div 
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '16px',
-                marginBottom: '24px',
-                backgroundColor: '#FFFFFF',
-                padding: '20px',
-                borderRadius: '16px',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.03)'
-              }}
-            >
-              <div style={{ flex: 1, minWidth: '240px', position: 'relative' }}>
-                <Search size={18} style={{ position: 'absolute', left: '14px', top: '14px', color: '#64748B' }} />
-                <input 
-                  type="text" 
-                  className="form-input"
-                  placeholder="Search patient name, phone, service..." 
-                  style={{ paddingLeft: '42px', fontSize: '0.875rem' }}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Patient Clinical Leads</h2>
+                <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Manage incoming appointment submissions and send WhatsApp reminders.</p>
               </div>
 
-              <select 
-                className="form-select" 
-                style={{ width: '180px', fontSize: '0.875rem' }}
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-              >
-                <option value="all">All Care Types</option>
-                <option value="child">Child Care</option>
-                <option value="adult">Adult Care</option>
-              </select>
-
-              <select 
-                className="form-select" 
-                style={{ width: '160px', fontSize: '0.875rem' }}
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="all">All Statuses</option>
-                <option value="New">New</option>
-                <option value="Scheduled">Scheduled</option>
-                <option value="Contacted">Contacted</option>
-                <option value="Completed">Completed</option>
-              </select>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button onClick={() => handleExportCSV(activeLeads, 'Patient_Leads')} className="btn-outline-theme" style={{ fontSize: '0.813rem', padding: '8px 16px' }}>
+                  <Download size={14} /> Export CSV
+                </button>
+              </div>
             </div>
 
-            {/* Table */}
             <div className="crm-table-container">
               <table className="crm-table">
                 <thead>
                   <tr>
-                    <th>Patient Details</th>
-                    <th>Care Type</th>
-                    <th>Service Requested</th>
-                    <th>Consultation Date</th>
-                    <th>Status Pipeline</th>
-                    <th>Actions & Reminders</th>
+                    <th>Ref ID</th>
+                    <th>Patient Name</th>
+                    <th>Phone / Email</th>
+                    <th>Service Required</th>
+                    <th>Type & Slot</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredLeads.length === 0 ? (
-                    <tr>
-                      <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: '#64748B' }}>
-                        No patient records found matching search filters.
+                  {activeLeads.map((lead) => (
+                    <tr key={lead.id}>
+                      <td><strong>{lead.id}</strong></td>
+                      <td>
+                        <div style={{ fontWeight: 700 }}>{lead.patientName}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748B' }}>Age: {lead.age}</div>
+                      </td>
+                      <td>
+                        <div>{lead.phone}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748B' }}>{lead.email}</div>
+                      </td>
+                      <td><strong style={{ color: '#8A4FFF' }}>{lead.service}</strong></td>
+                      <td>
+                        <div style={{ fontSize: '0.813rem', fontWeight: 600 }}>{lead.type}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748B' }}>{lead.date} @ {lead.time}</div>
+                      </td>
+                      <td>
+                        <select 
+                          value={lead.status}
+                          onChange={(e) => handleUpdateStatus(lead.id, e.target.value)}
+                          style={{
+                            padding: '4px 10px',
+                            borderRadius: '9999px',
+                            fontSize: '0.75rem',
+                            fontWeight: 800,
+                            border: '1px solid #CBD5E1',
+                            backgroundColor: lead.status === 'New' ? '#FEF3C7' : lead.status === 'Scheduled' ? '#D1FAE5' : '#F1F5F9'
+                          }}
+                        >
+                          <option value="New">New Lead</option>
+                          <option value="Contacted">Contacted</option>
+                          <option value="Scheduled">Scheduled</option>
+                          <option value="Completed Archive">Completed Archive</option>
+                        </select>
+                      </td>
+                      <td>
+                        <a 
+                          href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(lead.patientName)},%20this%20is%20MANODAYA%20Clinic%20regarding%20your%20booking%20for%20${encodeURIComponent(lead.service)}.`}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            backgroundColor: '#25D366',
+                            color: '#FFF',
+                            padding: '6px 12px',
+                            borderRadius: '9999px',
+                            fontSize: '0.75rem',
+                            fontWeight: 700
+                          }}
+                        >
+                          <MessageSquare size={12} /> WhatsApp
+                        </a>
                       </td>
                     </tr>
-                  ) : (
-                    filteredLeads.map((lead) => (
-                      <tr key={lead.id}>
-                        <td>
-                          <div style={{ fontWeight: 800, color: '#0F172A' }}>{lead.patientName}</div>
-                          <div style={{ fontSize: '0.813rem', color: '#64748B' }}>
-                            📞 {lead.phone} | ✉️ {lead.email}
-                          </div>
-                          <div style={{ fontSize: '0.75rem', color: '#94A3B8' }}>Ref: {lead.id}</div>
-                        </td>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
+        {/* TAB 2: INTERNSHIPS & WORKSHOPS APPLICATIONS */}
+        {activeTab === 'internships' && (
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Psychology Student Applications</h2>
+                <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Review applications for clinical internships, observerships, and workshops.</p>
+              </div>
+
+              <button onClick={() => handleExportCSV(internships, 'Internship_Applications')} className="btn-outline-theme" style={{ fontSize: '0.813rem', padding: '8px 16px' }}>
+                <Download size={14} /> Export CSV
+              </button>
+            </div>
+
+            {internships.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '48px', backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #E2E8F0' }}>
+                <GraduationCap size={40} color="#8A4FFF" style={{ marginBottom: '12px' }} />
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>No Applications Received Yet</h3>
+                <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Student applications submitted via the website form will appear here automatically.</p>
+              </div>
+            ) : (
+              <div className="crm-table-container">
+                <table className="crm-table">
+                  <thead>
+                    <tr>
+                      <th>Ref ID</th>
+                      <th>Applicant Name</th>
+                      <th>Phone & Email</th>
+                      <th>University / Qualification</th>
+                      <th>App Type & Track</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {internships.map((app) => (
+                      <tr key={app.id}>
+                        <td><strong>{app.id}</strong></td>
                         <td>
-                          <span className="badge-status" style={{ backgroundColor: lead.category === 'child' ? '#FFE4EC' : '#EDE9FE', color: lead.category === 'child' ? '#FF5E8E' : '#7C3AED' }}>
-                            {lead.category === 'child' ? 'Child Care' : 'Adult Care'}
+                          <div style={{ fontWeight: 700 }}>{app.applicantName}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#64748B' }}>{app.createdAt}</div>
+                        </td>
+                        <td>
+                          <div>{app.phone}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#64748B' }}>{app.email}</div>
+                        </td>
+                        <td>
+                          <div style={{ fontWeight: 600 }}>{app.institution}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#64748B' }}>{app.qualification}</div>
+                        </td>
+                        <td>
+                          <span className="badge-status" style={{ backgroundColor: app.applicationType === 'Clinical Internship' ? '#EDE9FE' : '#FEF3C7', color: app.applicationType === 'Clinical Internship' ? '#8A4FFF' : '#D97706', marginBottom: '4px' }}>
+                            {app.applicationType}
                           </span>
+                          <div style={{ fontSize: '0.813rem', fontWeight: 700 }}>{app.workshopTrack}</div>
                         </td>
-
-                        <td>
-                          <div style={{ fontWeight: 700 }}>{lead.service}</div>
-                          <div style={{ fontSize: '0.75rem', color: '#64748B' }}>{lead.type}</div>
-                        </td>
-
-                        <td>
-                          <div style={{ fontWeight: 600 }}>{lead.date}</div>
-                          <div style={{ fontSize: '0.813rem', color: '#64748B' }}>{lead.time}</div>
-                        </td>
-
                         <td>
                           <select 
-                            value={lead.status}
-                            onChange={(e) => handleUpdateStatus(lead.id, e.target.value)}
+                            value={app.status}
+                            onChange={(e) => handleUpdateInternshipStatus(app.id, e.target.value)}
                             style={{
-                              padding: '6px 10px',
-                              borderRadius: '8px',
-                              fontWeight: 700,
-                              fontSize: '0.813rem',
-                              border: '1.5px solid #CBD5E1',
-                              backgroundColor: lead.status === 'New' ? '#E0F2FE' : lead.status === 'Scheduled' ? '#EDE9FE' : lead.status === 'Completed' ? '#D1FAE5' : '#FEF3C7',
-                              color: lead.status === 'New' ? '#0284C7' : lead.status === 'Scheduled' ? '#7C3AED' : lead.status === 'Completed' ? '#059669' : '#D97706'
+                              padding: '4px 10px',
+                              borderRadius: '9999px',
+                              fontSize: '0.75rem',
+                              fontWeight: 800,
+                              border: '1px solid #CBD5E1',
+                              backgroundColor: app.status === 'Pending Review' ? '#FEF3C7' : app.status === 'Accepted' ? '#D1FAE5' : '#F1F5F9'
                             }}
                           >
-                            <option value="New">New</option>
-                            <option value="Scheduled">Scheduled</option>
-                            <option value="Contacted">Contacted</option>
-                            <option value="Completed">Completed Archive</option>
+                            <option value="Pending Review">Pending Review</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Rejected">Rejected</option>
                           </select>
                         </td>
-
                         <td>
-                          <div style={{ display: 'flex', gap: '6px' }}>
-                            <button 
-                              onClick={() => setSelectedLeadForReminder(lead)}
-                              style={{
-                                backgroundColor: '#25D366',
-                                color: '#FFF',
-                                padding: '6px 12px',
-                                borderRadius: '8px',
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
-                                border: 'none',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px'
-                              }}
-                            >
-                              <MessageSquare size={13} /> WhatsApp
-                            </button>
-
-                            <button onClick={() => handleDeleteLead(lead.id)} style={{ color: '#EF4444', padding: '4px', border: 'none', background: 'none' }}>
-                              <Trash2 size={16} />
-                            </button>
-                          </div>
+                          <a 
+                            href={`https://wa.me/${app.phone.replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(app.applicantName)},%20this%20is%20MANODAYA%20regarding%20your%20${encodeURIComponent(app.applicationType)}%20application.`}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              backgroundColor: '#25D366',
+                              color: '#FFF',
+                              padding: '6px 12px',
+                              borderRadius: '9999px',
+                              fontSize: '0.75rem',
+                              fontWeight: 700
+                            }}
+                          >
+                            <MessageSquare size={12} /> Contact
+                          </a>
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 3: POST NEW UPCOMING WORKSHOP */}
+        {activeTab === 'post-workshop' && (
+          <div>
+            <div style={{ marginBottom: '24px' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Post Upcoming Clinical Workshop</h2>
+              <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Announce new training workshops. Posted workshops update live on the website automatically.</p>
+            </div>
+
+            {workshopPostedSuccess && (
+              <div style={{ backgroundColor: '#D1FAE5', color: '#059669', padding: '14px 20px', borderRadius: '14px', marginBottom: '20px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <CheckCircle2 size={20} /> Workshop posted successfully! It is now live on the website feed.
+              </div>
+            )}
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px' }}>
+              {/* Form */}
+              <div style={{ backgroundColor: '#FFFFFF', padding: '32px', borderRadius: '24px', border: '1.5px solid #E2E8F0' }}>
+                <form onSubmit={handlePostWorkshop}>
+                  <div className="form-group">
+                    <label className="form-label">Workshop Title *</label>
+                    <input 
+                      type="text"
+                      required
+                      className="form-input"
+                      placeholder="e.g. Cognitive Rehabilitation & Memory Training Masterclass"
+                      value={newWorkshop.title}
+                      onChange={(e) => setNewWorkshop({ ...newWorkshop, title: e.target.value })}
+                    />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                    <div className="form-group">
+                      <label className="form-label">Date *</label>
+                      <input 
+                        type="text"
+                        required
+                        className="form-input"
+                        placeholder="e.g. 25th September 2026"
+                        value={newWorkshop.date}
+                        onChange={(e) => setNewWorkshop({ ...newWorkshop, date: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">Time Slot *</label>
+                      <input 
+                        type="text"
+                        required
+                        className="form-input"
+                        placeholder="e.g. 10:00 AM - 04:00 PM"
+                        value={newWorkshop.time}
+                        onChange={(e) => setNewWorkshop({ ...newWorkshop, time: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                    <div className="form-group">
+                      <label className="form-label">Registration Fee</label>
+                      <input 
+                        type="text"
+                        className="form-input"
+                        placeholder="e.g. ₹2,000"
+                        value={newWorkshop.fee}
+                        onChange={(e) => setNewWorkshop({ ...newWorkshop, fee: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">Seats Available</label>
+                      <input 
+                        type="text"
+                        className="form-input"
+                        placeholder="e.g. 15 Seats"
+                        value={newWorkshop.seats}
+                        onChange={(e) => setNewWorkshop({ ...newWorkshop, seats: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Mode of Delivery</label>
+                    <select 
+                      className="form-select"
+                      value={newWorkshop.mode}
+                      onChange={(e) => setNewWorkshop({ ...newWorkshop, mode: e.target.value })}
+                    >
+                      <option value="In-Person (Bhubaneswar Clinic)">In-Person (Bhubaneswar Clinic)</option>
+                      <option value="Online Video Interactive">Online Video Interactive</option>
+                      <option value="Hybrid / Both Options">Hybrid / Both Options</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Instructor / Faculty</label>
+                    <input 
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g. Dr. Senior Neuropsychologist"
+                      value={newWorkshop.instructor}
+                      onChange={(e) => setNewWorkshop({ ...newWorkshop, instructor: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Workshop Description & Key Takeaways</label>
+                    <textarea 
+                      className="form-textarea"
+                      rows={4}
+                      placeholder="Describe what students will learn, batteries covered, certificates, and prerequisites..."
+                      value={newWorkshop.description}
+                      onChange={(e) => setNewWorkshop({ ...newWorkshop, description: e.target.value })}
+                    />
+                  </div>
+
+                  <button className="btn-pink" type="submit" style={{ width: '100%', padding: '14px' }}>
+                    <PlusCircle size={18} /> Post Workshop Live
+                  </button>
+                </form>
+              </div>
+
+              {/* Live Preview List */}
+              <div>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '16px' }}>
+                  Currently Active Workshops ({workshops.length})
+                </h3>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {workshops.map((ws) => (
+                    <div key={ws.id} style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '18px', border: '1.5px solid #E2E8F0' }}>
+                      <span className="badge-status" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF', marginBottom: '8px' }}>
+                        {ws.mode}
+                      </span>
+                      <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0E0E10', marginBottom: '6px' }}>
+                        {ws.title}
+                      </h4>
+                      <div style={{ fontSize: '0.813rem', color: '#64748B', marginBottom: '10px' }}>
+                        📅 {ws.date} | ⏰ {ws.time} | 🏷️ {ws.fee}
+                      </div>
+                      <p style={{ fontSize: '0.875rem', color: '#475569', lineHeight: 1.4 }}>
+                        {ws.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}
 
-        {/* ITEM 5: TAB 2 - SEPARATE COMPLETED PATIENT HISTORY SECTION */}
-        {activeTab === 'history' && (
+        {/* TAB 4: COMPLETED ARCHIVES */}
+        {activeTab === 'archives' && (
           <div>
-            <div 
-              style={{
-                backgroundColor: '#D1FAE5',
-                border: '1px solid #6EE7B7',
-                borderRadius: '16px',
-                padding: '20px 24px',
-                marginBottom: '24px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px'
-              }}
-            >
-              <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: '#059669', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <History size={26} />
-              </div>
-              <div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#064E3B', margin: 0 }}>
-                  Completed Patient Care History & Clinical Archives
-                </h3>
-                <p style={{ fontSize: '0.875rem', color: '#047857', margin: '4px 0 0 0' }}>
-                  Archived clinical history of patients who have completed their assessments, therapeutic sessions, or neuro rehabilitation.
-                </p>
-              </div>
+            <div style={{ marginBottom: '20px' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Completed Patient History Archives</h2>
+              <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Archived records marked as Completed.</p>
             </div>
 
             <div className="crm-table-container">
               <table className="crm-table">
                 <thead>
                   <tr>
-                    <th>Completed Patient</th>
-                    <th>Care Service</th>
-                    <th>Consultation Date</th>
-                    <th>Clinical Completion Status</th>
-                    <th>Actions & Follow-up</th>
+                    <th>Ref ID</th>
+                    <th>Patient Name</th>
+                    <th>Phone</th>
+                    <th>Service Provided</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {completedHistoryLeads.length === 0 ? (
-                    <tr>
-                      <td colSpan="5" style={{ textAlign: 'center', padding: '40px', color: '#64748B' }}>
-                        No completed patient archives yet. Update patient status to "Completed Archive" to move them here.
-                      </td>
+                  {archivedLeads.map((lead) => (
+                    <tr key={lead.id}>
+                      <td><strong>{lead.id}</strong></td>
+                      <td>{lead.patientName}</td>
+                      <td>{lead.phone}</td>
+                      <td>{lead.service}</td>
+                      <td><span className="badge-status" style={{ backgroundColor: '#D1FAE5', color: '#059669' }}>Completed</span></td>
                     </tr>
-                  ) : (
-                    completedHistoryLeads.map((lead) => (
-                      <tr key={lead.id}>
-                        <td>
-                          <div style={{ fontWeight: 800, color: '#0F172A' }}>{lead.patientName}</div>
-                          <div style={{ fontSize: '0.813rem', color: '#64748B' }}>
-                            📞 {lead.phone} | ✉️ {lead.email}
-                          </div>
-                          <div style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 700 }}>
-                            Ref: {lead.id}
-                          </div>
-                        </td>
-
-                        <td>
-                          <div style={{ fontWeight: 700 }}>{lead.service}</div>
-                          <div style={{ fontSize: '0.813rem', color: '#64748B' }}>{lead.notes}</div>
-                        </td>
-
-                        <td>
-                          <div style={{ fontWeight: 600 }}>{lead.date}</div>
-                          <div style={{ fontSize: '0.813rem', color: '#64748B' }}>{lead.time}</div>
-                        </td>
-
-                        <td>
-                          <span className="badge-status" style={{ backgroundColor: '#D1FAE5', color: '#059669', padding: '6px 14px' }}>
-                            ✓ Clinical Care Completed
-                          </span>
-                        </td>
-
-                        <td>
-                          <button 
-                            onClick={() => setSelectedLeadForReminder(lead)}
-                            style={{
-                              backgroundColor: '#8A4FFF',
-                              color: '#FFF',
-                              padding: '6px 12px',
-                              borderRadius: '8px',
-                              fontSize: '0.75rem',
-                              fontWeight: 700,
-                              border: 'none',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '4px'
-                            }}
-                          >
-                            <MessageSquare size={13} /> Follow-up Reminder
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
+                  ))}
                 </tbody>
               </table>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 3: Analytics Overview */}
-        {activeTab === 'analytics' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
-            <div className="minimal-card">
-              <h4 style={{ color: '#64748B', fontSize: '0.875rem' }}>Total Submissions</h4>
-              <h2 style={{ fontSize: '3rem', fontWeight: 900, color: '#0F172A' }}>{leads.length}</h2>
-              <p style={{ fontSize: '0.813rem', color: '#10B981' }}>Active Patient Care Requests</p>
-            </div>
-
-            <div className="minimal-card">
-              <h4 style={{ color: '#64748B', fontSize: '0.875rem' }}>Child Care Requests</h4>
-              <h2 style={{ fontSize: '3rem', fontWeight: 900, color: '#FF5E8E' }}>
-                {leads.filter(l => l.category === 'child').length}
-              </h2>
-              <p style={{ fontSize: '0.813rem', color: '#64748B' }}>Pediatric & Teen Care</p>
-            </div>
-
-            <div className="minimal-card">
-              <h4 style={{ color: '#64748B', fontSize: '0.875rem' }}>Adult Care Requests</h4>
-              <h2 style={{ fontSize: '3rem', fontWeight: 900, color: '#8A4FFF' }}>
-                {leads.filter(l => l.category === 'adult').length}
-              </h2>
-              <p style={{ fontSize: '0.813rem', color: '#64748B' }}>Adult & Senior Care</p>
-            </div>
-
-            <div className="minimal-card">
-              <h4 style={{ color: '#64748B', fontSize: '0.875rem' }}>Completed History Archives</h4>
-              <h2 style={{ fontSize: '3rem', fontWeight: 900, color: '#10B981' }}>
-                {completedHistoryLeads.length}
-              </h2>
-              <p style={{ fontSize: '0.813rem', color: '#059669' }}>Archived Patient Records</p>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 4: Add Offline Lead */}
-        {activeTab === 'add' && (
-          <div className="minimal-card" style={{ maxWidth: '640px', margin: '0 auto' }}>
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', fontWeight: 900 }}>Register Offline Walk-In Patient</h3>
-            <form onSubmit={handleAddOfflineLead}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div className="form-group">
-                  <label className="form-label">Patient Full Name *</label>
-                  <input 
-                    type="text" 
-                    required 
-                    className="form-input"
-                    value={newLeadForm.patientName}
-                    onChange={(e) => setNewLeadForm({ ...newLeadForm, patientName: e.target.value })}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Phone / WhatsApp *</label>
-                  <input 
-                    type="tel" 
-                    required 
-                    className="form-input"
-                    value={newLeadForm.phone}
-                    onChange={(e) => setNewLeadForm({ ...newLeadForm, phone: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Service Required</label>
-                <select 
-                  className="form-select"
-                  value={newLeadForm.service}
-                  onChange={(e) => setNewLeadForm({ ...newLeadForm, service: e.target.value })}
-                >
-                  <option value="ADHD & Attention Assessment">ADHD & Attention Assessment</option>
-                  <option value="Autism Spectrum Assessment">Autism Spectrum Assessment</option>
-                  <option value="Comprehensive Neuropsychological Assessment">Comprehensive Neuropsychological Assessment</option>
-                  <option value="Cognitive Behaviour Therapy (CBT)">Cognitive Behaviour Therapy (CBT)</option>
-                  <option value="Post-Stroke Cognitive Rehabilitation">Post-Stroke Cognitive Rehabilitation</option>
-                </select>
-              </div>
-
-              <button className="btn-black" type="submit" style={{ width: '100%', marginTop: '12px', border: '2px solid #0E0E10' }}>
-                Save Offline Patient Record
-              </button>
-            </form>
-          </div>
-        )}
-
-        {/* Reminder Modal */}
-        {selectedLeadForReminder && (
-          <div className="modal-overlay" onClick={() => setSelectedLeadForReminder(null)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '520px' }}>
-              <button className="modal-close-btn" onClick={() => setSelectedLeadForReminder(null)}>
-                <X size={20} />
-              </button>
-
-              <span className="section-badge" style={{ backgroundColor: '#D1FAE5', color: '#059669' }}>
-                Send Patient Reminder
-              </span>
-
-              <h3 style={{ fontSize: '1.4rem', margin: '12px 0', fontWeight: 800 }}>
-                Dispatch Reminder to {selectedLeadForReminder.patientName}
-              </h3>
-
-              <div className="form-group">
-                <label className="form-label">Reminder Preset</label>
-                <select 
-                  className="form-select"
-                  value={reminderTemplate}
-                  onChange={(e) => setReminderTemplate(e.target.value)}
-                >
-                  <option value="appointment">Appointment Date & Time Reminder</option>
-                  <option value="followUp">Post-Care Follow-up</option>
-                  <option value="custom">Custom Message</option>
-                </select>
-              </div>
-
-              {reminderTemplate === 'custom' && (
-                <div className="form-group">
-                  <label className="form-label">Custom Message</label>
-                  <textarea 
-                    rows="3"
-                    className="form-textarea"
-                    value={customMsg}
-                    onChange={(e) => setCustomMsg(e.target.value)}
-                  ></textarea>
-                </div>
-              )}
-
-              <div style={{ backgroundColor: '#F8FAFC', padding: '16px', borderRadius: '12px', fontSize: '0.875rem', marginBottom: '24px', border: '1px dashed #8A4FFF' }}>
-                <strong>Message Preview:</strong>
-                <p style={{ margin: '6px 0 0 0', fontStyle: 'italic' }}>
-                  "{getReminderText(selectedLeadForReminder)}"
-                </p>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <button 
-                  className="btn-primary-theme" 
-                  onClick={() => {
-                    handleLaunchWhatsApp(selectedLeadForReminder);
-                    setSelectedLeadForReminder(null);
-                  }}
-                  style={{ backgroundColor: '#25D366' }}
-                >
-                  <MessageSquare size={16} /> Open WhatsApp
-                </button>
-
-                <button 
-                  className="btn-outline-theme" 
-                  onClick={() => {
-                    handleLaunchEmail(selectedLeadForReminder);
-                    setSelectedLeadForReminder(null);
-                  }}
-                >
-                  <Mail size={16} /> Open Email
-                </button>
-              </div>
             </div>
           </div>
         )}
