@@ -1,5 +1,6 @@
 import React from 'react';
-import { SafeSpaceIllustration, HeadphonesListeningIllustration, ArchTestimonialGraphic, HoldingHandsBannerIllustration } from '../components/EditorialIllustrations';
+import { SafeSpaceIllustration, HeadphonesListeningIllustration, HoldingHandsBannerIllustration } from '../components/EditorialIllustrations';
+import { TestimonialsSection } from '../components/TestimonialsSection';
 import { Calendar, Video, ArrowRight, CheckCircle2, Sparkles, Baby, HeartPulse, ClipboardCheck, Activity, GraduationCap } from 'lucide-react';
 
 export const HomePage = ({ onNavigate, onOpenBooking }) => {
@@ -57,9 +58,8 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
                 </span>
               </div>
 
-              {/* Two Aesthetic Action Buttons */}
+              {/* Action Buttons */}
               <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
-                {/* In-Person Consultation Button */}
                 <button 
                   className="btn-black" 
                   onClick={() => onOpenBooking('In-Person Consultation')} 
@@ -69,7 +69,6 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
                   <span>Book In-Person Consultation</span>
                 </button>
 
-                {/* Proper Aesthetic Online Consultation Button */}
                 <button 
                   className="btn-outline-theme" 
                   onClick={() => onOpenBooking('Online Tele-Health')} 
@@ -91,7 +90,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
         </div>
       </section>
 
-      {/* 2. Core Services Overview (4 Minimal Cards) */}
+      {/* 2. Core Services Overview */}
       <section className="section-padding" style={{ backgroundColor: '#FAFAFD' }}>
         <div className="container">
           <div className="section-header reveal-element">
@@ -103,7 +102,6 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
-            {/* Card 1 */}
             <div className="reference-card reveal-element" style={{ textAlign: 'left' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#FFD2DF', color: '#FF497C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <ClipboardCheck size={26} />
@@ -118,7 +116,6 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               </button>
             </div>
 
-            {/* Card 2 */}
             <div className="reference-card reveal-element" style={{ textAlign: 'left' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#EDE9FE', color: '#8A4FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <HeartPulse size={26} />
@@ -133,7 +130,6 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               </button>
             </div>
 
-            {/* Card 3 */}
             <div className="reference-card reveal-element" style={{ textAlign: 'left' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <Activity size={26} />
@@ -148,7 +144,6 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               </button>
             </div>
 
-            {/* Card 4 */}
             <div className="reference-card reveal-element" style={{ textAlign: 'left' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <GraduationCap size={26} />
@@ -166,7 +161,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
         </div>
       </section>
 
-      {/* 3. DEDICATED SPOTLIGHT SECTION: "We Also Provide Specialized Care For Children & Adolescents" */}
+      {/* 3. DEDICATED SPOTLIGHT SECTION: Child Care Spotlight */}
       <section className="section-padding" style={{ backgroundColor: '#FFF5F8', borderTop: '1px solid #FFE4EC', borderBottom: '1px solid #FFE4EC' }}>
         <div className="container">
           <div 
@@ -216,22 +211,8 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
         </div>
       </section>
 
-      {/* 4. Testimonials Teaser Section */}
-      <section className="section-padding" style={{ backgroundColor: '#FFFFFF', textAlign: 'center' }}>
-        <div className="container">
-          <div className="reveal-element" style={{ maxWidth: '600px', margin: '0 auto -15px auto' }}>
-            <ArchTestimonialGraphic />
-          </div>
-          <div className="reveal-element" style={{ maxWidth: '640px', margin: '0 auto 24px auto' }}>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: '#0E0E10', marginBottom: '8px' }}>
-              What Our Clients Say
-            </h2>
-            <p style={{ color: '#6B7280', fontSize: '1rem' }}>
-              Real stories from people who found support, healing, and hope with MANODAYA.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* 4. Full Interactive Client Feedback & Testimonials Section */}
+      <TestimonialsSection currentMode="all" />
 
       {/* 5. Pre-Footer Banner */}
       <section style={{ backgroundColor: '#F8F6FF', paddingTop: '48px', textAlign: 'center' }}>
