@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { BookingModal } from './components/BookingModal';
+import { LoadingEntryPage } from './components/LoadingEntryPage';
 
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
@@ -14,6 +15,7 @@ import { ContactPage } from './pages/ContactPage';
 import { FullCrmDashboard } from './pages/FullCrmDashboard';
 
 export function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [activePage, setActivePage] = useState('home');
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [initialService, setInitialService] = useState('');
@@ -31,12 +33,13 @@ export function App() {
 
   // Setup Bi-directional Scroll In & Out IntersectionObserver
   useEffect(() => {
+    if (isLoading) return;
+
     const observerCallback = (entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
         } else {
-          // Scroll Out Effect: remove is-visible so it animates back out
           entry.target.classList.remove('is-visible');
         }
       });
@@ -56,86 +59,93 @@ export function App() {
     return () => {
       revealElements.forEach(el => observer.unobserve(el));
     };
-  }, [activePage]);
-
-  // Full-Page Staff CRM Dashboard
-  if (activePage === 'dashboard') {
-    return <FullCrmDashboard onNavigateHome={() => handleNavigate('home')} />;
-  }
+  }, [activePage, isLoading]);
 
   return (
     <div className="app-main-wrapper" style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
-      {/* Navbar with Links & Dropdown */}
-      <Navbar 
-        activePage={activePage}
-        onNavigate={handleNavigate}
-        onOpenBooking={() => handleOpenBookingWithService()}
-      />
+      {/* 1. Mindhaven Loading Entry Splash Page */}
+      {isLoading && (
+        <LoadingEntryPage onComplete={() => setIsLoading(false)} />
+      )}
 
-      {/* Dynamic Multi-Page Router View */}
-      <main>
-        {activePage === 'home' && (
-          <HomePage 
-            onNavigate={handleNavigate} 
-            onOpenBooking={(service) => handleOpenBookingWithService(service)} 
+      {/* Full-Page Staff CRM Dashboard */}
+      {activePage === 'dashboard' ? (
+        <FullCrmDashboard onNavigateHome={() => handleNavigate('home')} />
+      ) : (
+        <>
+          {/* Navbar with Links & Dropdown */}
+          <Navbar 
+            activePage={activePage}
+            onNavigate={handleNavigate}
+            onOpenBooking={() => handleOpenBookingWithService()}
           />
-        )}
 
-        {activePage === 'about' && (
-          <AboutPage 
-            onOpenBooking={(service) => handleOpenBookingWithService(service)} 
+          {/* Dynamic Multi-Page Router View */}
+          <main>
+            {activePage === 'home' && (
+              <HomePage 
+                onNavigate={handleNavigate} 
+                onOpenBooking={(service) => handleOpenBookingWithService(service)} 
+              />
+            )}
+
+            {activePage === 'about' && (
+              <AboutPage 
+                onOpenBooking={(service) => handleOpenBookingWithService(service)} 
+              />
+            )}
+
+            {activePage === 'assessments' && (
+              <AssessmentsPage 
+                currentMode="all" 
+                onSelectAssessment={(service) => handleOpenBookingWithService(service)} 
+              />
+            )}
+
+            {activePage === 'therapies' && (
+              <TherapiesPage 
+                onOpenBooking={(service) => handleOpenBookingWithService(service)} 
+              />
+            )}
+
+            {activePage === 'rehab' && (
+              <RehabPage 
+                onOpenBooking={(service) => handleOpenBookingWithService(service)} 
+              />
+            )}
+
+            {activePage === 'support' && (
+              <SupportGroupsPage 
+                onOpenBooking={(service) => handleOpenBookingWithService(service)} 
+              />
+            )}
+
+            {activePage === 'internship' && (
+              <InternshipPage 
+                onOpenBooking={(service) => handleOpenBookingWithService(service)} 
+              />
+            )}
+
+            {activePage === 'contact' && (
+              <ContactPage />
+            )}
+          </main>
+
+          {/* Footer */}
+          <Footer 
+            currentMode="all"
+            onOpenBooking={() => handleOpenBookingWithService()}
+            onOpenCrm={() => handleNavigate('dashboard')}
           />
-        )}
 
-        {activePage === 'assessments' && (
-          <AssessmentsPage 
-            currentMode="all" 
-            onSelectAssessment={(service) => handleOpenBookingWithService(service)} 
+          {/* Interactive Booking Modal */}
+          <BookingModal 
+            isOpen={bookingModalOpen}
+            onClose={() => setBookingModalOpen(false)}
+            initialService={initialService}
           />
-        )}
-
-        {activePage === 'therapies' && (
-          <TherapiesPage 
-            onOpenBooking={(service) => handleOpenBookingWithService(service)} 
-          />
-        )}
-
-        {activePage === 'rehab' && (
-          <RehabPage 
-            onOpenBooking={(service) => handleOpenBookingWithService(service)} 
-          />
-        )}
-
-        {activePage === 'support' && (
-          <SupportGroupsPage 
-            onOpenBooking={(service) => handleOpenBookingWithService(service)} 
-          />
-        )}
-
-        {activePage === 'internship' && (
-          <InternshipPage 
-            onOpenBooking={(service) => handleOpenBookingWithService(service)} 
-          />
-        )}
-
-        {activePage === 'contact' && (
-          <ContactPage />
-        )}
-      </main>
-
-      {/* Footer */}
-      <Footer 
-        currentMode="all"
-        onOpenBooking={() => handleOpenBookingWithService()}
-        onOpenCrm={() => handleNavigate('dashboard')}
-      />
-
-      {/* Interactive Booking Modal */}
-      <BookingModal 
-        isOpen={bookingModalOpen}
-        onClose={() => setBookingModalOpen(false)}
-        initialService={initialService}
-      />
+        </>
+      )}
     </div>
   );
 }

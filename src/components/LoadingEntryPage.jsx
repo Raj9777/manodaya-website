@@ -1,0 +1,131 @@
+import React, { useState, useEffect } from 'react';
+import { Brain, Sparkles, Heart } from 'lucide-react';
+import { CuteSmilingBrainCard } from './EditorialIllustrations';
+
+export const LoadingEntryPage = ({ onComplete }) => {
+  const [progress, setProgress] = useState(0);
+  const [loadingText, setLoadingText] = useState('Preparing safe clinical space...');
+  const [isFadingOut, setIsFadingOut] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(timer);
+          setTimeout(() => {
+            setIsFadingOut(true);
+            setTimeout(() => {
+              onComplete();
+            }, 600); // 600ms fade out transition
+          }, 300);
+          return 100;
+        }
+
+        const next = prev + 5;
+        if (next === 30) setLoadingText('Loading standardized test batteries...');
+        if (next === 65) setLoadingText('Initializing evidence-based care modules...');
+        if (next === 90) setLoadingText('Welcome to MANODAYA Care.');
+        return next;
+      });
+    }, 80); // 80ms * 20 steps = ~1.6s total loading time
+
+    return () => clearInterval(timer);
+  }, [onComplete]);
+
+  return (
+    <div 
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: '#FAFAFD',
+        zIndex: 9999,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+        opacity: isFadingOut ? 0 : 1,
+        transform: isFadingOut ? 'scale(1.04)' : 'scale(1)',
+        transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        pointerEvents: isFadingOut ? 'none' : 'auto'
+      }}
+    >
+      <div 
+        style={{
+          maxWidth: '460px',
+          width: '100%',
+          textAlign: 'center',
+          backgroundColor: '#FFFFFF',
+          padding: '40px 32px',
+          borderRadius: '32px',
+          border: '1.5px solid #E2E8F0',
+          boxShadow: '0 20px 50px rgba(138, 79, 255, 0.08)'
+        }}
+      >
+        {/* Animated Cute Brain Vector Graphic */}
+        <div style={{ maxWidth: '240px', margin: '0 auto 20px auto' }}>
+          <CuteSmilingBrainCard />
+        </div>
+
+        {/* Brand Name & Tagline */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: '#EDE9FE', color: '#8A4FFF', padding: '4px 14px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '12px' }}>
+          <Sparkles size={12} /> Clinical Center Bhubaneswar
+        </div>
+
+        <h1 
+          style={{
+            fontSize: '2.5rem',
+            fontWeight: 900,
+            letterSpacing: '-0.04em',
+            color: '#0E0E10',
+            marginBottom: '4px'
+          }}
+        >
+          MANODAYA
+        </h1>
+
+        <p style={{ fontSize: '0.875rem', color: '#64748B', fontWeight: 600, marginBottom: '28px' }}>
+          Advanced Neuropsychological & Cognitive Care
+        </p>
+
+        {/* Aesthetic Animated Progress Bar */}
+        <div style={{ marginBottom: '16px' }}>
+          <div 
+            style={{
+              height: '10px',
+              width: '100%',
+              backgroundColor: '#EDE9FE',
+              borderRadius: '9999px',
+              overflow: 'hidden',
+              position: 'relative'
+            }}
+          >
+            <div 
+              style={{
+                height: '100%',
+                width: `${progress}%`,
+                background: 'linear-gradient(90deg, #FF497C 0%, #8A4FFF 100%)',
+                borderRadius: '9999px',
+                transition: 'width 0.1s linear'
+              }}
+            />
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', fontSize: '0.813rem' }}>
+            <span style={{ color: '#8A4FFF', fontWeight: 700 }}>{loadingText}</span>
+            <span style={{ color: '#0E0E10', fontWeight: 900 }}>{progress}%</span>
+          </div>
+        </div>
+
+        {/* Floating Heart Icon */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', opacity: 0.8, marginTop: '16px' }}>
+          <Heart size={16} fill="#FF497C" color="#FF497C" className="pulse-heart" />
+          <Heart size={14} fill="#8A4FFF" color="#8A4FFF" className="pulse-heart" />
+        </div>
+      </div>
+    </div>
+  );
+};
