@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Send, ShieldCheck, Phone, Mail, MapPin, Clock, MessageSquare } from 'lucide-react';
+import { Calendar, Send, ShieldCheck, Phone, Mail, MapPin, Clock, MessageSquare, ExternalLink } from 'lucide-react';
 import { HoldingHandsBannerIllustration } from './EditorialIllustrations';
 import { ManodayaLogoSVG } from './ManodayaLogoSVG';
 import { CLINIC_INFO } from '../data/content';
@@ -173,26 +173,26 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
             </div>
           </div>
 
-          {/* ULTRA BOLD & MASSIVE BRAND TYPOGRAPHY FOR ALL SCREEN SIZES */}
+          {/* LARGE FULL DISPLAY TYPOGRAPHY - 100% UNCLIPPED (M A N O D A Y A) */}
           <div 
             style={{
-              fontSize: 'clamp(4.5rem, 16vw, 13.5rem)',
+              fontSize: 'clamp(3.2rem, 13.2vw, 11rem)',
               fontWeight: 950,
               color: 'rgba(255, 255, 255, 0.09)',
-              lineHeight: 0.82,
-              letterSpacing: '-0.05em',
+              lineHeight: 0.85,
+              letterSpacing: '-0.02em',
               textTransform: 'uppercase',
               marginBottom: '36px',
               userSelect: 'none',
               textAlign: 'center',
               width: '100%',
-              overflow: 'hidden'
+              boxSizing: 'border-box'
             }}
           >
             MANODAYA
           </div>
 
-          {/* Bottom Copyright */}
+          {/* Bottom Copyright & Credit */}
           <div 
             style={{
               borderTop: '1px solid rgba(255,255,255,0.1)',
@@ -203,16 +203,33 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
               flexWrap: 'wrap',
               gap: '16px',
               fontSize: '0.813rem',
-              color: '#64748B'
+              color: '#94A3B8'
             }}
           >
             <div>
               © {new Date().getFullYear()} MANODAYA – Advanced Neuropsychological Care. All rights reserved.
             </div>
 
-            <div style={{ display: 'flex', gap: '20px' }}>
-              <span>Privacy Policy</span>
-              <span>Terms of Service</span>
+            {/* Design & Develop Credit with Link to pixelexcellence.online */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>Designed & Developed by</span>
+              <a 
+                href="https://pixelexcellence.online" 
+                target="_blank" 
+                rel="noreferrer"
+                style={{ 
+                  color: '#FFD166', 
+                  fontWeight: 800, 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '4px',
+                  textDecoration: 'underline',
+                  textUnderlineOffset: '3px'
+                }}
+              >
+                <span>PIXE - Pixel Excellence</span>
+                <ExternalLink size={13} />
+              </a>
             </div>
           </div>
         </div>
