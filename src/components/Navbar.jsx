@@ -43,7 +43,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
         borderBottom: '1.5px solid #F1F1F5'
       }}
     >
-      {/* Top Bar */}
+      {/* Top Notification Bar */}
       <div 
         style={{
           backgroundColor: '#0F172A',
@@ -65,7 +65,8 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
           </a>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        {/* Staff CRM Portal Access Button - ONLY visible in Desktop Mode */}
+        <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button 
             onClick={() => onNavigate('dashboard')} 
             style={{ 
