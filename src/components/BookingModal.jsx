@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, CheckCircle2, MessageSquare, Sparkles, User, Mail, Info } from 'lucide-react';
+import { X, Calendar, CheckCircle2, MessageSquare, Info } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export const SERVICE_DESCRIPTIONS = {
@@ -81,13 +81,12 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
 
   return (
     <div className="modal-overlay" style={{ zIndex: 1500 }}>
-      <div className="modal-content" style={{ maxWidth: '620px', borderRadius: '24px', padding: '36px' }}>
+      <div className="modal-content" style={{ maxWidth: '620px', borderRadius: '24px' }}>
         <button className="modal-close-btn" onClick={handleReset} aria-label="Close modal">
           <X size={20} />
         </button>
 
         {submittedLead ? (
-          /* Confirmation Screen */
           <div style={{ textAlign: 'center', padding: '16px 0' }}>
             <div 
               style={{
@@ -117,7 +116,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
               Thank you, <strong>{submittedLead.patientName}</strong>. Our clinical team at MANODAYA will review your booking for <strong>{submittedLead.service}</strong> and confirm shortly.
             </p>
 
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <a 
                 href={`https://wa.me/919876543210?text=Hello%20MANODAYA,%20I%20just%20booked%20an%20appointment%20(Ref:%20${submittedLead.id}).`}
                 target="_blank"
@@ -134,7 +133,6 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
             </div>
           </div>
         ) : (
-          /* Modern Minimal Form Layout */
           <div>
             <div style={{ marginBottom: '24px' }}>
               <span className="section-badge" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF' }}>
@@ -149,7 +147,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
                 <div className="form-group">
                   <label className="form-label">Patient Name *</label>
                   <input 
@@ -175,7 +173,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
                 <div className="form-group">
                   <label className="form-label">Email Address</label>
                   <input 
@@ -222,7 +220,6 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
                   <option value="General Consultation & Guidance">General Consultation & Guidance</option>
                 </select>
 
-                {/* 1-Line Description Card directly beneath selector */}
                 <div 
                   style={{
                     marginTop: '8px',
@@ -242,7 +239,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px' }}>
                 <div className="form-group">
                   <label className="form-label">Type</label>
                   <select 
