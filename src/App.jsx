@@ -14,7 +14,7 @@ import { ContactPage } from './pages/ContactPage';
 import { FullCrmDashboard } from './pages/FullCrmDashboard';
 
 export function App() {
-  const [activePage, setActivePage] = useState('home'); // 'home' | 'about' | 'assessments' | 'therapies' | 'rehab' | 'support' | 'internship' | 'contact' | 'dashboard'
+  const [activePage, setActivePage] = useState('home');
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [initialService, setInitialService] = useState('');
 
@@ -29,20 +29,23 @@ export function App() {
     setBookingModalOpen(true);
   };
 
-  // Setup Scroll Reveal IntersectionObserver
+  // Setup Bi-directional Scroll In & Out IntersectionObserver
   useEffect(() => {
     const observerCallback = (entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
+        } else {
+          // Scroll Out Effect: remove is-visible so it animates back out
+          entry.target.classList.remove('is-visible');
         }
       });
     };
 
     const observerOptions = {
       root: null,
-      rootMargin: '0px 0px -40px 0px',
-      threshold: 0.1
+      rootMargin: '-20px 0px -20px 0px',
+      threshold: 0.12
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
@@ -55,14 +58,14 @@ export function App() {
     };
   }, [activePage]);
 
-  // If Full-Page Password Protected CRM Dashboard is active
+  // Full-Page Staff CRM Dashboard
   if (activePage === 'dashboard') {
     return <FullCrmDashboard onNavigateHome={() => handleNavigate('home')} />;
   }
 
   return (
     <div className="app-main-wrapper" style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
-      {/* Navbar with Multi-Page Navigation Links */}
+      {/* Navbar with Links & Dropdown */}
       <Navbar 
         activePage={activePage}
         onNavigate={handleNavigate}
@@ -127,7 +130,7 @@ export function App() {
         onOpenCrm={() => handleNavigate('dashboard')}
       />
 
-      {/* Interactive Booking & Inquiry Form Modal */}
+      {/* Interactive Booking Modal */}
       <BookingModal 
         isOpen={bookingModalOpen}
         onClose={() => setBookingModalOpen(false)}
