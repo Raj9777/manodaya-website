@@ -1,4 +1,4 @@
-/* MANODAYA Design System - Aesthetic Button Styling & Visual Tokens */
+/* MANODAYA Design System - Aesthetic Button Styling & Vector Animations */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap');
 
@@ -119,7 +119,117 @@ button {
 }
 
 /* ==========================================================================
-   AESTHETIC BUTTON SYSTEM (Elevated Mindhaven Styling)
+   CONTINUOUS VECTOR GRAPHIC IN-AND-OUT ANIMATIONS
+   ========================================================================== */
+
+/* Smooth Continuous Up & Down Floating Animation */
+@keyframes floatContinuous {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes floatContinuousSlow {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(2deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+/* Breathing Pulse Animation for Hearts & Icons */
+@keyframes pulseHeartContinuous {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+}
+
+/* Soft Wave Tilt Animation */
+@keyframes waveContinuous {
+  0% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(-3deg);
+  }
+}
+
+/* In-and-Out Scale & Opacity Fade Animation */
+@keyframes inOutScaleFade {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.96);
+    opacity: 0.85;
+  }
+}
+
+/* Animation Helper Classes */
+.float-element {
+  animation: floatContinuous 3.5s ease-in-out infinite;
+}
+
+.float-element-slow {
+  animation: floatContinuousSlow 5s ease-in-out infinite;
+}
+
+.pulse-heart {
+  animation: pulseHeartContinuous 2.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.wave-element {
+  animation: waveContinuous 4s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.in-out-fade {
+  animation: inOutScaleFade 3s ease-in-out infinite;
+}
+
+/* Vector SVG Interactive Hover & Base Floating */
+.section-svg-graphic {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: floatContinuous 4.5s ease-in-out infinite;
+}
+
+.section-svg-graphic:hover {
+  transform: scale(1.03) translateY(-6px);
+}
+
+/* ==========================================================================
+   AESTHETIC BUTTON SYSTEM
    ========================================================================== */
 
 /* Primary Black CTA Button */
@@ -405,10 +515,4 @@ button {
 .reveal-element.is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-.hero-svg-graphic, .section-svg-graphic {
-  width: 100%;
-  height: auto;
-  display: block;
 }
