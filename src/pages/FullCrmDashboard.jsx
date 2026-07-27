@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, Lock, Search, Download, Printer, LogOut, CheckCircle2, 
-  Clock, MessageSquare, Mail, RefreshCw, Home, Users, Calendar, PlusCircle, Sparkles, GraduationCap 
+  Clock, MessageSquare, Mail, RefreshCw, Home, Users, Calendar, PlusCircle, Sparkles, GraduationCap, Edit3, Trash2, Key, Settings, AlertCircle 
 } from 'lucide-react';
 import { INITIAL_CRM_LEADS } from '../data/content';
 
@@ -33,19 +33,19 @@ export const INITIAL_WORKSHOPS = [
 export const FullCrmDashboard = ({ onNavigateHome }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passcode, setPasscode] = useState('');
+  const [currentSavedPasscode, setCurrentSavedPasscode] = useState('1234');
   const [passcodeError, setPasscodeError] = useState(false);
 
-  // Tab State: 'patients' | 'internships' | 'post-workshop' | 'archives'
+  // Tab State: 'patients' | 'internships' | 'post-workshop' | 'archives' | 'settings'
   const [activeTab, setActiveTab] = useState('patients');
 
-  // Leads Data
+  // Leads & Data
   const [leads, setLeads] = useState([]);
   const [internships, setInternships] = useState([]);
   const [workshops, setWorkshops] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
 
-  // New Workshop Form State
+  // Workshop Edit State
+  const [editingWorkshopId, setEditingWorkshopId] = useState(null);
   const [newWorkshop, setNewWorkshop] = useState({
     title: '',
     date: '',
@@ -56,10 +56,23 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     seats: '15 Seats',
     description: ''
   });
-  const [workshopPostedSuccess, setWorkshopPostedSuccess] = useState(false);
+  const [workshopNotice, setWorkshopNotice] = useState('');
 
-  // Load from localStorage
+  // Passcode Settings Form State
+  const [passcodeForm, setPasscodeForm] = useState({
+    currentPass: '',
+    newPass: '',
+    confirmPass: ''
+  });
+  const [passcodeNotice, setPasscodeNotice] = useState({ type: '', msg: '' });
+
+  // Load from localStorage on mount
   useEffect(() => {
+    // 1. Passcode
+    const savedPass = localStorage.getItem('manodaya_crm_passcode') || '1234';
+    setCurrentSavedPasscode(savedPass);
+
+    // 2. Leads
     const savedLeads = JSON.parse(localStorage.getItem('manodaya_crm_leads') || 'null');
     if (savedLeads && savedLeads.length > 0) {
       setLeads(savedLeads);
@@ -68,9 +81,11 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       localStorage.setItem('manodaya_crm_leads', JSON.stringify(INITIAL_CRM_LEADS));
     }
 
+    // 3. Internships
     const savedInternships = JSON.parse(localStorage.getItem('manodaya_crm_internships') || '[]');
     setInternships(savedInternships);
 
+    // 4. Workshops
     const savedWorkshops = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
     if (savedWorkshops && savedWorkshops.length > 0) {
       setWorkshops(savedWorkshops);
@@ -82,7 +97,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (passcode === '1234') {
+    if (passcode === currentSavedPasscode) {
       setIsAuthenticated(true);
       setPasscodeError(false);
     } else {
@@ -102,15 +117,28 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     localStorage.setItem('manodaya_crm_internships', JSON.stringify(updated));
   };
 
-  const handlePostWorkshop = (e) => {
+  // Workshop Post / Edit Submit
+  const handleSaveWorkshop = (e) => {
     e.preventDefault();
-    const wsId = `ws-${Math.floor(100 + Math.random() * 900)}`;
-    const createdWS = { id: wsId, ...newWorkshop };
-    const updatedWSList = [createdWS, ...workshops];
 
-    setWorkshops(updatedWSList);
-    localStorage.setItem('manodaya_workshops', JSON.stringify(updatedWSList));
-    setWorkshopPostedSuccess(true);
+    if (editingWorkshopId) {
+      // Edit existing workshop
+      const updatedList = workshops.map(ws => 
+        ws.id === editingWorkshopId ? { ...ws, ...newWorkshop } : ws
+      );
+      setWorkshops(updatedList);
+      localStorage.setItem('manodaya_workshops', JSON.stringify(updatedList));
+      setEditingWorkshopId(null);
+      setWorkshopNotice('Workshop updated successfully live on website!');
+    } else {
+      // Post new workshop
+      const wsId = `ws-${Math.floor(100 + Math.random() * 900)}`;
+      const createdWS = { id: wsId, ...newWorkshop };
+      const updatedList = [createdWS, ...workshops];
+      setWorkshops(updatedList);
+      localStorage.setItem('manodaya_workshops', JSON.stringify(updatedList));
+      setWorkshopNotice('New workshop posted live on website!');
+    }
 
     setNewWorkshop({
       title: '',
@@ -123,7 +151,73 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       description: ''
     });
 
-    setTimeout(() => setWorkshopPostedSuccess(false), 4000);
+    setTimeout(() => setWorkshopNotice(''), 4000);
+  };
+
+  // Start Editing Workshop
+  const handleStartEditWorkshop = (ws) => {
+    setEditingWorkshopId(ws.id);
+    setNewWorkshop({
+      title: ws.title || '',
+      date: ws.date || '',
+      time: ws.time || '',
+      mode: ws.mode || 'In-Person (Bhubaneswar Clinic)',
+      instructor: ws.instructor || 'MANODAYA Clinical Faculty',
+      fee: ws.fee || '',
+      seats: ws.seats || '15 Seats',
+      description: ws.description || ''
+    });
+    window.scrollTo({ top: 200, behavior: 'smooth' });
+  };
+
+  // Cancel Editing
+  const handleCancelEditWorkshop = () => {
+    setEditingWorkshopId(null);
+    setNewWorkshop({
+      title: '',
+      date: '',
+      time: '',
+      mode: 'In-Person (Bhubaneswar Clinic)',
+      instructor: 'MANODAYA Clinical Faculty',
+      fee: '',
+      seats: '15 Seats',
+      description: ''
+    });
+  };
+
+  // Delete Workshop
+  const handleDeleteWorkshop = (wsId) => {
+    if (window.confirm("Are you sure you want to delete this workshop from the website feed?")) {
+      const updatedList = workshops.filter(ws => ws.id !== wsId);
+      setWorkshops(updatedList);
+      localStorage.setItem('manodaya_workshops', JSON.stringify(updatedList));
+      if (editingWorkshopId === wsId) handleCancelEditWorkshop();
+      setWorkshopNotice('Workshop deleted from live website feed.');
+      setTimeout(() => setWorkshopNotice(''), 4000);
+    }
+  };
+
+  // Change Passcode Submit
+  const handleChangePasscode = (e) => {
+    e.preventDefault();
+    if (passcodeForm.currentPass !== currentSavedPasscode) {
+      setPasscodeNotice({ type: 'error', msg: 'Current passcode is incorrect.' });
+      return;
+    }
+    if (!passcodeForm.newPass || passcodeForm.newPass.length < 4) {
+      setPasscodeNotice({ type: 'error', msg: 'New passcode must be at least 4 digits/characters.' });
+      return;
+    }
+    if (passcodeForm.newPass !== passcodeForm.confirmPass) {
+      setPasscodeNotice({ type: 'error', msg: 'New passcode and confirmation do not match.' });
+      return;
+    }
+
+    // Save passcode
+    localStorage.setItem('manodaya_crm_passcode', passcodeForm.newPass);
+    setCurrentSavedPasscode(passcodeForm.newPass);
+    setPasscodeNotice({ type: 'success', msg: 'Dashboard passcode changed successfully!' });
+    setPasscodeForm({ currentPass: '', newPass: '', confirmPass: '' });
   };
 
   // CSV Export
@@ -194,7 +288,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
             <div style={{ marginBottom: '20px' }}>
               <input 
                 type="password"
-                placeholder="Enter Staff Passcode (1234)"
+                placeholder="Enter Staff Passcode"
                 value={passcode}
                 onChange={(e) => setPasscode(e.target.value)}
                 style={{
@@ -211,7 +305,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
               />
               {passcodeError && (
                 <div style={{ color: '#EF4444', fontSize: '0.813rem', marginTop: '6px', fontWeight: 600 }}>
-                  Incorrect Passcode. Try 1234.
+                  Incorrect Passcode. Contact administrator.
                 </div>
               )}
             </div>
@@ -233,7 +327,10 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
               fontSize: '0.813rem',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer'
             }}
           >
             <Home size={14} /> Back to Website
@@ -272,81 +369,100 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       {/* Main Content Area */}
       <div className="container" style={{ padding: '32px 24px' }}>
         {/* Navigation Tabs */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '28px', borderBottom: '2px solid #E2E8F0', paddingBottom: '12px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '28px', borderBottom: '2px solid #E2E8F0', paddingBottom: '12px', flexWrap: 'wrap' }}>
           <button 
             onClick={() => setActiveTab('patients')}
             style={{
-              padding: '10px 20px',
+              padding: '10px 18px',
               borderRadius: '9999px',
               fontWeight: 800,
-              fontSize: '0.875rem',
+              fontSize: '0.844rem',
               backgroundColor: activeTab === 'patients' ? '#0F172A' : '#FFFFFF',
               color: activeTab === 'patients' ? '#FFFFFF' : '#64748B',
               border: '1.5px solid #E2E8F0',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '6px'
             }}
           >
-            <Users size={16} /> Patient Inquiries ({activeLeads.length})
+            <Users size={15} /> Patient Leads ({activeLeads.length})
           </button>
 
           <button 
             onClick={() => setActiveTab('internships')}
             style={{
-              padding: '10px 20px',
+              padding: '10px 18px',
               borderRadius: '9999px',
               fontWeight: 800,
-              fontSize: '0.875rem',
+              fontSize: '0.844rem',
               backgroundColor: activeTab === 'internships' ? '#8A4FFF' : '#FFFFFF',
               color: activeTab === 'internships' ? '#FFFFFF' : '#64748B',
               border: '1.5px solid #E2E8F0',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '6px'
             }}
           >
-            <GraduationCap size={16} /> Internships & Workshops ({internships.length})
+            <GraduationCap size={15} /> Internships & Workshops ({internships.length})
           </button>
 
           <button 
             onClick={() => setActiveTab('post-workshop')}
             style={{
-              padding: '10px 20px',
+              padding: '10px 18px',
               borderRadius: '9999px',
               fontWeight: 800,
-              fontSize: '0.875rem',
+              fontSize: '0.844rem',
               backgroundColor: activeTab === 'post-workshop' ? '#FF497C' : '#FFFFFF',
               color: activeTab === 'post-workshop' ? '#FFFFFF' : '#64748B',
               border: '1.5px solid #E2E8F0',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '6px'
             }}
           >
-            <PlusCircle size={16} /> Post Upcoming Workshop ({workshops.length})
+            <PlusCircle size={15} /> Post & Manage Workshops ({workshops.length})
           </button>
 
           <button 
             onClick={() => setActiveTab('archives')}
             style={{
-              padding: '10px 20px',
+              padding: '10px 18px',
               borderRadius: '9999px',
               fontWeight: 800,
-              fontSize: '0.875rem',
+              fontSize: '0.844rem',
               backgroundColor: activeTab === 'archives' ? '#10B981' : '#FFFFFF',
               color: activeTab === 'archives' ? '#FFFFFF' : '#64748B',
               border: '1.5px solid #E2E8F0',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '6px'
             }}
           >
-            <CheckCircle2 size={16} /> Completed Archives ({archivedLeads.length})
+            <CheckCircle2 size={15} /> Completed Archives ({archivedLeads.length})
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('settings')}
+            style={{
+              padding: '10px 18px',
+              borderRadius: '9999px',
+              fontWeight: 800,
+              fontSize: '0.844rem',
+              backgroundColor: activeTab === 'settings' ? '#D97706' : '#FFFFFF',
+              color: activeTab === 'settings' ? '#FFFFFF' : '#64748B',
+              border: '1.5px solid #E2E8F0',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <Settings size={15} /> Change Passcode
           </button>
         </div>
 
@@ -547,24 +663,39 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
           </div>
         )}
 
-        {/* TAB 3: POST NEW UPCOMING WORKSHOP */}
+        {/* TAB 3: POST & MANAGE WORKSHOPS (WITH EDIT / DELETE) */}
         {activeTab === 'post-workshop' && (
           <div>
             <div style={{ marginBottom: '24px' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Post Upcoming Clinical Workshop</h2>
-              <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Announce new training workshops. Posted workshops update live on the website automatically.</p>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>
+                {editingWorkshopId ? 'Edit Workshop Listing' : 'Post & Manage Clinical Workshops'}
+              </h2>
+              <p style={{ color: '#64748B', fontSize: '0.875rem' }}>
+                Announce new workshops or update/delete currently active listings in real-time.
+              </p>
             </div>
 
-            {workshopPostedSuccess && (
+            {workshopNotice && (
               <div style={{ backgroundColor: '#D1FAE5', color: '#059669', padding: '14px 20px', borderRadius: '14px', marginBottom: '20px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <CheckCircle2 size={20} /> Workshop posted successfully! It is now live on the website feed.
+                <CheckCircle2 size={20} /> {workshopNotice}
               </div>
             )}
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px' }}>
-              {/* Form */}
-              <div style={{ backgroundColor: '#FFFFFF', padding: '32px', borderRadius: '24px', border: '1.5px solid #E2E8F0' }}>
-                <form onSubmit={handlePostWorkshop}>
+              {/* Form Area */}
+              <div style={{ backgroundColor: '#FFFFFF', padding: '32px', borderRadius: '24px', border: editingWorkshopId ? '2px solid #FF497C' : '1.5px solid #E2E8F0' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0E0E10' }}>
+                    {editingWorkshopId ? 'Editing Workshop' : 'Create New Listing'}
+                  </h3>
+                  {editingWorkshopId && (
+                    <button onClick={handleCancelEditWorkshop} style={{ color: '#EF4444', fontSize: '0.813rem', fontWeight: 700 }}>
+                      Cancel Edit
+                    </button>
+                  )}
+                </div>
+
+                <form onSubmit={handleSaveWorkshop}>
                   <div className="form-group">
                     <label className="form-label">Workshop Title *</label>
                     <input 
@@ -652,23 +783,24 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Workshop Description & Key Takeaways</label>
+                    <label className="form-label">Workshop Description</label>
                     <textarea 
                       className="form-textarea"
-                      rows={4}
-                      placeholder="Describe what students will learn, batteries covered, certificates, and prerequisites..."
+                      rows={3}
+                      placeholder="Describe what students will learn..."
                       value={newWorkshop.description}
                       onChange={(e) => setNewWorkshop({ ...newWorkshop, description: e.target.value })}
                     />
                   </div>
 
                   <button className="btn-pink" type="submit" style={{ width: '100%', padding: '14px' }}>
-                    <PlusCircle size={18} /> Post Workshop Live
+                    <PlusCircle size={18} />
+                    <span>{editingWorkshopId ? 'Update Workshop Live' : 'Post Workshop Live'}</span>
                   </button>
                 </form>
               </div>
 
-              {/* Live Preview List */}
+              {/* Active Workshops List with EDIT / DELETE */}
               <div>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '16px' }}>
                   Currently Active Workshops ({workshops.length})
@@ -676,10 +808,59 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   {workshops.map((ws) => (
-                    <div key={ws.id} style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '18px', border: '1.5px solid #E2E8F0' }}>
-                      <span className="badge-status" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF', marginBottom: '8px' }}>
-                        {ws.mode}
-                      </span>
+                    <div 
+                      key={ws.id} 
+                      style={{ 
+                        backgroundColor: '#FFFFFF', 
+                        padding: '20px', 
+                        borderRadius: '18px', 
+                        border: editingWorkshopId === ws.id ? '2px solid #FF497C' : '1.5px solid #E2E8F0',
+                        position: 'relative'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                        <span className="badge-status" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF' }}>
+                          {ws.mode}
+                        </span>
+
+                        {/* Edit & Delete Action Buttons */}
+                        <div style={{ display: 'flex', gap: '6px' }}>
+                          <button 
+                            onClick={() => handleStartEditWorkshop(ws)}
+                            style={{
+                              backgroundColor: '#F1F5F9',
+                              color: '#0F172A',
+                              padding: '4px 10px',
+                              borderRadius: '8px',
+                              fontSize: '0.75rem',
+                              fontWeight: 700,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}
+                          >
+                            <Edit3 size={12} /> Edit
+                          </button>
+
+                          <button 
+                            onClick={() => handleDeleteWorkshop(ws.id)}
+                            style={{
+                              backgroundColor: '#FEE2E2',
+                              color: '#EF4444',
+                              padding: '4px 10px',
+                              borderRadius: '8px',
+                              fontSize: '0.75rem',
+                              fontWeight: 700,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}
+                          >
+                            <Trash2 size={12} /> Delete
+                          </button>
+                        </div>
+                      </div>
+
                       <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0E0E10', marginBottom: '6px' }}>
                         {ws.title}
                       </h4>
@@ -728,6 +909,97 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: PORTAL SETTINGS (CHANGE DASHBOARD PASSCODE) */}
+        {activeTab === 'settings' && (
+          <div style={{ maxWidth: '520px', margin: '0 auto' }}>
+            <div style={{ marginBottom: '24px', textAlign: 'center' }}>
+              <div 
+                style={{
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '50%',
+                  backgroundColor: '#FEF3C7',
+                  color: '#D97706',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 12px auto'
+                }}
+              >
+                <Key size={28} />
+              </div>
+              <h2 style={{ fontSize: '1.65rem', fontWeight: 900 }}>Dashboard Passcode Settings</h2>
+              <p style={{ color: '#64748B', fontSize: '0.875rem' }}>
+                Update the security passcode required to unlock the staff CRM portal.
+              </p>
+            </div>
+
+            {passcodeNotice.msg && (
+              <div 
+                style={{ 
+                  backgroundColor: passcodeNotice.type === 'error' ? '#FEE2E2' : '#D1FAE5', 
+                  color: passcodeNotice.type === 'error' ? '#EF4444' : '#059669', 
+                  padding: '14px 18px', 
+                  borderRadius: '14px', 
+                  marginBottom: '20px', 
+                  fontWeight: 700, 
+                  fontSize: '0.875rem',
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '8px' 
+                }}
+              >
+                {passcodeNotice.type === 'error' ? <AlertCircle size={18} /> : <CheckCircle2 size={18} />}
+                <span>{passcodeNotice.msg}</span>
+              </div>
+            )}
+
+            <div style={{ backgroundColor: '#FFFFFF', padding: '32px', borderRadius: '24px', border: '1.5px solid #E2E8F0', boxShadow: '0 10px 30px rgba(0,0,0,0.04)' }}>
+              <form onSubmit={handleChangePasscode}>
+                <div className="form-group">
+                  <label className="form-label">Current Staff Passcode *</label>
+                  <input 
+                    type="password"
+                    required
+                    className="form-input"
+                    placeholder="Enter current passcode"
+                    value={passcodeForm.currentPass}
+                    onChange={(e) => setPasscodeForm({ ...passcodeForm, currentPass: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">New Passcode *</label>
+                  <input 
+                    type="password"
+                    required
+                    className="form-input"
+                    placeholder="Enter new passcode (e.g. 5678)"
+                    value={passcodeForm.newPass}
+                    onChange={(e) => setPasscodeForm({ ...passcodeForm, newPass: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Confirm New Passcode *</label>
+                  <input 
+                    type="password"
+                    required
+                    className="form-input"
+                    placeholder="Re-enter new passcode"
+                    value={passcodeForm.confirmPass}
+                    onChange={(e) => setPasscodeForm({ ...passcodeForm, confirmPass: e.target.value })}
+                  />
+                </div>
+
+                <button className="btn-black" type="submit" style={{ width: '100%', padding: '14px', marginTop: '8px' }}>
+                  <Key size={18} /> Update Passcode
+                </button>
+              </form>
             </div>
           </div>
         )}
