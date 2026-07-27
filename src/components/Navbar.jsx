@@ -43,7 +43,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
         borderBottom: '1.5px solid #F1F1F5'
       }}
     >
-      {/* Top Notification Bar */}
+      {/* Top Bar */}
       <div 
         style={{
           backgroundColor: '#0F172A',
@@ -111,8 +111,8 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
           </span>
         </button>
 
-        {/* Minimal Desktop Links: Home | About Us | Contact Us | More ▾ */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '24px', position: 'relative' }} className="desktop-only">
+        {/* Modern Nav Menu Row: Home | About Us | Contact Us | More ▾ | Book Now */}
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '20px', position: 'relative' }} className="desktop-only">
           <button
             onClick={() => onNavigate('home')}
             style={{
@@ -240,30 +240,30 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
               </div>
             )}
           </div>
-        </nav>
 
-        {/* Action Button: "Book Now" */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Book Now shifted directly into the Nav Menu Row */}
           <button 
             className="btn-black" 
             onClick={() => onOpenBooking()}
             style={{
-              fontSize: '0.875rem',
+              fontSize: '0.844rem',
               fontWeight: 800,
-              padding: '11px 24px',
+              padding: '9px 20px',
               border: '1.5px solid #0E0E10',
-              borderRadius: '9999px'
+              borderRadius: '9999px',
+              marginLeft: '6px'
             }}
           >
-            <Calendar size={16} />
+            <Calendar size={15} />
             <span>Book Now</span>
           </button>
+        </nav>
 
-          {/* Mobile Hamburger Toggle */}
+        {/* Mobile Toggle */}
+        <div style={{ display: 'none' }} className="mobile-toggle">
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer' }}
-            className="mobile-toggle"
+            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
             aria-label="Toggle Menu"
           >
             {mobileMenuOpen ? <X size={26} color="#0E0E10" /> : <Menu size={26} color="#0E0E10" />}
@@ -271,7 +271,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div 
           style={{
@@ -295,7 +295,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
 
           <div style={{ borderTop: '1px solid #F1F1F5', paddingTop: '10px', marginTop: '4px' }}>
             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', marginBottom: '8px' }}>
-              More Sections
+              More Services
             </div>
             {moreSections.map((sec) => (
               <button
@@ -320,6 +320,15 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
               </button>
             ))}
           </div>
+
+          <button 
+            className="btn-black"
+            onClick={() => { onOpenBooking(); setMobileMenuOpen(false); }}
+            style={{ width: '100%', marginTop: '10px', justifyContent: 'center' }}
+          >
+            <Calendar size={16} />
+            <span>Book Now</span>
+          </button>
 
           <button 
             onClick={() => { onNavigate('dashboard'); setMobileMenuOpen(false); }}
