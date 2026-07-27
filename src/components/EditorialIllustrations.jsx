@@ -162,11 +162,11 @@ export const HeadphonesListeningIllustration = () => (
   </svg>
 );
 
-// SPREAD & SEPARATED: Mindhaven Client Feedback Speech Arc & Avatars
+// CONTINUOUS PATH MOTION: Elements move continuously from start point to end point along the curve!
 export const ArchTestimonialGraphic = () => (
-  <svg viewBox="0 0 820 210" className="section-svg-graphic" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ margin: '0 auto', maxWidth: '720px' }}>
-    {/* Rainbow Gradient Arc */}
-    <path d="M50 160 Q410 15 770 160" stroke="url(#archGradient)" strokeWidth="4" strokeLinecap="round" strokeDasharray="8 8" fill="none" />
+  <svg viewBox="0 0 820 210" className="section-svg-graphic" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ margin: '0 auto', maxWidth: '740px' }}>
+    {/* Arch Curve Guide Line */}
+    <path id="testimonialArchPath" d="M60 160 Q410 15 760 160" stroke="url(#archGradient)" strokeWidth="4" strokeLinecap="round" strokeDasharray="8 8" fill="none" />
     
     <defs>
       <linearGradient id="archGradient" x1="0" y1="0" x2="1" y2="0">
@@ -176,17 +176,25 @@ export const ArchTestimonialGraphic = () => (
       </linearGradient>
     </defs>
 
-    {/* Avatar 1: Left Speech Bubble character (Spread to X: 40) */}
-    <g transform="translate(40, 100)" className="float-element">
+    {/* Avatar 1: Left Speech Bubble (Starts at 0s) */}
+    <g transform="translate(-32, -26)">
       <rect width="64" height="52" rx="18" fill="#8A4FFF" stroke="#111111" strokeWidth="3" />
       <path d="M22 28 Q32 38 42 28" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
       <circle cx="20" cy="20" r="3.5" fill="#FFFFFF" />
       <circle cx="44" cy="20" r="3.5" fill="#FFFFFF" />
       <path d="M12 50 L20 62 V50 Z" fill="#8A4FFF" />
+      <animateMotion 
+        path="M60 160 Q410 15 760 160" 
+        dur="14s" 
+        repeatCount="indefinite" 
+        keyPoints="0;1" 
+        keyTimes="0;1"
+        calcMode="linear"
+      />
     </g>
 
-    {/* Avatar 2: Cute Brain with Headphones (Spread to X: 210) */}
-    <g transform="translate(210, 30)" className="float-element-slow">
+    {/* Avatar 2: Orange Brain with Headphones (Starts at 2.8s offset: keyPoints="0.25;1;0;0.25") */}
+    <g transform="translate(-48, -35)">
       <path d="M24 35 C6 18 30 0 48 18 C66 0 90 18 72 35 C90 52 66 70 48 58 C30 70 6 52 24 35 Z" fill="#FF785A" stroke="#111111" strokeWidth="3" />
       <circle cx="38" cy="34" r="3.5" fill="#111111" />
       <circle cx="58" cy="34" r="3.5" fill="#111111" />
@@ -196,82 +204,148 @@ export const ArchTestimonialGraphic = () => (
       <path d="M26 30 C26 12 70 12 70 30" stroke="#8A4FFF" strokeWidth="4" fill="none" />
       <rect x="22" y="26" width="8" height="14" rx="4" fill="#8A4FFF" />
       <rect x="66" y="26" width="8" height="14" rx="4" fill="#8A4FFF" />
+      <animateMotion 
+        path="M60 160 Q410 15 760 160" 
+        dur="14s" 
+        repeatCount="indefinite"
+        keyPoints="0.25;1;0;0.25"
+        keyTimes="0;0.75;0.751;1"
+        calcMode="linear"
+      />
     </g>
 
-    {/* Avatar 3: Center Glowing Heart Block (Apex Center X: 380) */}
-    <g transform="translate(380, 10)" className="pulse-heart">
+    {/* Avatar 3: Center Glowing Heart Block (Starts at 5.6s offset: keyPoints="0.5;1;0;0.5") */}
+    <g transform="translate(-30, -27)">
       <rect width="60" height="54" rx="16" fill="#FF497C" stroke="#111111" strokeWidth="3" />
       <path d="M30 20 C23 10 10 20 10 32 C10 44 30 52 30 52 C30 52 50 44 50 32 C50 20 37 10 30 20 Z" fill="#FFFFFF" />
+      <animateMotion 
+        path="M60 160 Q410 15 760 160" 
+        dur="14s" 
+        repeatCount="indefinite"
+        keyPoints="0.5;1;0;0.5"
+        keyTimes="0;0.5;0.501;1"
+        calcMode="linear"
+      />
     </g>
 
-    {/* Avatar 4: Smiling Star (Spread to X: 550) */}
-    <g transform="translate(550, 30)" className="float-element">
+    {/* Avatar 4: Smiling Star (Starts at 8.4s offset: keyPoints="0.75;1;0;0.75") */}
+    <g transform="translate(-40, -35)">
       <path d="M40 10 L50 28 L70 30 L55 45 L60 65 L40 54 L20 65 L25 45 L10 30 L30 28 Z" fill="#FFC107" stroke="#111111" strokeWidth="3" />
       <circle cx="33" cy="33" r="3" fill="#111111" />
       <circle cx="47" cy="33" r="3" fill="#111111" />
       <path d="M36 40 Q40 44 44 40" stroke="#111111" strokeWidth="2.5" strokeLinecap="round" />
+      <animateMotion 
+        path="M60 160 Q410 15 760 160" 
+        dur="14s" 
+        repeatCount="indefinite"
+        keyPoints="0.75;1;0;0.75"
+        keyTimes="0;0.25;0.251;1"
+        calcMode="linear"
+      />
     </g>
 
-    {/* Avatar 5: Right Green Eyelash Blob (Spread to X: 710) */}
-    <g transform="translate(710, 100)" className="float-element-slow">
+    {/* Avatar 5: Green Eyelash Blob (Starts at 10.5s offset: keyPoints="0.9;1;0;0.9") */}
+    <g transform="translate(-32, -26)">
       <rect width="64" height="52" rx="18" fill="#10B981" stroke="#111111" strokeWidth="3" />
       <path d="M18 25 Q24 32 30 25" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
       <path d="M34 25 Q40 32 46 25" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
       <path d="M52 50 L44 62 V50 Z" fill="#10B981" />
+      <animateMotion 
+        path="M60 160 Q410 15 760 160" 
+        dur="14s" 
+        repeatCount="indefinite"
+        keyPoints="0.9;1;0;0.9"
+        keyTimes="0;0.1;0.101;1"
+        calcMode="linear"
+      />
     </g>
   </svg>
 );
 
-// SPREAD & SEPARATED: Mindhaven Connected Healing Ribbon & Community Hug Banner
+// CONTINUOUS PATH MOTION: 5 Characters glide continuously along the ribbon curve one by one!
 export const HoldingHandsBannerIllustration = () => (
   <svg viewBox="0 0 960 200" className="section-svg-graphic" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ margin: '0 auto', maxWidth: '880px' }}>
-    {/* Background Sparkles */}
-    <path d="M130 35 L134 45 L144 49 L134 53 L130 63 L126 53 L116 49 L126 45 Z" fill="#FFB800" className="pulse-heart" />
-    <path d="M480 25 L484 35 L494 39 L484 43 L480 53 L476 43 L466 39 L476 35 Z" fill="#FF497C" className="pulse-heart" />
-    <path d="M830 35 L834 45 L844 49 L834 53 L830 63 L826 53 L816 49 L826 45 Z" fill="#8A4FFF" className="pulse-heart" />
+    {/* Ribbon Line */}
+    <path id="ribbonBannerPath" d="M60 100 Q480 150 900 100" stroke="#FF497C" strokeWidth="18" strokeLinecap="round" fill="none" />
+    <path d="M60 100 Q480 150 900 100" stroke="#FFB800" strokeWidth="6" strokeLinecap="round" fill="none" strokeDasharray="12 12" />
 
-    {/* 5 Distinct Vector Characters Spread Across 960px Width */}
-    {/* Person 1: Deep Teal (X: 50) */}
-    <g transform="translate(50, 45)" className="float-element">
+    {/* Person 1: Deep Teal (keyPoints="0;1") */}
+    <g transform="translate(-45, -70)">
       <circle cx="45" cy="30" r="20" fill="#FFC4B8" stroke="#111111" strokeWidth="3" />
       <path d="M25 15 C25 0 65 0 65 15 Z" fill="#111111" />
       <path d="M25 50 H65 V105 H25 Z" fill="#0F3832" stroke="#111111" strokeWidth="3" />
       <path d="M15 105 H75 V145 H15 Z" fill="#8A4FFF" stroke="#111111" strokeWidth="3" />
+      <animateMotion 
+        path="M60 100 Q480 150 900 100" 
+        dur="16s" 
+        repeatCount="indefinite"
+        keyPoints="0;1"
+        keyTimes="0;1"
+        calcMode="linear"
+      />
     </g>
 
-    {/* Person 2: Mustard Yellow (X: 240) */}
-    <g transform="translate(240, 55)" className="float-element-slow">
+    {/* Person 2: Mustard Yellow (keyPoints="0.2;1;0;0.2") */}
+    <g transform="translate(-45, -75)">
       <circle cx="45" cy="30" r="20" fill="#FFC4B8" stroke="#111111" strokeWidth="3" />
       <path d="M25 50 H65 V110 H25 Z" fill="#FFB800" stroke="#111111" strokeWidth="3" />
       <path d="M15 110 H75 V150 H15 Z" fill="#111111" stroke="#111111" strokeWidth="3" />
+      <animateMotion 
+        path="M60 100 Q480 150 900 100" 
+        dur="16s" 
+        repeatCount="indefinite"
+        keyPoints="0.2;1;0;0.2"
+        keyTimes="0;0.8;0.801;1"
+        calcMode="linear"
+      />
     </g>
 
-    {/* Person 3: Coral Pink (Center X: 435) */}
-    <g transform="translate(435, 65)" className="float-element">
+    {/* Person 3: Coral Pink (keyPoints="0.4;1;0;0.4") */}
+    <g transform="translate(-45, -70)">
       <circle cx="45" cy="25" r="20" fill="#FFC4B8" stroke="#111111" strokeWidth="3" />
       <path d="M25 8 C25 -8 65 -8 65 8 Z" fill="#FF497C" />
       <path d="M25 45 H65 V95 H25 Z" fill="#FF785A" stroke="#111111" strokeWidth="3" />
       <path d="M15 95 L5 135 H85 L75 95 Z" fill="#FFB800" stroke="#111111" strokeWidth="3" />
+      <animateMotion 
+        path="M60 100 Q480 150 900 100" 
+        dur="16s" 
+        repeatCount="indefinite"
+        keyPoints="0.4;1;0;0.4"
+        keyTimes="0;0.6;0.601;1"
+        calcMode="linear"
+      />
     </g>
 
-    {/* Person 4: Lavender Purple (X: 630) */}
-    <g transform="translate(630, 55)" className="float-element-slow">
+    {/* Person 4: Lavender Purple (keyPoints="0.6;1;0;0.6") */}
+    <g transform="translate(-45, -75)">
       <circle cx="45" cy="30" r="20" fill="#FFC4B8" stroke="#111111" strokeWidth="3" />
       <path d="M25 50 H65 V110 H25 Z" fill="#EDE9FE" stroke="#111111" strokeWidth="3" />
       <path d="M25 75 H65 V150 H25 Z" fill="#10B981" stroke="#111111" strokeWidth="3" />
+      <animateMotion 
+        path="M60 100 Q480 150 900 100" 
+        dur="16s" 
+        repeatCount="indefinite"
+        keyPoints="0.6;1;0;0.6"
+        keyTimes="0;0.4;0.401;1"
+        calcMode="linear"
+      />
     </g>
 
-    {/* Person 5: Mint Green (X: 820) */}
-    <g transform="translate(820, 45)" className="float-element">
+    {/* Person 5: Mint Green (keyPoints="0.8;1;0;0.8") */}
+    <g transform="translate(-45, -70)">
       <circle cx="45" cy="30" r="20" fill="#FFC4B8" stroke="#111111" strokeWidth="3" />
       <path d="M25 15 C25 0 65 0 65 15 Z" fill="#111111" />
       <path d="M25 50 H65 V105 H25 Z" fill="#FFA6DF" stroke="#111111" strokeWidth="3" />
       <path d="M15 105 L5 145 H85 L75 105 Z" fill="#10B981" stroke="#111111" strokeWidth="3" />
+      <animateMotion 
+        path="M60 100 Q480 150 900 100" 
+        dur="16s" 
+        repeatCount="indefinite"
+        keyPoints="0.8;1;0;0.8"
+        keyTimes="0;0.2;0.201;1"
+        calcMode="linear"
+      />
     </g>
-
-    {/* Connected Ribbon Spanning Gracefully Across All 5 Characters */}
-    <path d="M95 100 Q480 150 865 100" stroke="#FF497C" strokeWidth="18" strokeLinecap="round" fill="none" />
-    <path d="M95 100 Q480 150 865 100" stroke="#FFB800" strokeWidth="6" strokeLinecap="round" fill="none" strokeDasharray="12 12" />
   </svg>
 );
 
