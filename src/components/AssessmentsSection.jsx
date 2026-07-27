@@ -6,7 +6,9 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
   const [filterCategory, setFilterCategory] = useState('all');
   const [activeModalItem, setActiveModalItem] = useState(null);
 
+  // FIX 1: Filter logic - Explicitly honor filterCategory ('all', 'child', 'adult')
   const filteredList = ASSESSMENTS.filter(item => {
+    if (filterCategory === 'all') return true;
     if (filterCategory === 'child') return item.category === 'child';
     if (filterCategory === 'adult') return item.category === 'adult';
     if (currentMode === 'child') return item.category === 'child';
@@ -18,7 +20,7 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
     <section id="assessments" className="section-padding" style={{ backgroundColor: '#FFFFFF' }}>
       <div className="container">
         {/* Section Header */}
-        <div className="section-header reveal-element">
+        <div className="section-header reveal-element is-visible">
           <span className="section-badge" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF' }}>
             <ClipboardCheck size={14} /> Comprehensive Clinical Care
           </span>
@@ -40,7 +42,7 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
           }}
         >
           {/* Card 1: Assessments */}
-          <div className="minimal-card reveal-element" style={{ borderTop: '4px solid #FF5E8E' }}>
+          <div className="minimal-card reveal-element is-visible" style={{ borderTop: '4px solid #FF5E8E' }}>
             <div 
               style={{
                 width: '48px',
@@ -69,7 +71,7 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
           </div>
 
           {/* Card 2: Therapies */}
-          <div className="minimal-card reveal-element" style={{ borderTop: '4px solid #8A4FFF' }}>
+          <div className="minimal-card reveal-element is-visible" style={{ borderTop: '4px solid #8A4FFF' }}>
             <div 
               style={{
                 width: '48px',
@@ -98,7 +100,7 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
           </div>
 
           {/* Card 3: Cognitive Remediation */}
-          <div className="minimal-card reveal-element" style={{ borderTop: '4px solid #10B981' }}>
+          <div className="minimal-card reveal-element is-visible" style={{ borderTop: '4px solid #10B981' }}>
             <div 
               style={{
                 width: '48px',
@@ -127,7 +129,7 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
           </div>
 
           {/* Card 4: Support & Training */}
-          <div className="minimal-card reveal-element" style={{ borderTop: '4px solid #FFB800' }}>
+          <div className="minimal-card reveal-element is-visible" style={{ borderTop: '4px solid #FFB800' }}>
             <div 
               style={{
                 width: '48px',
@@ -156,7 +158,7 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
           </div>
         </div>
 
-        {/* Detailed Assessment Batteries Section with Fixed Perfect Alignment */}
+        {/* Detailed Assessment Batteries Section */}
         <div id="assessments-list" style={{ paddingTop: '20px' }}>
           <div style={{ textAlign: 'center', marginBottom: '36px' }}>
             <h3 style={{ fontSize: '2rem', fontWeight: 900, color: '#0E0E10', marginBottom: '8px' }}>
@@ -175,7 +177,9 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
                 backgroundColor: '#FAFAFD',
                 padding: '6px',
                 borderRadius: '9999px',
-                border: '1px solid #E2E8F0'
+                border: '1px solid #E2E8F0',
+                flexWrap: 'wrap',
+                justifyContent: 'center'
               }}
             >
               <button 
@@ -209,7 +213,7 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
                   cursor: 'pointer'
                 }}
               >
-                Child & Adolescent
+                Child & Adolescent ({ASSESSMENTS.filter(a => a.category === 'child').length})
               </button>
 
               <button 
@@ -226,12 +230,12 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
                   cursor: 'pointer'
                 }}
               >
-                Adult & Geriatric
+                Adult & Geriatric ({ASSESSMENTS.filter(a => a.category === 'adult').length})
               </button>
             </div>
           </div>
 
-          {/* Cards Grid with Equal Heights & Clean Alignment */}
+          {/* Cards Grid - FIX 2: Guaranteed immediate visibility on tab click */}
           <div 
             style={{
               display: 'grid',
@@ -243,118 +247,135 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
             {filteredList.map((item) => (
               <div 
                 key={item.id}
-                className="minimal-card reveal-element"
+                className="minimal-card reveal-element is-visible"
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  backgroundColor: '#FAFAFD',
-                  borderColor: '#E2E8F0'
+                  borderTop: item.category === 'child' ? '4px solid #FF497C' : '4px solid #0F3832',
+                  minHeight: '280px'
                 }}
               >
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                    <span className="badge-status" style={{ backgroundColor: item.category === 'child' ? '#FFE4EC' : '#EDE9FE', color: item.category === 'child' ? '#FF497C' : '#7C3AED' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
+                    <span 
+                      className="badge-status"
+                      style={{
+                        backgroundColor: item.category === 'child' ? '#FFE4EC' : '#D1FAE5',
+                        color: item.category === 'child' ? '#FF497C' : '#0F3832',
+                        fontSize: '0.75rem'
+                      }}
+                    >
                       {item.badge}
                     </span>
-                    <span style={{ fontSize: '0.813rem', color: '#6B7280', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Clock size={14} /> {item.duration}
+
+                    <span style={{ fontSize: '0.75rem', color: '#6B7280', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Clock size={12} /> {item.duration}
                     </span>
                   </div>
 
-                  <h4 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '10px', color: '#0E0E10' }}>
+                  <h4 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#0E0E10', marginBottom: '10px', lineHeight: 1.3 }}>
                     {item.title}
                   </h4>
 
-                  <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '18px', lineHeight: 1.5, minHeight: '60px' }}>
+                  <p style={{ fontSize: '0.875rem', color: '#475569', marginBottom: '16px', lineHeight: 1.5 }}>
                     {item.description}
                   </p>
 
-                  <div 
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      padding: '12px 14px',
-                      borderRadius: '12px',
-                      marginBottom: '20px',
-                      fontSize: '0.813rem',
-                      border: '1px solid #E2E8F0',
-                      minHeight: '70px'
-                    }}
-                  >
-                    <div style={{ fontWeight: 700, marginBottom: '4px', color: '#8A4FFF', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Wrench size={13} /> Standardized Batteries & Tools:
+                  <div style={{ backgroundColor: '#FAFAFD', padding: '10px 14px', borderRadius: '12px', marginBottom: '18px', border: '1px solid #F1F1F5' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Wrench size={12} /> Standardized Batteries Used:
                     </div>
-                    <span style={{ color: '#0E0E10' }}>{item.tools}</span>
+                    <div style={{ fontSize: '0.813rem', color: '#0E0E10', fontWeight: 600, lineHeight: 1.4 }}>
+                      {item.tools}
+                    </div>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '10px', marginTop: 'auto' }}>
+                <div style={{ display: 'flex', gap: '10px' }}>
                   <button 
                     className="btn-black"
                     onClick={() => onSelectAssessment(item.title)}
-                    style={{ flex: 1, padding: '10px 14px', fontSize: '0.875rem', border: '2px solid #0E0E10' }}
+                    style={{ flex: 1, padding: '10px 16px', fontSize: '0.813rem' }}
                   >
-                    <span>Book Assessment</span>
+                    <span>Book Battery</span>
                   </button>
 
                   <button 
                     className="btn-outline-theme"
                     onClick={() => setActiveModalItem(item)}
-                    style={{ padding: '10px 14px', fontSize: '0.875rem', border: '1.5px solid #0E0E10' }}
+                    style={{ padding: '10px 14px', fontSize: '0.813rem' }}
                   >
-                    Info
+                    <span>Details</span>
                   </button>
                 </div>
               </div>
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Info Modal */}
-        {activeModalItem && (
-          <div className="modal-overlay" onClick={() => setActiveModalItem(null)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="modal-close-btn" onClick={() => setActiveModalItem(null)}>
-                <X size={20} />
-              </button>
+      {/* Item Details Modal */}
+      {activeModalItem && (
+        <div className="modal-overlay" onClick={() => setActiveModalItem(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '560px' }}>
+            <button className="modal-close-btn" onClick={() => setActiveModalItem(null)}>
+              <X size={20} />
+            </button>
 
-              <span className="section-badge" style={{ backgroundColor: '#EDE9FE', color: '#7C3AED' }}>
-                {activeModalItem.badge}
-              </span>
+            <span 
+              className="badge-status"
+              style={{
+                backgroundColor: activeModalItem.category === 'child' ? '#FFE4EC' : '#D1FAE5',
+                color: activeModalItem.category === 'child' ? '#FF497C' : '#0F3832',
+                marginBottom: '12px'
+              }}
+            >
+              {activeModalItem.badge}
+            </span>
 
-              <h2 style={{ fontSize: '1.75rem', color: '#0E0E10', margin: '12px 0' }}>
-                {activeModalItem.title}
-              </h2>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#0E0E10', marginBottom: '12px' }}>
+              {activeModalItem.title}
+            </h3>
 
-              <p style={{ color: '#6B7280', marginBottom: '24px', lineHeight: 1.6 }}>
-                {activeModalItem.description}
-              </p>
+            <p style={{ color: '#475569', fontSize: '0.938rem', lineHeight: 1.6, marginBottom: '20px' }}>
+              {activeModalItem.description}
+            </p>
 
-              <div style={{ backgroundColor: '#FAFAFD', padding: '20px', borderRadius: '16px', marginBottom: '24px', border: '1px solid #E2E8F0' }}>
-                <h4 style={{ color: '#0E0E10', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Wrench size={16} color="#8A4FFF" /> Standardized Clinical Batteries:
-                </h4>
-                <p style={{ fontSize: '0.938rem', color: '#0E0E10', margin: 0 }}>{activeModalItem.tools}</p>
-                <div style={{ marginTop: '12px', fontSize: '0.875rem', color: '#6B7280' }}>
-                  Expected Evaluation Duration: <strong>{activeModalItem.duration}</strong>
-                </div>
+            <div style={{ backgroundColor: '#FAFAFD', padding: '16px', borderRadius: '16px', marginBottom: '24px', border: '1px solid #E2E8F0' }}>
+              <div style={{ fontWeight: 800, color: '#0E0E10', fontSize: '0.875rem', marginBottom: '6px' }}>
+                Standardized Evaluation Tools:
               </div>
+              <div style={{ color: '#8A4FFF', fontWeight: 700, fontSize: '0.938rem' }}>
+                {activeModalItem.tools}
+              </div>
+              <div style={{ marginTop: '10px', fontSize: '0.813rem', color: '#64748B' }}>
+                Expected Duration: <strong>{activeModalItem.duration}</strong>
+              </div>
+            </div>
 
+            <div style={{ display: 'flex', gap: '12px' }}>
               <button 
                 className="btn-black"
                 onClick={() => {
-                  const title = activeModalItem.title;
+                  onSelectAssessment(activeModalItem.title);
                   setActiveModalItem(null);
-                  onSelectAssessment(title);
                 }}
-                style={{ width: '100%', border: '2px solid #0E0E10' }}
+                style={{ flex: 1 }}
               >
-                Book {activeModalItem.title}
+                <span>Book This Assessment</span>
+              </button>
+
+              <button 
+                className="btn-outline-theme"
+                onClick={() => setActiveModalItem(null)}
+              >
+                <span>Close</span>
               </button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
 };
