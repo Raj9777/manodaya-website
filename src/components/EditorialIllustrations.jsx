@@ -162,90 +162,118 @@ export const HeadphonesListeningIllustration = () => (
   </svg>
 );
 
-// FIX: Curved Arch Testimonial Graphic (Balanced ViewBox & Centered Scaling)
+// BRAND NEW AESTHETIC VECTOR: Mindhaven Client Feedback Speech Arc & Constellation
 export const ArchTestimonialGraphic = () => (
-  <svg viewBox="0 0 700 180" className="section-svg-graphic" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ margin: '0 auto', maxWidth: '620px' }}>
-    <path d="M70 150 A270 130 0 0 1 630 150" stroke="#FF75A0" strokeWidth="2.5" strokeDasharray="6 6" fill="none" />
+  <svg viewBox="0 0 720 200" className="section-svg-graphic" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ margin: '0 auto', maxWidth: '640px' }}>
+    {/* Rainbow Gradient Arch */}
+    <path d="M60 160 Q360 20 660 160" stroke="url(#archGradient)" strokeWidth="4" strokeLinecap="round" strokeDasharray="8 8" fill="none" />
     
-    {/* Left Eyelash Blob */}
-    <g transform="translate(45, 110)" className="float-element">
-      <rect width="50" height="42" rx="16" fill="#8A4FFF" />
-      <path d="M13 21 Q19 28 25 21" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" />
-      <path d="M27 21 Q33 28 39 21" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" />
+    <defs>
+      <linearGradient id="archGradient" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#FF497C" />
+        <stop offset="50%" stopColor="#8A4FFF" />
+        <stop offset="100%" stopColor="#10B981" />
+      </linearGradient>
+    </defs>
+
+    {/* Left Speech Bubble character */}
+    <g transform="translate(60, 90)" className="float-element">
+      <rect width="64" height="52" rx="18" fill="#8A4FFF" stroke="#111111" strokeWidth="3" />
+      <path d="M22 28 Q32 38 42 28" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
+      <circle cx="20" cy="20" r="3.5" fill="#FFFFFF" />
+      <circle cx="44" cy="20" r="3.5" fill="#FFFFFF" />
+      {/* Small Quote Tag */}
+      <path d="M12 50 L20 62 V50 Z" fill="#8A4FFF" />
     </g>
 
-    {/* Smiling Orange Brain */}
-    <g transform="translate(145, 25)" className="float-element-slow">
-      <path d="M24 35 C6 18 30 0 48 18 C66 0 90 18 72 35 C90 52 66 70 48 58 C30 70 6 52 24 35 Z" fill="#FF785A" />
-      <circle cx="38" cy="34" r="3" fill="#111111" />
-      <circle cx="58" cy="34" r="3" fill="#111111" />
-      <circle cx="30" cy="40" r="3.5" fill="#FFC107" />
-      <circle cx="66" cy="40" r="3.5" fill="#FFC107" />
-      <path d="M42 41 Q48 46 54 41" stroke="#111111" strokeWidth="2.5" strokeLinecap="round" />
+    {/* Cute Brain Avatar with Headphone */}
+    <g transform="translate(180, 25)" className="float-element-slow">
+      <path d="M24 35 C6 18 30 0 48 18 C66 0 90 18 72 35 C90 52 66 70 48 58 C30 70 6 52 24 35 Z" fill="#FF785A" stroke="#111111" strokeWidth="3" />
+      <circle cx="38" cy="34" r="3.5" fill="#111111" />
+      <circle cx="58" cy="34" r="3.5" fill="#111111" />
+      <ellipse cx="28" cy="40" rx="4" ry="3" fill="#FFC107" />
+      <ellipse cx="68" cy="40" rx="4" ry="3" fill="#FFC107" />
+      <path d="M42 42 Q48 48 54 42" stroke="#111111" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Headphone Arch */}
+      <path d="M26 30 C26 12 70 12 70 30" stroke="#8A4FFF" strokeWidth="4" fill="none" />
+      <rect x="22" y="26" width="8" height="14" rx="4" fill="#8A4FFF" />
+      <rect x="66" y="26" width="8" height="14" rx="4" fill="#8A4FFF" />
     </g>
 
-    {/* Center Handshake Thumbs Block */}
-    <g transform="translate(310, 5)" className="pulse-heart">
-      <rect width="36" height="40" rx="10" fill="#8A4FFF" />
-      <rect x="40" y="0" width="36" height="40" rx="10" fill="#70E000" />
-      <path d="M17 20 H29" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="M48 20 H60" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
+    {/* Center Glowing Heart Block */}
+    <g transform="translate(330, 10)" className="pulse-heart">
+      <rect width="60" height="54" rx="16" fill="#FF497C" stroke="#111111" strokeWidth="3" />
+      <path d="M30 20 C23 10 10 20 10 32 C10 44 30 52 30 52 C30 52 50 44 50 32 C50 20 37 10 30 20 Z" fill="#FFFFFF" />
     </g>
 
-    {/* Right Smiling Pink Heart */}
+    {/* Right Smiling Star Avatar */}
     <g transform="translate(480, 25)" className="float-element">
-      <path d="M40 18 C23 0 0 18 0 40 C0 62 40 85 40 85 C40 85 80 62 80 40 C80 18 57 0 40 18 Z" fill="#FFA6DF" />
-      <circle cx="30" cy="38" r="3" fill="#111111" />
-      <circle cx="50" cy="38" r="3" fill="#111111" />
-      <path d="M34 44 Q40 50 46 44" stroke="#111111" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M40 10 L50 28 L70 30 L55 45 L60 65 L40 54 L20 65 L25 45 L10 30 L30 28 Z" fill="#FFC107" stroke="#111111" strokeWidth="3" />
+      <circle cx="33" cy="33" r="3" fill="#111111" />
+      <circle cx="47" cy="33" r="3" fill="#111111" />
+      <path d="M36 40 Q40 44 44 40" stroke="#111111" strokeWidth="2.5" strokeLinecap="round" />
     </g>
 
-    {/* Right Green Eyelash Blob */}
-    <g transform="translate(600, 110)" className="float-element-slow">
-      <rect width="50" height="42" rx="16" fill="#70E000" />
-      <path d="M13 21 Q19 28 25 21" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" />
-      <path d="M27 21 Q33 28 39 21" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" />
+    {/* Right Green Eyelash Avatar */}
+    <g transform="translate(600, 90)" className="float-element-slow">
+      <rect width="64" height="52" rx="18" fill="#10B981" stroke="#111111" strokeWidth="3" />
+      <path d="M18 25 Q24 32 30 25" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M34 25 Q40 32 46 25" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M52 50 L44 62 V50 Z" fill="#10B981" />
     </g>
   </svg>
 );
 
-// FIX: Holding Hands Banner (Proportional ViewBox & Smooth Alignment)
+// BRAND NEW AESTHETIC VECTOR: Mindhaven Connected Healing Ribbon & Community Hug Banner
 export const HoldingHandsBannerIllustration = () => (
-  <svg viewBox="0 0 900 180" className="section-svg-graphic" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ margin: '0 auto', maxWidth: '800px' }}>
-    <g transform="translate(70, 20)" className="float-element">
-      <circle cx="45" cy="35" r="18" fill="#FFC4B8" />
-      <path d="M25 20 C25 5 65 5 65 20 Z" fill="#111111" />
-      <path d="M25 55 H65 V105 H25 Z" fill="#70E000" />
-      <path d="M20 105 H70 V140 H20 Z" fill="#8A4FFF" />
+  <svg viewBox="0 0 900 200" className="section-svg-graphic" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ margin: '0 auto', maxWidth: '820px' }}>
+    {/* Background Sparkles & Hearts */}
+    <path d="M120 40 L124 50 L134 54 L124 58 L120 68 L116 58 L106 54 L116 50 Z" fill="#FFB800" className="pulse-heart" />
+    <path d="M450 30 L454 40 L464 44 L454 48 L450 58 L446 48 L436 44 L446 40 Z" fill="#FF497C" className="pulse-heart" />
+    <path d="M780 40 L784 50 L794 54 L784 58 L780 68 L776 58 L766 54 L776 50 Z" fill="#8A4FFF" className="pulse-heart" />
+
+    {/* 5 Distinct Vector Characters holding connected healing ribbon */}
+    {/* Person 1: Deep Teal */}
+    <g transform="translate(70, 45)" className="float-element">
+      <circle cx="45" cy="30" r="20" fill="#FFC4B8" stroke="#111111" strokeWidth="3" />
+      <path d="M25 15 C25 0 65 0 65 15 Z" fill="#111111" />
+      <path d="M25 50 H65 V105 H25 Z" fill="#0F3832" stroke="#111111" strokeWidth="3" />
+      <path d="M15 105 H75 V145 H15 Z" fill="#8A4FFF" stroke="#111111" strokeWidth="3" />
     </g>
 
-    <g transform="translate(230, 35)" className="float-element-slow">
-      <circle cx="45" cy="35" r="18" fill="#FFC4B8" />
-      <path d="M25 55 H65 V110 H25 Z" fill="#FFC107" />
-      <path d="M20 110 H70 V150 H20 Z" fill="#111111" />
+    {/* Person 2: Muted Mustard Yellow */}
+    <g transform="translate(230, 55)" className="float-element-slow">
+      <circle cx="45" cy="30" r="20" fill="#FFC4B8" stroke="#111111" strokeWidth="3" />
+      <path d="M25 50 H65 V110 H25 Z" fill="#FFB800" stroke="#111111" strokeWidth="3" />
+      <path d="M15 110 H75 V150 H15 Z" fill="#111111" stroke="#111111" strokeWidth="3" />
     </g>
 
-    <g transform="translate(400, 45)" className="float-element">
-      <circle cx="45" cy="30" r="18" fill="#FFC4B8" />
-      <path d="M25 10 C25 -5 65 -5 65 10 Z" fill="#FF75A0" />
-      <path d="M25 50 H65 V95 H25 Z" fill="#FF785A" />
-      <path d="M20 95 L10 135 H80 L70 95 Z" fill="#FFC107" />
+    {/* Person 3: Bright Coral Pink */}
+    <g transform="translate(400, 65)" className="float-element">
+      <circle cx="45" cy="25" r="20" fill="#FFC4B8" stroke="#111111" strokeWidth="3" />
+      <path d="M25 8 C25 -8 65 -8 65 8 Z" fill="#FF497C" />
+      <path d="M25 45 H65 V95 H25 Z" fill="#FF785A" stroke="#111111" strokeWidth="3" />
+      <path d="M15 95 L5 135 H85 L75 95 Z" fill="#FFB800" stroke="#111111" strokeWidth="3" />
     </g>
 
-    <g transform="translate(570, 35)" className="float-element-slow">
-      <circle cx="45" cy="35" r="18" fill="#FFC4B8" />
-      <path d="M25 55 H65 V110 H25 Z" fill="#FFFFFF" stroke="#111111" strokeWidth="2" />
-      <path d="M25 80 H65 V150 H25 Z" fill="#00C853" />
+    {/* Person 4: Lavender Purple */}
+    <g transform="translate(570, 55)" className="float-element-slow">
+      <circle cx="45" cy="30" r="20" fill="#FFC4B8" stroke="#111111" strokeWidth="3" />
+      <path d="M25 50 H65 V110 H25 Z" fill="#EDE9FE" stroke="#111111" strokeWidth="3" />
+      <path d="M25 75 H65 V150 H25 Z" fill="#10B981" stroke="#111111" strokeWidth="3" />
     </g>
 
-    <g transform="translate(730, 20)" className="float-element">
-      <circle cx="45" cy="35" r="18" fill="#FFC4B8" />
-      <path d="M25 20 C25 5 65 5 65 20 Z" fill="#111111" />
-      <path d="M25 55 H65 V105 H25 Z" fill="#FFA6DF" />
-      <path d="M20 105 L10 140 H80 L70 105 Z" fill="#70E000" />
+    {/* Person 5: Mint Green */}
+    <g transform="translate(730, 45)" className="float-element">
+      <circle cx="45" cy="30" r="20" fill="#FFC4B8" stroke="#111111" strokeWidth="3" />
+      <path d="M25 15 C25 0 65 0 65 15 Z" fill="#111111" />
+      <path d="M25 50 H65 V105 H25 Z" fill="#FFA6DF" stroke="#111111" strokeWidth="3" />
+      <path d="M15 105 L5 145 H85 L75 105 Z" fill="#10B981" stroke="#111111" strokeWidth="3" />
     </g>
 
-    <path d="M125 90 Q275 130 445 130 T775 90" stroke="#FFC4B8" strokeWidth="16" strokeLinecap="round" fill="none" />
+    {/* Connected Glowing Pink/Gold Healing Ribbon */}
+    <path d="M115 100 Q275 145 445 145 T775 100" stroke="#FF497C" strokeWidth="18" strokeLinecap="round" fill="none" />
+    <path d="M115 100 Q275 145 445 145 T775 100" stroke="#FFB800" strokeWidth="6" strokeLinecap="round" fill="none" strokeDasharray="12 12" />
   </svg>
 );
 
