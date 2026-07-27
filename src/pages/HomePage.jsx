@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeSpaceIllustration, HeadphonesListeningIllustration, HoldingHandsBannerIllustration } from '../components/EditorialIllustrations';
+import { SafeSpaceIllustration, HeadphonesListeningIllustration } from '../components/EditorialIllustrations';
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import { Calendar, Video, ArrowRight, CheckCircle2, Sparkles, Baby, HeartPulse, ClipboardCheck, Activity, GraduationCap } from 'lucide-react';
 
@@ -161,7 +161,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
         </div>
       </section>
 
-      {/* 3. DEDICATED SPOTLIGHT SECTION: Child Care Spotlight */}
+      {/* 3. Child Care Spotlight */}
       <section className="section-padding" style={{ backgroundColor: '#FFF5F8', borderTop: '1px solid #FFE4EC', borderBottom: '1px solid #FFE4EC' }}>
         <div className="container">
           <div 
@@ -213,22 +213,6 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
 
       {/* 4. Full Interactive Client Feedback & Testimonials Section */}
       <TestimonialsSection currentMode="all" />
-
-      {/* 5. Pre-Footer Banner */}
-      <section style={{ backgroundColor: '#F8F6FF', paddingTop: '48px', textAlign: 'center' }}>
-        <div className="container" style={{ marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '2.25rem', fontWeight: 900, color: '#0E0E10', marginBottom: '16px' }}>
-            Your Mind Matters. Let's Heal, Together.
-          </h2>
-          <button className="btn-black" onClick={() => onOpenBooking()}>
-            <Calendar size={18} />
-            <span>Book an Appointment</span>
-          </button>
-        </div>
-        <div style={{ maxWidth: '850px', margin: '0 auto' }}>
-          <HoldingHandsBannerIllustration />
-        </div>
-      </section>
     </div>
   );
 };
