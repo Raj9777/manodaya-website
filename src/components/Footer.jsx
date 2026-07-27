@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, Send, ShieldCheck, Phone, Mail, MapPin, Clock, MessageSquare } from 'lucide-react';
 import { HoldingHandsBannerIllustration } from './EditorialIllustrations';
+import { ManodayaLogoSVG } from './ManodayaLogoSVG';
 import { CLINIC_INFO } from '../data/content';
 
 export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
@@ -30,19 +31,19 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
             Your Mind Matters. Let's Heal, Together.
           </h2>
 
-          <button className="btn-primary-theme" onClick={onOpenBooking} style={{ padding: '16px 36px' }}>
+          <button className="btn-black" onClick={onOpenBooking} style={{ padding: '16px 36px', border: '2px solid #0E0E10' }}>
             <Calendar size={18} />
             <span>Book an Appointment</span>
           </button>
         </div>
 
-        {/* Row of 5 Characters Holding Hands */}
-        <div style={{ maxWidth: '850px', margin: '0 auto' }}>
+        {/* 5 Characters Holding Hands Banner */}
+        <div style={{ maxWidth: '880px', margin: '0 auto' }}>
           <HoldingHandsBannerIllustration />
         </div>
       </section>
 
-      {/* Dark Footer (Deep Teal / Black) - Prompt Requirement 6 */}
+      {/* Dark Footer (Deep Teal / Black) */}
       <footer style={{ backgroundColor: '#0B201C', color: '#FFFFFF', paddingTop: '64px', paddingBottom: '36px' }}>
         <div className="container">
           <div 
@@ -53,9 +54,15 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
               marginBottom: '56px'
             }}
           >
-            {/* Left: Newsletter CTA (Wellness tips, straight to your inbox) */}
+            {/* Left: Newsletter CTA */}
             <div>
-              <h3 style={{ fontSize: '1.25rem', color: '#FFFFFF', marginBottom: '8px', fontWeight: 800 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                <ManodayaLogoSVG size={40} color="#FFD166" sunColor="#FFA6DF" />
+                <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.03em' }}>
+                  MANODAYA
+                </span>
+              </div>
+              <h3 style={{ fontSize: '1.125rem', color: '#FFFFFF', marginBottom: '8px', fontWeight: 800 }}>
                 Wellness tips, straight to your inbox
               </h3>
               <p style={{ color: '#94A3B8', fontSize: '0.875rem', marginBottom: '18px' }}>
@@ -77,8 +84,8 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
                   }}
                 />
                 <button 
-                  className="btn-primary-theme"
-                  style={{ padding: '12px 20px', backgroundColor: '#FF5E8E', color: '#FFFFFF' }}
+                  className="btn-pink"
+                  style={{ padding: '12px 20px', minWidth: 'auto' }}
                 >
                   <Send size={16} />
                 </button>
@@ -146,7 +153,9 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
                   padding: '10px 18px',
                   borderRadius: '9999px',
                   fontSize: '0.813rem',
-                  fontWeight: 700
+                  fontWeight: 700,
+                  border: '1px solid rgba(255,209,102,0.3)',
+                  cursor: 'pointer'
                 }}
               >
                 <ShieldCheck size={16} /> Staff CRM Portal Access
@@ -196,7 +205,7 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
           </div>
         </div>
 
-        {/* Persistent Mobile CTAs ("Call", "WhatsApp", "Book Appointment") */}
+        {/* Persistent Mobile CTAs */}
         <div 
           style={{
             position: 'fixed',

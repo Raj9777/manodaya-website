@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Brain, Sparkles, Heart } from 'lucide-react';
-import { CuteSmilingBrainCard } from './EditorialIllustrations';
+import { Sparkles, Heart } from 'lucide-react';
+import { ManodayaLogoSVG } from './ManodayaLogoSVG';
 
 export const LoadingEntryPage = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
@@ -16,7 +16,7 @@ export const LoadingEntryPage = ({ onComplete }) => {
             setIsFadingOut(true);
             setTimeout(() => {
               onComplete();
-            }, 600); // 600ms fade out transition
+            }, 600);
           }, 300);
           return 100;
         }
@@ -27,7 +27,7 @@ export const LoadingEntryPage = ({ onComplete }) => {
         if (next === 90) setLoadingText('Welcome to MANODAYA Care.');
         return next;
       });
-    }, 80); // 80ms * 20 steps = ~1.6s total loading time
+    }, 80);
 
     return () => clearInterval(timer);
   }, [onComplete]);
@@ -59,15 +59,15 @@ export const LoadingEntryPage = ({ onComplete }) => {
           width: '100%',
           textAlign: 'center',
           backgroundColor: '#FFFFFF',
-          padding: '40px 32px',
+          padding: '44px 36px',
           borderRadius: '32px',
           border: '1.5px solid #E2E8F0',
           boxShadow: '0 20px 50px rgba(138, 79, 255, 0.08)'
         }}
       >
-        {/* Animated Cute Brain Vector Graphic */}
-        <div style={{ maxWidth: '240px', margin: '0 auto 20px auto' }}>
-          <CuteSmilingBrainCard />
+        {/* Official Manodaya Vector Outline Logo */}
+        <div style={{ marginBottom: '20px' }}>
+          <ManodayaLogoSVG size={100} color="#6B8E4E" sunColor="#E0A96D" className="float-element" />
         </div>
 
         {/* Brand Name & Tagline */}
@@ -91,7 +91,7 @@ export const LoadingEntryPage = ({ onComplete }) => {
           Advanced Neuropsychological & Cognitive Care
         </p>
 
-        {/* Aesthetic Animated Progress Bar */}
+        {/* Progress Bar */}
         <div style={{ marginBottom: '16px' }}>
           <div 
             style={{
@@ -107,7 +107,7 @@ export const LoadingEntryPage = ({ onComplete }) => {
               style={{
                 height: '100%',
                 width: `${progress}%`,
-                background: 'linear-gradient(90deg, #FF497C 0%, #8A4FFF 100%)',
+                background: 'linear-gradient(90deg, #6B8E4E 0%, #8A4FFF 100%)',
                 borderRadius: '9999px',
                 transition: 'width 0.1s linear'
               }}

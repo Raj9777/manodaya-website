@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Brain, Phone, Calendar, Menu, X, ShieldCheck, ChevronDown, ClipboardCheck, HeartPulse, Activity, Users, GraduationCap } from 'lucide-react';
+import { Phone, Calendar, Menu, X, ShieldCheck, ChevronDown, ClipboardCheck, HeartPulse, Activity, Users, GraduationCap } from 'lucide-react';
 import { CLINIC_INFO } from '../data/content';
+import { ManodayaLogoSVG } from './ManodayaLogoSVG';
 
 export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -89,24 +90,11 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
       </div>
 
       {/* Main Modern Minimal Navbar */}
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '72px', padding: '0 24px' }}>
-        {/* Brand Logo */}
-        <button onClick={() => onNavigate('home')} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-          <div 
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '12px',
-              backgroundColor: '#FF497C',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#FFFFFF'
-            }}
-          >
-            <Brain size={22} />
-          </div>
-          <span style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '-0.04em', color: '#0E0E10' }}>
+      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '76px', padding: '0 24px' }}>
+        {/* Official Manodaya Outline Vector Logo */}
+        <button onClick={() => onNavigate('home')} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+          <ManodayaLogoSVG size={46} color="#6B8E4E" sunColor="#E0A96D" />
+          <span style={{ fontSize: '1.45rem', fontWeight: 900, letterSpacing: '-0.03em', color: '#0E0E10' }}>
             MANODAYA
           </span>
         </button>
@@ -241,7 +229,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
             )}
           </div>
 
-          {/* Book Now shifted directly into the Nav Menu Row */}
+          {/* Book Now Button */}
           <button 
             className="btn-black" 
             onClick={() => onOpenBooking()}
@@ -271,7 +259,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
         </div>
       </div>
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div 
           style={{
