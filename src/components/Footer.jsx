@@ -43,7 +43,7 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
         </div>
       </section>
 
-      {/* Dark Footer (Deep Teal / Black) */}
+      {/* Dark Footer (Deep Slate / Emerald Theme) */}
       <footer style={{ backgroundColor: '#0B201C', color: '#FFFFFF', paddingTop: '64px', paddingBottom: '36px' }}>
         <div className="container">
           <div 
@@ -54,11 +54,21 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
               marginBottom: '56px'
             }}
           >
-            {/* Left: Newsletter CTA */}
+            {/* Left: Brand Header & Newsletter CTA */}
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                <ManodayaLogoSVG size={40} color="#FFD166" sunColor="#FFA6DF" />
-                <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.03em' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+                <ManodayaLogoSVG size={58} color="#FFD166" sunColor="#FFA6DF" />
+                <span 
+                  style={{ 
+                    fontSize: 'clamp(2rem, 4vw, 2.75rem)', 
+                    fontWeight: 950, 
+                    color: '#FFFFFF', 
+                    letterSpacing: '-0.03em',
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FFD166 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}
+                >
                   MANODAYA
                 </span>
               </div>
@@ -163,18 +173,20 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
             </div>
           </div>
 
-          {/* Large Brand Typography */}
+          {/* ULTRA BOLD & MASSIVE BRAND TYPOGRAPHY FOR ALL SCREEN SIZES */}
           <div 
             style={{
-              fontSize: 'clamp(3rem, 10vw, 8rem)',
-              fontWeight: 900,
-              color: 'rgba(255, 255, 255, 0.06)',
-              lineHeight: 0.85,
+              fontSize: 'clamp(4.5rem, 16vw, 13.5rem)',
+              fontWeight: 950,
+              color: 'rgba(255, 255, 255, 0.09)',
+              lineHeight: 0.82,
               letterSpacing: '-0.05em',
               textTransform: 'uppercase',
-              marginBottom: '32px',
+              marginBottom: '36px',
               userSelect: 'none',
-              textAlign: 'center'
+              textAlign: 'center',
+              width: '100%',
+              overflow: 'hidden'
             }}
           >
             MANODAYA
