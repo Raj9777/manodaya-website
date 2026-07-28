@@ -2,6 +2,7 @@ import React from 'react';
 import { SafeSpaceIllustration, HeadphonesListeningIllustration } from '../components/EditorialIllustrations';
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import { ClinicalTeamSection } from '../components/ClinicalTeamSection';
+import { FlagshipProgramsSection } from '../components/FlagshipProgramsSection';
 import { Calendar, Video, ArrowRight, CheckCircle2, Sparkles, Baby, HeartPulse, ClipboardCheck, Activity, GraduationCap } from 'lucide-react';
 
 export const HomePage = ({ onNavigate, onOpenBooking }) => {
@@ -162,10 +163,13 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
         </div>
       </section>
 
-      {/* 3. Clinical Team Section (Short Description + Photos + Special Interests) */}
+      {/* 3. NEW FEATURED FLAGSHIP PROGRAMS SECTION (MCMF Career & Cogmed Training) */}
+      <FlagshipProgramsSection onOpenBooking={onOpenBooking} />
+
+      {/* 4. Clinical Team Section */}
       <ClinicalTeamSection mode="short" onOpenBooking={onOpenBooking} />
 
-      {/* 4. Child Care Spotlight */}
+      {/* 5. Child Care Spotlight */}
       <section className="section-padding" style={{ backgroundColor: '#FFF5F8', borderTop: '1px solid #FFE4EC', borderBottom: '1px solid #FFE4EC' }}>
         <div className="container">
           <div 
@@ -215,7 +219,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
         </div>
       </section>
 
-      {/* 5. Full Interactive Client Feedback & Testimonials Section */}
+      {/* 6. Full Interactive Client Feedback & Testimonials Section */}
       <TestimonialsSection currentMode="all" />
     </div>
   );
