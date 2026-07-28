@@ -463,3 +463,46 @@ button {
     justify-content: center;
   }
 }
+
+/* ==========================================================================
+   INTERACTIVE & ANIMATED TRANSPARENT ELEMENT GRAPHICS
+   ========================================================================== */
+
+.interactive-element-graphic {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  animation: floatEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards, gentleFloat 5s ease-in-out infinite 0.8s;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.08));
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+
+.interactive-element-graphic:hover {
+  transform: translateY(-10px) scale(1.04) rotate(-0.5deg) !important;
+  filter: drop-shadow(0 24px 42px rgba(138, 79, 255, 0.24)) !important;
+}
+
+@keyframes floatEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(32px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(0.6deg);
+  }
+}
+

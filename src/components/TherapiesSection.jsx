@@ -34,26 +34,14 @@ export const TherapiesSection = ({ currentMode, onSelectTherapy }) => {
             </p>
           </div>
 
-          <div className="reveal-element is-visible">
-            <div 
-              style={{ 
-                maxWidth: '540px', 
-                margin: '0 auto',
-                borderRadius: '32px',
-                overflow: 'hidden',
-                boxShadow: '0 20px 50px rgba(138, 79, 255, 0.12)',
-                border: '3px solid #EDE9FE',
-                backgroundColor: '#FAF5FF',
-                transition: 'transform 0.3s ease'
-              }}
-              className="vector-container"
-            >
-              <img 
-                src="/images/elements/For therapy.png" 
-                alt="MANODAYA Psychotherapy & Counseling Care" 
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-              />
-            </div>
+          {/* Psychotherapy Graphic (For therapy.png) - 100% Transparent & Interactive */}
+          <div className="reveal-element is-visible" style={{ textAlign: 'center' }}>
+            <img 
+              src="/images/elements/For therapy.png" 
+              alt="MANODAYA Psychotherapy & Counseling Care" 
+              className="interactive-element-graphic"
+              style={{ maxWidth: '560px', width: '100%', height: 'auto' }}
+            />
           </div>
         </div>
 

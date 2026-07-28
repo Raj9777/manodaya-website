@@ -65,9 +65,15 @@ export const LoadingEntryPage = ({ onComplete }) => {
           boxShadow: '0 20px 50px rgba(138, 79, 255, 0.08)'
         }}
       >
-        {/* Official Manodaya Brand Logo */}
-        <div style={{ marginBottom: '16px' }}>
-          <ManodayaLogoSVG size={160} className="float-element" />
+        {/* Official Manodaya Brand Logo & Floating Element Graphic */}
+        <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+          <ManodayaLogoSVG size={140} className="float-element" />
+          <img 
+            src="/images/elements/Home.png" 
+            alt="Loading Care" 
+            className="interactive-element-graphic"
+            style={{ maxWidth: '240px', width: '100%', height: 'auto' }}
+          />
         </div>
 
         {/* Brand Badge */}

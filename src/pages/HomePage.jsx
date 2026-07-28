@@ -82,27 +82,14 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               </div>
             </div>
 
-            {/* Right Lifespan Progression Graphic (Home.png) */}
+            {/* Right Lifespan Progression Graphic (Home.png) - 100% Transparent & Interactive */}
             <div className="reveal-element is-visible" style={{ textAlign: 'center' }}>
-              <div 
-                style={{ 
-                  maxWidth: '560px', 
-                  margin: '0 auto',
-                  borderRadius: '32px',
-                  overflow: 'hidden',
-                  boxShadow: '0 20px 50px rgba(138, 79, 255, 0.12)',
-                  border: '3px solid #EDE9FE',
-                  backgroundColor: '#FFFBF5',
-                  transition: 'transform 0.3s ease'
-                }}
-                className="vector-container"
-              >
-                <img 
-                  src="/images/elements/Home.png" 
-                  alt="MANODAYA Lifespan Neuropsychological Care" 
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                />
-              </div>
+              <img 
+                src="/images/elements/Home.png" 
+                alt="MANODAYA Lifespan Neuropsychological Care" 
+                className="interactive-element-graphic"
+                style={{ maxWidth: '580px', width: '100%', height: 'auto' }}
+              />
             </div>
           </div>
         </div>

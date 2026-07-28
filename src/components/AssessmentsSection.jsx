@@ -160,26 +160,14 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
 
         {/* Detailed Assessment Batteries Section */}
         <div id="assessments-list" style={{ paddingTop: '20px' }}>
-          {/* Featured Clinical Assessment Illustration Banner (Assessment.png) */}
+          {/* Featured Clinical Assessment Graphic (Assessment.png) - 100% Transparent & Interactive */}
           <div style={{ marginBottom: '40px', display: 'flex', justifyContent: 'center' }}>
-            <div 
-              style={{
-                maxWidth: '680px',
-                width: '100%',
-                borderRadius: '32px',
-                overflow: 'hidden',
-                boxShadow: '0 16px 40px rgba(255, 94, 142, 0.12)',
-                border: '3px solid #FFE4EC',
-                backgroundColor: '#FFF5F8'
-              }}
-              className="vector-container"
-            >
-              <img 
-                src="/images/elements/Assessment.png" 
-                alt="MANODAYA Clinical Assessment & Diagnostic Evaluation" 
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-              />
-            </div>
+            <img 
+              src="/images/elements/Assessment.png" 
+              alt="MANODAYA Clinical Assessment & Diagnostic Evaluation" 
+              className="interactive-element-graphic"
+              style={{ maxWidth: '640px', width: '100%', height: 'auto' }}
+            />
           </div>
 
           <div style={{ textAlign: 'center', marginBottom: '36px' }}>

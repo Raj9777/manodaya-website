@@ -20,26 +20,14 @@ export const RehabPage = ({ onOpenBooking }) => {
           </p>
         </div>
 
-        {/* Featured Cognitive Rehabilitation Illustration Banner (cognitive rehabilitation.png) */}
+        {/* Featured Cognitive Rehabilitation Graphic (cognitive rehabilitation.png) - 100% Transparent & Interactive */}
         <div style={{ marginBottom: '48px', display: 'flex', justifyContent: 'center' }}>
-          <div 
-            style={{
-              maxWidth: '680px',
-              width: '100%',
-              borderRadius: '32px',
-              overflow: 'hidden',
-              boxShadow: '0 16px 40px rgba(16, 185, 129, 0.12)',
-              border: '3px solid #D1FAE5',
-              backgroundColor: '#F0FDF4'
-            }}
-            className="vector-container"
-          >
-            <img 
-              src="/images/elements/cognitive rehabilitation.png" 
-              alt="MANODAYA Senior Cognitive Remediation & Memory Training" 
-              style={{ width: '100%', height: 'auto', display: 'block' }}
-            />
-          </div>
+          <img 
+            src="/images/elements/cognitive rehabilitation.png" 
+            alt="MANODAYA Senior Cognitive Remediation & Memory Training" 
+            className="interactive-element-graphic"
+            style={{ maxWidth: '640px', width: '100%', height: 'auto' }}
+          />
         </div>
 
         {/* 3 Toolkit Highlights */}
