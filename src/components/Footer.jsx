@@ -56,21 +56,8 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
           >
             {/* Left: Brand Header & Newsletter CTA */}
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-                <ManodayaLogoSVG size={58} color="#FFD166" sunColor="#FFA6DF" />
-                <span 
-                  style={{ 
-                    fontSize: 'clamp(2rem, 4vw, 2.75rem)', 
-                    fontWeight: 950, 
-                    color: '#FFFFFF', 
-                    letterSpacing: '-0.03em',
-                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FFD166 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent'
-                  }}
-                >
-                  MANODAYA
-                </span>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                <ManodayaLogoSVG size={110} />
               </div>
               <h3 style={{ fontSize: '1.125rem', color: '#FFFFFF', marginBottom: '8px', fontWeight: 800 }}>
                 Wellness tips, straight to your inbox

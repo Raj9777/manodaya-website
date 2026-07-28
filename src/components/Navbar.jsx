@@ -39,7 +39,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        backgroundColor: 'rgba(255, 255, 255, 0.96)',
+        backgroundColor: 'rgba(255, 255, 255, 0.97)',
         backdropFilter: 'blur(16px)',
         borderBottom: '1.5px solid #F1F1F5'
       }}
@@ -89,20 +89,30 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
         </div>
       </div>
 
-      {/* Main Modern Minimal Navbar */}
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '80px', padding: '0 24px' }}>
-        {/* Official MANODAYA Transparent Logo */}
-        <button onClick={() => onNavigate('home')} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-          <ManodayaLogoSVG size={58} />
+      {/* Main Navbar Header */}
+      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: '94px', padding: '8px 24px' }}>
+        {/* Prominent Official Logo */}
+        <button 
+          onClick={() => onNavigate('home')} 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            background: 'none', 
+            border: 'none', 
+            cursor: 'pointer', 
+            padding: '4px 0' 
+          }}
+        >
+          <ManodayaLogoSVG size={88} />
         </button>
 
         {/* Modern Nav Menu Row: Home | About Us | Contact Us | More ▾ | Book Now */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '20px', position: 'relative' }} className="desktop-only">
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '22px', position: 'relative' }} className="desktop-only">
           <button
             onClick={() => onNavigate('home')}
             style={{
               fontWeight: activePage === 'home' ? 800 : 600,
-              fontSize: '0.906rem',
+              fontSize: '0.938rem',
               color: activePage === 'home' ? '#FF497C' : '#0E0E10',
               padding: '6px 2px',
               borderBottom: activePage === 'home' ? '2.5px solid #FF497C' : '2.5px solid transparent',
@@ -118,7 +128,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
             onClick={() => onNavigate('about')}
             style={{
               fontWeight: activePage === 'about' ? 800 : 600,
-              fontSize: '0.906rem',
+              fontSize: '0.938rem',
               color: activePage === 'about' ? '#FF497C' : '#0E0E10',
               padding: '6px 2px',
               borderBottom: activePage === 'about' ? '2.5px solid #FF497C' : '2.5px solid transparent',
@@ -134,7 +144,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
             onClick={() => onNavigate('contact')}
             style={{
               fontWeight: activePage === 'contact' ? 800 : 600,
-              fontSize: '0.906rem',
+              fontSize: '0.938rem',
               color: activePage === 'contact' ? '#FF497C' : '#0E0E10',
               padding: '6px 2px',
               borderBottom: activePage === 'contact' ? '2.5px solid #FF497C' : '2.5px solid transparent',
@@ -153,7 +163,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
               onMouseEnter={() => setMoreDropdownOpen(true)}
               style={{
                 fontWeight: ['assessments', 'therapies', 'rehab', 'support', 'internship'].includes(activePage) ? 800 : 600,
-                fontSize: '0.906rem',
+                fontSize: '0.938rem',
                 color: ['assessments', 'therapies', 'rehab', 'support', 'internship'].includes(activePage) ? '#FF497C' : '#0E0E10',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -174,7 +184,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
                 onMouseLeave={() => setMoreDropdownOpen(false)}
                 style={{
                   position: 'absolute',
-                  top: '40px',
+                  top: '44px',
                   right: '-20px',
                   width: '290px',
                   backgroundColor: '#FFFFFF',
@@ -231,15 +241,15 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
             className="btn-black" 
             onClick={() => onOpenBooking()}
             style={{
-              fontSize: '0.844rem',
+              fontSize: '0.875rem',
               fontWeight: 800,
-              padding: '9px 20px',
+              padding: '11px 24px',
               border: '1.5px solid #0E0E10',
               borderRadius: '9999px',
-              marginLeft: '6px'
+              marginLeft: '8px'
             }}
           >
-            <Calendar size={15} />
+            <Calendar size={16} />
             <span>Book Now</span>
           </button>
         </nav>
@@ -251,7 +261,7 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
             style={{ background: 'none', border: 'none', cursor: 'pointer' }}
             aria-label="Toggle Menu"
           >
-            {mobileMenuOpen ? <X size={26} color="#0E0E10" /> : <Menu size={26} color="#0E0E10" />}
+            {mobileMenuOpen ? <X size={28} color="#0E0E10" /> : <Menu size={28} color="#0E0E10" />}
           </button>
         </div>
       </div>

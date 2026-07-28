@@ -65,27 +65,15 @@ export const LoadingEntryPage = ({ onComplete }) => {
           boxShadow: '0 20px 50px rgba(138, 79, 255, 0.08)'
         }}
       >
-        {/* Official Manodaya Vector Outline Logo */}
-        <div style={{ marginBottom: '20px' }}>
-          <ManodayaLogoSVG size={100} color="#6B8E4E" sunColor="#E0A96D" className="float-element" />
+        {/* Official Manodaya Brand Logo */}
+        <div style={{ marginBottom: '16px' }}>
+          <ManodayaLogoSVG size={160} className="float-element" />
         </div>
 
-        {/* Brand Name & Tagline */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: '#EDE9FE', color: '#8A4FFF', padding: '4px 14px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '12px' }}>
+        {/* Brand Badge */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: '#EDE9FE', color: '#8A4FFF', padding: '4px 14px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '20px' }}>
           <Sparkles size={12} /> Clinical Center Bhubaneswar
         </div>
-
-        <h1 
-          style={{
-            fontSize: '2.5rem',
-            fontWeight: 900,
-            letterSpacing: '-0.04em',
-            color: '#0E0E10',
-            marginBottom: '4px'
-          }}
-        >
-          MANODAYA
-        </h1>
 
         <p style={{ fontSize: '0.875rem', color: '#64748B', fontWeight: 600, marginBottom: '28px' }}>
           Advanced Neuropsychological & Cognitive Care
