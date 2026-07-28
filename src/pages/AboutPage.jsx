@@ -1,5 +1,6 @@
 import React from 'react';
 import { SafeSpaceIllustration } from '../components/EditorialIllustrations';
+import { ClinicalTeamSection } from '../components/ClinicalTeamSection';
 import { Compass, HeartHandshake, ShieldCheck, Award, Check } from 'lucide-react';
 
 export const AboutPage = ({ onOpenBooking }) => {
@@ -7,7 +8,7 @@ export const AboutPage = ({ onOpenBooking }) => {
     <div className="page-wrapper section-padding" style={{ backgroundColor: '#FFFFFF' }}>
       <div className="container">
         {/* Page Header */}
-        <div className="section-header reveal-element">
+        <div className="section-header reveal-element is-visible">
           <span className="section-badge" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF' }}>
             About MANODAYA
           </span>
@@ -29,11 +30,11 @@ export const AboutPage = ({ onOpenBooking }) => {
             marginBottom: '72px'
           }}
         >
-          <div className="reveal-element">
+          <div className="reveal-element is-visible">
             <SafeSpaceIllustration />
           </div>
 
-          <div className="reveal-element">
+          <div className="reveal-element is-visible">
             <h2 style={{ fontSize: '2.25rem', fontWeight: 900, marginBottom: '20px', color: '#0E0E10' }}>
               Human, Professional & Scientific Care
             </h2>
@@ -61,7 +62,7 @@ export const AboutPage = ({ onOpenBooking }) => {
 
         {/* 3 Pillar Cards: Vision, Approach, Values */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px', marginBottom: '64px' }}>
-          <div className="reference-card reveal-element">
+          <div className="reference-card reveal-element is-visible">
             <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#EDE9FE', color: '#8A4FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
               <Compass size={26} />
             </div>
@@ -71,7 +72,7 @@ export const AboutPage = ({ onOpenBooking }) => {
             </p>
           </div>
 
-          <div className="reference-card reveal-element">
+          <div className="reference-card reveal-element is-visible">
             <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#FFD2DF', color: '#FF497C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
               <HeartHandshake size={26} />
             </div>
@@ -81,7 +82,7 @@ export const AboutPage = ({ onOpenBooking }) => {
             </p>
           </div>
 
-          <div className="reference-card reveal-element">
+          <div className="reference-card reveal-element is-visible">
             <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
               <ShieldCheck size={26} />
             </div>
@@ -91,6 +92,9 @@ export const AboutPage = ({ onOpenBooking }) => {
             </p>
           </div>
         </div>
+
+        {/* Clinical Leadership & Specialists Section (Full Detailed Bios & Photos) */}
+        <ClinicalTeamSection mode="full" onOpenBooking={onOpenBooking} />
       </div>
     </div>
   );

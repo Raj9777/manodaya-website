@@ -34,6 +34,49 @@ export const AUDIENCE_CONFIG = {
   }
 };
 
+export const TEAM_MEMBERS = [
+  {
+    id: "dr-sayali-mishra",
+    name: "Dr. Sayali Mishra",
+    role: "Senior Clinical Psychologist",
+    qualifications: "M.Phil, PhD | RCI Registered (A06381)",
+    experience: "20 Years Experience",
+    image: "/images/dr_sayali_mishra.jpg",
+    shortBio: "Senior Clinical Psychologist with 20 years of experience in mental health and clinical psychology. Currently faculty & PhD supervisor at KIMS Bhubaneswar, with prior clinical associations at AIIMS Bhubaneswar, Sahyadri Hospital Pune, Infosys, and Viacom18.",
+    fullBioPara1: "Dr. Sayali Mishra is a Senior Clinical Psychologist with 20 years of experience in mental health and clinical psychology. She has previously worked with AIIMS Bhubaneswar, Sahyadri Multispeciality Hospital Pune, Manam Foundation, and as a visiting consultant with Infosys and Viacom18. She is currently associated with KIMS, Bhubaneswar as faculty and PhD supervisor in Clinical Psychology.",
+    fullBioPara2: "Her areas of expertise include psychological and neurocognitive assessments, child and adolescent mental health, learning disability assessment, cognitive rehabilitation, career and aptitude assessment, and psychotherapy. She is trained in CBT, DBT and mindfulness-based interventions, with experience in managing depression, OCD, phobias, personality concerns and school refusal.",
+    specialInterests: [
+      "Neuropsychology",
+      "Child & Adolescent Mental Health",
+      "Psychological Assessment",
+      "Cognitive Rehabilitation",
+      "CBT & DBT",
+      "Learning Disabilities",
+      "Career Counselling"
+    ]
+  },
+  {
+    id: "ashwini-rajmohan",
+    name: "Ashwini Rajmohan",
+    role: "Psychologist",
+    qualifications: "M.Sc. Clinical Psychology | Doctoral Scholar",
+    experience: "5 Years Experience",
+    image: "/images/ashwini_rajmohan.jpg",
+    shortBio: "Psychologist & Doctoral Scholar at KIMS Bhubaneswar with 5 years of experience across clinical, school, and hospital settings. Currently associated with Rahat Hospital, specializing in child/adolescent mental health, perinatal care, and ERP for OCD.",
+    fullBioPara1: "Ashwini Rajmohan is a Psychologist with 5 years of experience across clinical, school, hospital, and corporate mental health settings. She holds an M.Sc. in Clinical Psychology and is currently a Doctoral Scholar in Clinical Psychology at KIMS, Bhubaneswar. She has worked extensively with children and adolescents in school settings and has provided corporate mental health support through the Employee Assistance Programme (EAP) at Cognizant. She is currently associated with Rahat Hospital, Bhubaneswar, working with perinatal mental health concerns, including postpartum depression and baby blues, as well as developmental and emotional concerns in children.",
+    fullBioPara2: "Her areas of expertise include child and adolescent mental health, psychotherapy, perinatal mental health, OCD interventions, and cognitive training. Her therapeutic approach incorporates CBT, DBT, mindfulness-based interventions, and Exposure and Response Prevention (ERP) for OCD. She is also trained in Cognitive Training, focusing on attention, memory, executive functioning, and related cognitive abilities.",
+    specialInterests: [
+      "Child & Adolescent Mental Health",
+      "CBT & DBT",
+      "ERP for OCD",
+      "Cognitive Training",
+      "Mindfulness-Based Interventions",
+      "Perinatal Mental Health",
+      "Anxiety & Emotional Concerns"
+    ]
+  }
+];
+
 export const ASSESSMENTS = [
   {
     id: "adhd-child",
@@ -139,221 +182,92 @@ export const THERAPIES = [
     id: "dbt",
     category: "adult",
     title: "Dialectical Behaviour Therapy (DBT)",
-    description: "Specialized intervention focusing on distress tolerance, emotion regulation, mindfulness, and interpersonal effectiveness.",
-    highlights: ["Mindfulness Skills", "Distress Tolerance Modules", "Emotional Regulation Strategies"]
-  },
-  {
-    id: "erp-ocd",
-    category: "adult",
-    title: "Exposure & Response Prevention (ERP)",
-    description: "First-line evidence-based protocol for Obsessive-Compulsive Disorder (OCD) and phobic anxiety.",
-    highlights: ["Hierarchy Building", "In-Vivo & Imaginal Exposure", "Compulsion Prevention"]
-  },
-  {
-    id: "child-adolescent-therapy",
-    category: "child",
-    title: "Child & Adolescent Psychotherapy",
-    description: "Play-informed and age-appropriate therapeutic interventions to help young individuals process trauma, stress, and anxiety.",
-    highlights: ["Expressive Art & Play Therapy", "Emotion Identification", "Coping Cards & Skill Kits"]
-  },
-  {
-    id: "pmt-parenting",
-    category: "child",
-    title: "Parent Management Training (PMT) & Guidance",
-    description: "Structured coaching for parents to manage challenging behaviors, establish routines, and enhance parent-child attachment.",
-    highlights: ["Positive Reinforcement Systems", "De-escalation Techniques", "Consistent Discipline Routines"]
-  },
-  {
-    id: "social-skills-training",
-    category: "child",
-    title: "Social Skills & Emotional Regulation Training",
-    description: "Targeted individual or small-group modules for neurodivergent children to build peer interactions and self-soothing.",
-    highlights: ["Non-verbal Cue Recognition", "Peer Turn-taking", "Frustration Tolerance"]
-  },
-  {
-    id: "couples-family",
-    category: "adult",
-    title: "Couples & Family Therapy",
-    description: "Systemic therapy for relationship distress, premarital counseling, and caregiver family burden.",
-    highlights: ["Communication Patterns", "Conflict Resolution", "Relational Empathy"]
-  },
-  {
-    id: "stress-anxiety",
-    category: "adult",
-    title: "Stress & Exam Anxiety Intervention",
-    description: "Tailored programs for adolescents and working adults to manage burnouts, high-stakes exam pressure, and performance stress.",
-    highlights: ["Biofeedback & Relaxation", "Study & Time Management", "Cognitive De-catastrophizing"]
+    description: "Mindfulness-based emotional regulation, distress tolerance, and interpersonal effectiveness modules.",
+    highlights: ["Emotion Regulation", "Distress Tolerance", "Mindfulness Practices"]
   }
 ];
 
 export const REHABILITATION = [
   {
-    id: "attention-retraining",
-    title: "Attention & Executive Function Training",
-    audience: "Both Child & Adult",
-    description: "Computerized and tactile exercises to expand sustained, selective, and divided attention capacities."
+    id: "rehab-adhd",
+    title: "Attention & Executive Training",
+    description: "Restorative cognitive retraining for focus, planning, organization, and working memory."
   },
   {
-    id: "memory-rehab",
-    title: "Working Memory & Retraining Programmes",
-    audience: "Both Child & Adult",
-    description: "Structured memory strategies, dual N-back protocols, and compensatory internal/external memory aids."
-  },
-  {
-    id: "post-stroke-rehab",
-    title: "Post-Stroke & Brain Injury Cognitive Rehabilitation",
-    audience: "Adult & Senior",
-    description: "Targeted restorative modules for processing speed, executive planning, spatial neglect, and language recovery."
-  },
-  {
-    id: "dementia-mci-care",
-    title: "Cognitive Rehabilitation for Dementia & MCI",
-    audience: "Adult & Senior",
-    description: "Cognitive stimulation therapy (CST) and environmental adaptations to preserve daily independence and dignity."
-  },
-  {
-    id: "epilepsy-retraining",
-    title: "Cognitive Retraining for Epilepsy & Neurological Disorders",
-    audience: "Both Child & Adult",
-    description: "Individualized neurocognitive adaptation for seizure-related cognitive fatigue and medication side effects."
+    id: "rehab-stroke",
+    title: "Post-Stroke Cognitive Remediation",
+    description: "Targeted rehabilitation for processing speed, spatial neglect, memory recovery, and executive planning."
   }
 ];
+
+export const REHAB_SERVICES = REHABILITATION;
 
 export const SUPPORT_GROUPS = [
   {
     id: "sg-adhd",
-    title: "ADHD Support Group",
-    audience: "Teens & Adults with ADHD",
-    schedule: "Bi-Weekly Saturdays (Online & In-Person)",
-    description: "A compassionate space to share executive function strategies, unmasking experiences, and peer support."
+    title: "Adult ADHD & Neurodivergent Circle",
+    schedule: "Bi-weekly Saturdays @ 5:00 PM"
   },
   {
-    id: "sg-asd",
-    title: "Autism Spectrum Disorder (ASD) Circle",
-    audience: "Neurodivergent Individuals & Families",
-    schedule: "Monthly Sundays",
-    description: "Peer connection focused on neurodiversity celebration, sensory management, and navigating societal barriers."
-  },
-  {
-    id: "sg-ocd",
-    title: "OCD Recovery & ERP Peer Group",
-    audience: "Individuals Managing OCD",
-    schedule: "1st & 3rd Friday Evenings",
-    description: "Facilitated peer group reinforcement for staying committed to ERP protocols and reducing isolation."
-  },
-  {
-    id: "sg-parent",
-    title: "Parent & Caregiver Support Group",
-    audience: "Parents of Neurodivergent / Special Needs Children",
-    schedule: "Alternate Saturday Mornings",
-    description: "Emotional safe haven for caregivers to share emotional burden, navigate educational advocacy, and recharge."
+    id: "sg-parents",
+    title: "Parents of Neurodivergent Children Circle",
+    schedule: "Monthly Sundays @ 11:00 AM"
   }
 ];
-
-export const INTERNSHIPS_WORKSHOPS = {
-  internships: {
-    title: "Psychology Internship & Clinical Observerships",
-    eligibility: "UG/PG Psychology Students, M.Phil / M.Sc Scholars",
-    highlights: [
-      "Exposure to standardized psychometric and neuropsychological testing instruments",
-      "Live case discussion and supervised clinical diagnostic formulation",
-      "Observation of therapy sessions & intake interviews (with informed consent)",
-      "Certificate of Clinical Completion and performance evaluation report"
-    ]
-  },
-  workshops: [
-    {
-      title: "Standardized Neuropsychological Battery Administration",
-      date: "Upcoming: August 20, 2026",
-      duration: "2-Day Intensive Hands-on Workshop",
-      target: "Psychology Students & Early Professionals"
-    },
-    {
-      title: "Child & Adolescent Mental Health First Aid",
-      date: "Upcoming: September 05, 2026",
-      duration: "1-Day Skill Building Session",
-      target: "School Counselors, Educators & Parents"
-    },
-    {
-      title: "CBT Techniques in Clinical Practice",
-      date: "Upcoming: September 18, 2026",
-      duration: "Weekend Certificate Course",
-      target: "Post-graduate Students & Counselors"
-    }
-  ]
-};
 
 export const TESTIMONIALS = [
   {
     id: 1,
-    name: "Priyanka S.",
-    role: "Parent of a 9-year-old child (ADHD Assessment)",
-    quote: "Finding MANODAYA changed everything for our family. The comprehensive assessment gave us clear answers without labeling our child. The parent training gave us actionable tools that restored peace at home."
+    name: "Dr. P. K. Mohapatra",
+    role: "Parent of 9-year-old child",
+    text: "The ADHD and learning disability evaluation at MANODAYA was exceptionally thorough. The clinical report helped our school implement accommodations seamlessly.",
+    rating: 5
   },
   {
     id: 2,
-    name: "Ramesh Chandra M.",
-    role: "Post-Stroke Cognitive Rehab Client (Age 62)",
-    quote: "After my stroke, processing numbers and planning my daily routine felt impossible. The cognitive rehabilitation exercises under guidance gave me back my independence step by step. Truly grateful!"
+    name: "Sarmistha Das",
+    role: "Corporate Executive",
+    text: "Therapy and CBT sessions with the specialists helped me overcome severe anxiety and burnout. Highly professional and deeply empathetic environment.",
+    rating: 5
   },
   {
     id: 3,
-    name: "Dr. Ananya P.",
-    role: "M.Sc Psychology Graduate (Internship Trainee)",
-    quote: "The clinical exposure during the 2-month internship at MANODAYA was unmatched. We received structured supervision on psychometric tools, case formulations, and ethical practices."
-  },
-  {
-    id: 4,
-    name: "Soumya & Rahul",
-    role: "Couples Therapy Clients",
-    quote: "The warm, non-judgmental environment helped us communicate openly about our stress. The therapist helped us understand each other's emotional triggers effectively."
+    name: "Ramesh Chandra B.",
+    role: "Family of Post-Stroke Patient",
+    text: "The cognitive rehabilitation program restored my father's memory and executive planning abilities significantly after his stroke. Forever grateful.",
+    rating: 5
   }
 ];
 
 export const INITIAL_CRM_LEADS = [
   {
-    id: "LEAD-101",
-    patientName: "Sunita Das",
-    phone: "+91 94371 22334",
-    email: "sunita.das@example.com",
+    id: "MAN-1082",
+    patientName: "Soumya Ranjan Das",
+    phone: "+91 98610 12345",
+    email: "soumya.das@example.com",
     category: "child",
-    age: "8",
+    age: "8 Years",
     service: "ADHD & Attention Assessment",
     type: "In-Person Consultation",
     date: "2026-07-30",
     time: "10:30 AM",
     status: "New",
-    notes: "Parent reported difficulty maintaining focus in school and hyperactivity during homework.",
-    createdAt: "2026-07-27 09:15"
+    notes: "Parent noticed difficulty concentrating in school and restlessness.",
+    createdAt: "26/07/2026, 11:30 AM"
   },
   {
-    id: "LEAD-102",
-    patientName: "Bhabani Sankar Mishra",
-    phone: "+91 98610 55443",
-    email: "bsmishra@example.com",
+    id: "MAN-1083",
+    patientName: "Ananya Patnaik",
+    phone: "+91 94370 67890",
+    email: "ananya.p@example.com",
     category: "adult",
-    age: "58",
-    service: "Post-Stroke Cognitive Rehabilitation",
-    type: "In-Person Consultation",
-    date: "2026-07-29",
-    time: "04:00 PM",
+    age: "34 Years",
+    service: "Cognitive Behaviour Therapy (CBT)",
+    type: "Online Tele-Health",
+    date: "2026-07-31",
+    time: "03:00 PM",
     status: "Scheduled",
-    notes: "Requires memory and executive function retraining post-ischemic stroke.",
-    createdAt: "2026-07-26 14:20"
-  },
-  {
-    id: "LEAD-103",
-    patientName: "Arpita Mohanty",
-    phone: "+91 97780 11223",
-    email: "arpita.m@example.com",
-    category: "child",
-    age: "21 (Student)",
-    service: "Psychology Internship Application",
-    type: "Online Enquiry",
-    date: "2026-08-01",
-    time: "02:00 PM",
-    status: "Contacted",
-    notes: "Final year B.A. Psychology student interested in August clinical batch.",
-    createdAt: "2026-07-25 11:45"
+    notes: "Experiencing work stress and anxiety. Requested online video session.",
+    createdAt: "26/07/2026, 02:15 PM"
   }
 ];

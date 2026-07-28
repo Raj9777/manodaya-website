@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeSpaceIllustration, HeadphonesListeningIllustration } from '../components/EditorialIllustrations';
 import { TestimonialsSection } from '../components/TestimonialsSection';
+import { ClinicalTeamSection } from '../components/ClinicalTeamSection';
 import { Calendar, Video, ArrowRight, CheckCircle2, Sparkles, Baby, HeartPulse, ClipboardCheck, Activity, GraduationCap } from 'lucide-react';
 
 export const HomePage = ({ onNavigate, onOpenBooking }) => {
@@ -93,7 +94,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
       {/* 2. Core Services Overview */}
       <section className="section-padding" style={{ backgroundColor: '#FAFAFD' }}>
         <div className="container">
-          <div className="section-header reveal-element">
+          <div className="section-header reveal-element is-visible">
             <span className="section-badge">Our Clinical Offerings</span>
             <h2 className="section-title">Core Specialized Services</h2>
             <p className="section-subtitle">
@@ -102,7 +103,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
-            <div className="reference-card reveal-element" style={{ textAlign: 'left' }}>
+            <div className="reference-card reveal-element is-visible" style={{ textAlign: 'left' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#FFD2DF', color: '#FF497C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <ClipboardCheck size={26} />
               </div>
@@ -110,13 +111,13 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '20px' }}>
                 ADHD, Autism, IQ, Learning Disability, Neuropsychological & Memory assessments.
               </p>
-              <button onClick={() => onNavigate('assessments')} style={{ color: '#FF497C', fontWeight: 700, fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <button onClick={() => onNavigate('assessments')} style={{ color: '#FF497C', fontWeight: 700, fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'none', border: 'none', cursor: 'pointer' }}>
                 <span>View All Assessments</span>
                 <ArrowRight size={14} />
               </button>
             </div>
 
-            <div className="reference-card reveal-element" style={{ textAlign: 'left' }}>
+            <div className="reference-card reveal-element is-visible" style={{ textAlign: 'left' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#EDE9FE', color: '#8A4FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <HeartPulse size={26} />
               </div>
@@ -124,13 +125,13 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '20px' }}>
                 CBT, DBT, ACT, Mindfulness, Child & Adolescent Therapy, Couples & Family Therapy.
               </p>
-              <button onClick={() => onNavigate('therapies')} style={{ color: '#8A4FFF', fontWeight: 700, fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <button onClick={() => onNavigate('therapies')} style={{ color: '#8A4FFF', fontWeight: 700, fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'none', border: 'none', cursor: 'pointer' }}>
                 <span>Explore Therapies</span>
                 <ArrowRight size={14} />
               </button>
             </div>
 
-            <div className="reference-card reveal-element" style={{ textAlign: 'left' }}>
+            <div className="reference-card reveal-element is-visible" style={{ textAlign: 'left' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <Activity size={26} />
               </div>
@@ -138,13 +139,13 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '20px' }}>
                 Attention, Memory, and Executive Function Training for ADHD, Stroke, and Dementia.
               </p>
-              <button onClick={() => onNavigate('rehab')} style={{ color: '#10B981', fontWeight: 700, fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <button onClick={() => onNavigate('rehab')} style={{ color: '#10B981', fontWeight: 700, fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'none', border: 'none', cursor: 'pointer' }}>
                 <span>Explore Toolkit</span>
                 <ArrowRight size={14} />
               </button>
             </div>
 
-            <div className="reference-card reveal-element" style={{ textAlign: 'left' }}>
+            <div className="reference-card reveal-element is-visible" style={{ textAlign: 'left' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <GraduationCap size={26} />
               </div>
@@ -152,7 +153,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '20px' }}>
                 Support Groups, Internships for Psychology Students, and Clinical Workshops.
               </p>
-              <button onClick={() => onNavigate('internship')} style={{ color: '#D97706', fontWeight: 700, fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <button onClick={() => onNavigate('internship')} style={{ color: '#D97706', fontWeight: 700, fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'none', border: 'none', cursor: 'pointer' }}>
                 <span>View Internships & Workshops</span>
                 <ArrowRight size={14} />
               </button>
@@ -161,7 +162,10 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
         </div>
       </section>
 
-      {/* 3. Child Care Spotlight */}
+      {/* 3. Clinical Team Section (Short Description + Photos + Special Interests) */}
+      <ClinicalTeamSection mode="short" onOpenBooking={onOpenBooking} />
+
+      {/* 4. Child Care Spotlight */}
       <section className="section-padding" style={{ backgroundColor: '#FFF5F8', borderTop: '1px solid #FFE4EC', borderBottom: '1px solid #FFE4EC' }}>
         <div className="container">
           <div 
@@ -172,7 +176,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               alignItems: 'center'
             }}
           >
-            <div className="reveal-element">
+            <div className="reveal-element is-visible">
               <span className="section-badge" style={{ backgroundColor: '#FFD2DF', color: '#FF497C' }}>
                 <Baby size={16} /> Pediatric & Adolescent Care Spotlight
               </span>
@@ -204,14 +208,14 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               </button>
             </div>
 
-            <div className="reveal-element" style={{ textAlign: 'center' }}>
+            <div className="reveal-element is-visible" style={{ textAlign: 'center' }}>
               <HeadphonesListeningIllustration />
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. Full Interactive Client Feedback & Testimonials Section */}
+      {/* 5. Full Interactive Client Feedback & Testimonials Section */}
       <TestimonialsSection currentMode="all" />
     </div>
   );
