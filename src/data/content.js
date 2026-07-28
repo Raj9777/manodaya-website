@@ -218,23 +218,38 @@ export const SUPPORT_GROUPS = [
 export const TESTIMONIALS = [
   {
     id: 1,
-    name: "Dr. P. K. Mohapatra",
-    role: "Parent of 9-year-old child",
-    text: "The ADHD and learning disability evaluation at MANODAYA was exceptionally thorough. The clinical report helped our school implement accommodations seamlessly.",
+    image: "/images/testimonials/1.png",
+    name: "Aarav S.",
+    role: "Adolescent Student (ADHD Care)",
+    quote: "Learning how my brain works and getting focus training at MANODAYA made school so much easier and less overwhelming. I feel confident now!",
+    text: "Learning how my brain works and getting focus training at MANODAYA made school so much easier and less overwhelming. I feel confident now!",
     rating: 5
   },
   {
     id: 2,
+    image: "/images/testimonials/2.png",
     name: "Sarmistha Das",
-    role: "Corporate Executive",
-    text: "Therapy and CBT sessions with the specialists helped me overcome severe anxiety and burnout. Highly professional and deeply empathetic environment.",
+    role: "Corporate Executive & Scholar",
+    quote: "Therapy and CBT sessions with Dr. Sayali and Ashwini helped me overcome severe anxiety and burnout. Highly professional and deeply empathetic environment.",
+    text: "Therapy and CBT sessions with Dr. Sayali and Ashwini helped me overcome severe anxiety and burnout. Highly professional and deeply empathetic environment.",
     rating: 5
   },
   {
     id: 3,
+    image: "/images/testimonials/3.png",
+    name: "Dr. P. K. Mohapatra",
+    role: "Parent of 9-year-old child",
+    quote: "The ADHD and learning disability evaluation at MANODAYA was exceptionally thorough. The clinical report helped our school implement accommodations seamlessly.",
+    text: "The ADHD and learning disability evaluation at MANODAYA was exceptionally thorough. The clinical report helped our school implement accommodations seamlessly.",
+    rating: 5
+  },
+  {
+    id: 4,
+    image: "/images/testimonials/4.png",
     name: "Ramesh Chandra B.",
     role: "Family of Post-Stroke Patient",
-    text: "The cognitive rehabilitation program restored my father's memory and executive planning abilities significantly after his stroke. Forever grateful.",
+    quote: "The cognitive rehabilitation program restored my father's memory and executive planning abilities significantly after his stroke. Forever grateful to the team.",
+    text: "The cognitive rehabilitation program restored my father's memory and executive planning abilities significantly after his stroke. Forever grateful to the team.",
     rating: 5
   }
 ];
