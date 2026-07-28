@@ -21,12 +21,12 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
           </p>
         </div>
 
-        {/* Specialists Cards Grid */}
+        {/* Specialists Cards Grid with Large Doctor Pictures */}
         <div 
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '32px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+            gap: '36px',
             alignItems: 'stretch'
           }}
         >
@@ -39,59 +39,83 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 backgroundColor: '#FFFFFF',
-                borderRadius: '28px',
-                padding: '32px',
+                borderRadius: '32px',
+                padding: '28px',
                 border: '1.5px solid #E2E8F0',
-                boxShadow: '0 12px 36px rgba(0, 0, 0, 0.05)',
+                boxShadow: '0 16px 40px rgba(0, 0, 0, 0.06)',
                 position: 'relative'
               }}
             >
               <div>
-                {/* Header Profile Photo & Badges */}
-                <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '20px' }}>
+                {/* Large Featured Doctor Portrait Picture */}
+                <div 
+                  style={{
+                    width: '100%',
+                    height: '280px',
+                    borderRadius: '24px',
+                    overflow: 'hidden',
+                    marginBottom: '24px',
+                    position: 'relative',
+                    boxShadow: '0 12px 30px rgba(255, 73, 124, 0.18)',
+                    backgroundColor: '#FFA6DF',
+                    border: '3px solid #FF497C'
+                  }}
+                >
+                  <img 
+                    src={member.image} 
+                    alt={member.name} 
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover',
+                      objectPosition: 'center 15%'
+                    }}
+                  />
+
+                  {/* Overlay Experience Badge */}
                   <div 
                     style={{
-                      width: '96px',
-                      height: '96px',
-                      borderRadius: '24px',
-                      overflow: 'hidden',
-                      flexShrink: 0,
-                      border: '3px solid #FF497C',
-                      boxShadow: '0 8px 20px rgba(255, 73, 124, 0.25)',
-                      backgroundColor: '#FFA6DF'
+                      position: 'absolute',
+                      bottom: '14px',
+                      left: '14px',
+                      backgroundColor: 'rgba(15, 23, 42, 0.88)',
+                      backdropFilter: 'blur(8px)',
+                      color: '#FFFFFF',
+                      padding: '6px 14px',
+                      borderRadius: '9999px',
+                      fontSize: '0.781rem',
+                      fontWeight: 800,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      border: '1px solid rgba(255, 255, 255, 0.2)'
                     }}
                   >
-                    <img 
-                      src={member.image} 
-                      alt={member.name} 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
+                    🏅 {member.experience}
                   </div>
+                </div>
 
-                  <div>
+                {/* Name, Role & Qualifications */}
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
                     <span 
                       className="badge-status" 
                       style={{ 
                         backgroundColor: member.id === 'dr-sayali-mishra' ? '#EDE9FE' : '#FFE4EC', 
                         color: member.id === 'dr-sayali-mishra' ? '#8A4FFF' : '#FF497C',
-                        marginBottom: '6px',
-                        fontSize: '0.75rem'
+                        fontSize: '0.781rem'
                       }}
                     >
-                      {member.qualifications.split('|')[1]?.trim() || member.qualifications}
+                      {member.qualifications}
                     </span>
+                  </div>
 
-                    <h3 style={{ fontSize: '1.45rem', fontWeight: 900, color: '#0E0E10', lineHeight: 1.2, marginBottom: '4px' }}>
-                      {member.name}
-                    </h3>
+                  <h3 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#0E0E10', lineHeight: 1.2, marginBottom: '4px' }}>
+                    {member.name}
+                  </h3>
 
-                    <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#8A4FFF', marginBottom: '4px' }}>
-                      {member.role}
-                    </div>
-
-                    <div style={{ fontSize: '0.781rem', color: '#64748B', fontWeight: 600 }}>
-                      🏅 {member.experience}
-                    </div>
+                  <div style={{ fontSize: '0.938rem', fontWeight: 800, color: '#8A4FFF' }}>
+                    {member.role}
                   </div>
                 </div>
 
@@ -123,7 +147,7 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
                           fontWeight: 700,
                           backgroundColor: '#FAFAFD',
                           color: '#0E0E10',
-                          padding: '4px 12px',
+                          padding: '5px 14px',
                           borderRadius: '9999px',
                           border: '1px solid #E2E8F0'
                         }}
@@ -136,13 +160,13 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
               </div>
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', gap: '10px', paddingTop: '16px', borderTop: '1px solid #F1F1F5' }}>
+              <div style={{ display: 'flex', gap: '10px', paddingTop: '18px', borderTop: '1px solid #F1F1F5' }}>
                 <button 
                   className="btn-black"
                   onClick={() => onOpenBooking(`Consultation with ${member.name}`)}
-                  style={{ flex: 1, padding: '10px 18px', fontSize: '0.844rem' }}
+                  style={{ flex: 1, padding: '12px 18px', fontSize: '0.875rem' }}
                 >
-                  <Calendar size={15} />
+                  <Calendar size={16} />
                   <span>Book Consultation</span>
                 </button>
 
@@ -150,7 +174,7 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
                   <button 
                     className="btn-outline-theme"
                     onClick={() => setActiveModalMember(member)}
-                    style={{ padding: '10px 16px', fontSize: '0.844rem' }}
+                    style={{ padding: '12px 18px', fontSize: '0.875rem' }}
                   >
                     <span>Full Profile</span>
                   </button>
@@ -161,30 +185,37 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
         </div>
       </div>
 
-      {/* Full Bio Modal (when clicked from Home Page) */}
+      {/* Full Bio Modal with Large Picture */}
       {activeModalMember && (
         <div className="modal-overlay" onClick={() => setActiveModalMember(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '640px', borderRadius: '24px' }}>
-            <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '20px' }}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '680px', borderRadius: '28px', padding: '36px' }}>
+            <div style={{ display: 'flex', gap: '24px', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap' }}>
               <img 
                 src={activeModalMember.image} 
                 alt={activeModalMember.name} 
-                style={{ width: '80px', height: '80px', borderRadius: '20px', objectFit: 'cover', border: '2px solid #FF497C' }}
+                style={{ 
+                  width: '120px', 
+                  height: '120px', 
+                  borderRadius: '24px', 
+                  objectFit: 'cover', 
+                  border: '3px solid #FF497C',
+                  boxShadow: '0 8px 24px rgba(255, 73, 124, 0.2)'
+                }}
               />
               <div>
-                <span className="badge-status" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF', marginBottom: '4px' }}>
+                <span className="badge-status" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF', marginBottom: '6px' }}>
                   {activeModalMember.qualifications}
                 </span>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#0E0E10' }}>
+                <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0E0E10', marginBottom: '4px' }}>
                   {activeModalMember.name}
                 </h3>
-                <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#FF497C' }}>
+                <div style={{ fontSize: '0.938rem', fontWeight: 800, color: '#FF497C' }}>
                   {activeModalMember.role} • {activeModalMember.experience}
                 </div>
               </div>
             </div>
 
-            <div style={{ fontSize: '0.938rem', color: '#475569', lineHeight: 1.65, display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+            <div style={{ fontSize: '0.938rem', color: '#475569', lineHeight: 1.65, display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '24px' }}>
               <p>{activeModalMember.fullBioPara1}</p>
               <p>{activeModalMember.fullBioPara2}</p>
             </div>
@@ -195,7 +226,7 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {activeModalMember.specialInterests.map((interest, idx) => (
-                  <span key={idx} style={{ fontSize: '0.781rem', fontWeight: 700, backgroundColor: '#FAFAFD', color: '#0E0E10', padding: '4px 12px', borderRadius: '9999px', border: '1px solid #E2E8F0' }}>
+                  <span key={idx} style={{ fontSize: '0.781rem', fontWeight: 700, backgroundColor: '#FAFAFD', color: '#0E0E10', padding: '5px 14px', borderRadius: '9999px', border: '1px solid #E2E8F0' }}>
                     • {interest}
                   </span>
                 ))}
@@ -209,12 +240,12 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
                   onOpenBooking(`Consultation with ${activeModalMember.name}`);
                   setActiveModalMember(null);
                 }}
-                style={{ flex: 1 }}
+                style={{ flex: 1, padding: '12px' }}
               >
                 <span>Book Consultation</span>
               </button>
 
-              <button className="btn-outline-theme" onClick={() => setActiveModalMember(null)}>
+              <button className="btn-outline-theme" onClick={() => setActiveModalMember(null)} style={{ padding: '12px 20px' }}>
                 <span>Close</span>
               </button>
             </div>
