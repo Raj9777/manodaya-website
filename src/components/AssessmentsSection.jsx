@@ -160,6 +160,28 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
 
         {/* Detailed Assessment Batteries Section */}
         <div id="assessments-list" style={{ paddingTop: '20px' }}>
+          {/* Featured Clinical Assessment Illustration Banner (Assessment.png) */}
+          <div style={{ marginBottom: '40px', display: 'flex', justifyContent: 'center' }}>
+            <div 
+              style={{
+                maxWidth: '680px',
+                width: '100%',
+                borderRadius: '32px',
+                overflow: 'hidden',
+                boxShadow: '0 16px 40px rgba(255, 94, 142, 0.12)',
+                border: '3px solid #FFE4EC',
+                backgroundColor: '#FFF5F8'
+              }}
+              className="vector-container"
+            >
+              <img 
+                src="/images/elements/Assessment.png" 
+                alt="MANODAYA Clinical Assessment & Diagnostic Evaluation" 
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+            </div>
+          </div>
+
           <div style={{ textAlign: 'center', marginBottom: '36px' }}>
             <h3 style={{ fontSize: '2rem', fontWeight: 900, color: '#0E0E10', marginBottom: '8px' }}>
               Standardized Psychometric & Diagnostic Batteries

@@ -82,10 +82,26 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               </div>
             </div>
 
-            {/* Right SVG Illustration */}
+            {/* Right Lifespan Progression Graphic (Home.png) */}
             <div className="reveal-element is-visible" style={{ textAlign: 'center' }}>
-              <div style={{ maxWidth: '480px', margin: '0 auto' }}>
-                <SafeSpaceIllustration />
+              <div 
+                style={{ 
+                  maxWidth: '560px', 
+                  margin: '0 auto',
+                  borderRadius: '32px',
+                  overflow: 'hidden',
+                  boxShadow: '0 20px 50px rgba(138, 79, 255, 0.12)',
+                  border: '3px solid #EDE9FE',
+                  backgroundColor: '#FFFBF5',
+                  transition: 'transform 0.3s ease'
+                }}
+                className="vector-container"
+              >
+                <img 
+                  src="/images/elements/Home.png" 
+                  alt="MANODAYA Lifespan Neuropsychological Care" 
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
               </div>
             </div>
           </div>

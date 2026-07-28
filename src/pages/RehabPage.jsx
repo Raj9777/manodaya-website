@@ -7,7 +7,8 @@ export const RehabPage = ({ onOpenBooking }) => {
   return (
     <div className="page-wrapper section-padding" style={{ backgroundColor: '#FAFAFD' }}>
       <div className="container">
-        <div className="section-header reveal-element">
+        {/* Section Header */}
+        <div className="section-header reveal-element is-visible">
           <span className="section-badge" style={{ backgroundColor: '#D1FAE5', color: '#059669' }}>
             <Activity size={14} /> Neuro Restorative Care
           </span>
@@ -17,6 +18,28 @@ export const RehabPage = ({ onOpenBooking }) => {
           <p className="section-subtitle">
             Restorative training targeting attention, working memory, executive planning, spatial orientation, and processing speed following stroke, dementia, epilepsy, or ADHD.
           </p>
+        </div>
+
+        {/* Featured Cognitive Rehabilitation Illustration Banner (cognitive rehabilitation.png) */}
+        <div style={{ marginBottom: '48px', display: 'flex', justifyContent: 'center' }}>
+          <div 
+            style={{
+              maxWidth: '680px',
+              width: '100%',
+              borderRadius: '32px',
+              overflow: 'hidden',
+              boxShadow: '0 16px 40px rgba(16, 185, 129, 0.12)',
+              border: '3px solid #D1FAE5',
+              backgroundColor: '#F0FDF4'
+            }}
+            className="vector-container"
+          >
+            <img 
+              src="/images/elements/cognitive rehabilitation.png" 
+              alt="MANODAYA Senior Cognitive Remediation & Memory Training" 
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+            />
+          </div>
         </div>
 
         {/* 3 Toolkit Highlights */}
