@@ -21,11 +21,11 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
           </p>
         </div>
 
-        {/* Specialists Cards Grid with Large Doctor Pictures */}
+        {/* Specialists Cards Grid with Large Square Doctor Pictures */}
         <div 
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
             gap: '36px',
             alignItems: 'stretch'
           }}
@@ -47,11 +47,11 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
               }}
             >
               <div>
-                {/* Large Featured Doctor Portrait Picture */}
+                {/* 1:1 Square View Doctor Picture */}
                 <div 
                   style={{
                     width: '100%',
-                    height: '280px',
+                    aspectRatio: '1 / 1',
                     borderRadius: '24px',
                     overflow: 'hidden',
                     marginBottom: '24px',
@@ -185,7 +185,7 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
         </div>
       </div>
 
-      {/* Full Bio Modal with Large Picture */}
+      {/* Full Bio Modal with Square View Picture */}
       {activeModalMember && (
         <div className="modal-overlay" onClick={() => setActiveModalMember(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '680px', borderRadius: '28px', padding: '36px' }}>
@@ -194,8 +194,8 @@ export const ClinicalTeamSection = ({ mode = 'short', onOpenBooking }) => {
                 src={activeModalMember.image} 
                 alt={activeModalMember.name} 
                 style={{ 
-                  width: '120px', 
-                  height: '120px', 
+                  width: '130px', 
+                  height: '130px', 
                   borderRadius: '24px', 
                   objectFit: 'cover', 
                   border: '3px solid #FF497C',
