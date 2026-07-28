@@ -90,13 +90,10 @@ export const Navbar = ({ activePage, onNavigate, onOpenBooking }) => {
       </div>
 
       {/* Main Modern Minimal Navbar */}
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '76px', padding: '0 24px' }}>
-        {/* Official Manodaya Outline Vector Logo */}
-        <button onClick={() => onNavigate('home')} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-          <ManodayaLogoSVG size={46} color="#6B8E4E" sunColor="#E0A96D" />
-          <span style={{ fontSize: '1.45rem', fontWeight: 900, letterSpacing: '-0.03em', color: '#0E0E10' }}>
-            MANODAYA
-          </span>
+      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '80px', padding: '0 24px' }}>
+        {/* Official MANODAYA Transparent Logo */}
+        <button onClick={() => onNavigate('home')} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+          <ManodayaLogoSVG size={58} />
         </button>
 
         {/* Modern Nav Menu Row: Home | About Us | Contact Us | More ▾ | Book Now */}
