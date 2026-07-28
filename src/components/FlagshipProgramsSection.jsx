@@ -97,13 +97,12 @@ export const FlagshipProgramsSection = ({ onOpenBooking }) => {
           </p>
         </div>
 
-        {/* 2 Featured Highlight Cards Grid */}
+        {/* Full-Width Landscape Mode Rows Stack */}
         <div 
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-            gap: '40px',
-            alignItems: 'stretch'
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '48px'
           }}
         >
           {FLAGSHIP_PROGRAMS.map((prog) => (
@@ -111,9 +110,6 @@ export const FlagshipProgramsSection = ({ onOpenBooking }) => {
               key={prog.id}
               className="reference-card reveal-element is-visible"
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
                 backgroundColor: prog.bgColor,
                 borderRadius: '32px',
                 padding: '36px',
@@ -122,141 +118,158 @@ export const FlagshipProgramsSection = ({ onOpenBooking }) => {
                 position: 'relative'
               }}
             >
-              <div>
-                {/* Badge & Poster Preview Trigger */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span 
-                    className="badge-status" 
-                    style={{ 
-                      backgroundColor: '#FFFFFF', 
-                      color: prog.themeColor,
-                      border: `1px solid ${prog.borderColor}`,
-                      fontSize: '0.813rem'
-                    }}
-                  >
-                    {prog.badge}
-                  </span>
+              {/* Landscape Layout Grid: Left Poster Image | Right Program Details */}
+              <div 
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                  gap: '36px',
+                  alignItems: 'center'
+                }}
+              >
+                {/* Left Landscape Column: Poster Image Preview */}
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <span 
+                      className="badge-status" 
+                      style={{ 
+                        backgroundColor: '#FFFFFF', 
+                        color: prog.themeColor,
+                        border: `1px solid ${prog.borderColor}`,
+                        fontSize: '0.813rem'
+                      }}
+                    >
+                      {prog.badge}
+                    </span>
 
-                  <button
+                    <button
+                      onClick={() => setActiveImageModal(prog)}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        backgroundColor: '#FFFFFF',
+                        color: prog.themeColor,
+                        border: `1px solid ${prog.borderColor}`,
+                        padding: '5px 12px',
+                        borderRadius: '9999px',
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
+                      }}
+                    >
+                      <Eye size={13} /> Enlarge Poster
+                    </button>
+                  </div>
+
+                  <div 
                     onClick={() => setActiveImageModal(prog)}
                     style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                      backgroundColor: '#FFFFFF',
-                      color: prog.themeColor,
-                      border: `1px solid ${prog.borderColor}`,
-                      padding: '5px 12px',
-                      borderRadius: '9999px',
-                      fontSize: '0.75rem',
-                      fontWeight: 800,
+                      borderRadius: '24px',
+                      overflow: 'hidden',
                       cursor: 'pointer',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
+                      position: 'relative',
+                      border: '3px solid #FFFFFF',
+                      boxShadow: '0 12px 30px rgba(0,0,0,0.08)',
+                      maxHeight: '440px'
                     }}
+                    className="vector-container"
                   >
-                    <Eye size={13} /> View Official Poster
+                    <img 
+                      src={prog.posterImage} 
+                      alt={prog.title}
+                      style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
+                    />
+                    <div 
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        backgroundColor: 'rgba(15, 23, 42, 0.3)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#FFFFFF',
+                        fontWeight: 800,
+                        fontSize: '0.875rem',
+                        gap: '6px',
+                        opacity: 0,
+                        transition: 'opacity 0.25s ease'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.opacity = 1}
+                      onMouseLeave={(e) => e.currentTarget.style.opacity = 0}
+                    >
+                      <Eye size={20} /> Click to View Full Resolution Poster
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Landscape Column: Program Breakdown & Details */}
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <h3 style={{ fontSize: '1.85rem', fontWeight: 900, color: '#0E0E10', lineHeight: 1.2, marginBottom: '6px' }}>
+                      {prog.title}
+                    </h3>
+                    <div style={{ fontSize: '1rem', fontWeight: 800, color: prog.accentColor, marginBottom: '16px' }}>
+                      {prog.subtitle}
+                    </div>
+
+                    <p style={{ fontSize: '0.969rem', color: '#334155', lineHeight: 1.6, marginBottom: '24px' }}>
+                      {prog.description}
+                    </p>
+
+                    {/* Highlights breakdown side-by-side in right column */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px', marginBottom: '24px' }}>
+                      <div style={{ backgroundColor: '#FFFFFF', padding: '16px 20px', borderRadius: '18px', border: `1px solid ${prog.borderColor}` }}>
+                        <div style={{ fontSize: '0.781rem', fontWeight: 800, color: prog.accentColor, textTransform: 'uppercase', marginBottom: '8px' }}>
+                          ✨ What the Program Covers:
+                        </div>
+                        <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '0.844rem', color: '#475569', lineHeight: 1.6 }}>
+                          {prog.whatItCovers.map((item, idx) => (
+                            <li key={idx}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div style={{ backgroundColor: '#FFFFFF', padding: '16px 20px', borderRadius: '18px', border: `1px solid ${prog.borderColor}` }}>
+                        <div style={{ fontSize: '0.781rem', fontWeight: 800, color: prog.accentColor, textTransform: 'uppercase', marginBottom: '8px' }}>
+                          🎯 Suitable For:
+                        </div>
+                        <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '0.844rem', color: '#475569', lineHeight: 1.6 }}>
+                          {prog.suitableFor.map((item, idx) => (
+                            <li key={idx}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Faculty Conducting */}
+                    <div style={{ marginBottom: '24px', paddingTop: '16px', borderTop: `1px solid ${prog.borderColor}` }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: '8px' }}>
+                        👨‍⚕️ Conducted By Senior Specialists:
+                      </div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+                        {prog.conductedBy.map((fac, idx) => (
+                          <div key={idx} style={{ backgroundColor: '#FFFFFF', padding: '8px 14px', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '0.813rem' }}>
+                            <strong style={{ color: '#0E0E10' }}>{fac.name}</strong>
+                            <div style={{ fontSize: '0.75rem', color: '#64748B' }}>{fac.role}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Register Action Button */}
+                  <button 
+                    className="btn-black"
+                    onClick={() => onOpenBooking(`Enquiry for ${prog.title}`)}
+                    style={{ width: '100%', padding: '14px', fontSize: '0.938rem', backgroundColor: '#0E0E10', borderColor: '#0E0E10' }}
+                  >
+                    <Calendar size={18} />
+                    <span>Register / Enroll in Program</span>
                   </button>
                 </div>
-
-                {/* Title & Subtitle */}
-                <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0E0E10', lineHeight: 1.2, marginBottom: '6px' }}>
-                  {prog.title}
-                </h3>
-                <div style={{ fontSize: '0.938rem', fontWeight: 700, color: prog.accentColor, marginBottom: '16px' }}>
-                  {prog.subtitle}
-                </div>
-
-                <p style={{ fontSize: '0.938rem', color: '#334155', lineHeight: 1.6, marginBottom: '24px' }}>
-                  {prog.description}
-                </p>
-
-                {/* Poster Thumbnail Clickable Image */}
-                <div 
-                  onClick={() => setActiveImageModal(prog)}
-                  style={{
-                    borderRadius: '20px',
-                    overflow: 'hidden',
-                    marginBottom: '24px',
-                    cursor: 'pointer',
-                    position: 'relative',
-                    border: '2px solid rgba(0, 0, 0, 0.08)',
-                    maxHeight: '220px',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.06)'
-                  }}
-                >
-                  <img 
-                    src={prog.posterImage} 
-                    alt={prog.title}
-                    style={{ width: '100%', height: '220px', objectFit: 'cover', objectPosition: 'top' }}
-                  />
-                  <div 
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      backgroundColor: 'rgba(15, 23, 42, 0.35)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#FFFFFF',
-                      fontWeight: 800,
-                      fontSize: '0.875rem',
-                      gap: '6px'
-                    }}
-                  >
-                    <Eye size={18} /> Click to Enlarge Official Program Brochure
-                  </div>
-                </div>
-
-                {/* Highlights breakdown */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '18px', marginBottom: '24px' }}>
-                  <div style={{ backgroundColor: '#FFFFFF', padding: '16px 20px', borderRadius: '18px', border: `1px solid ${prog.borderColor}` }}>
-                    <div style={{ fontSize: '0.781rem', fontWeight: 800, color: prog.accentColor, textTransform: 'uppercase', marginBottom: '8px' }}>
-                      ✨ What the Program Covers:
-                    </div>
-                    <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '0.875rem', color: '#475569', lineHeight: 1.6 }}>
-                      {prog.whatItCovers.map((item, idx) => (
-                        <li key={idx}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div style={{ backgroundColor: '#FFFFFF', padding: '16px 20px', borderRadius: '18px', border: `1px solid ${prog.borderColor}` }}>
-                    <div style={{ fontSize: '0.781rem', fontWeight: 800, color: prog.accentColor, textTransform: 'uppercase', marginBottom: '8px' }}>
-                      🎯 Suitable For:
-                    </div>
-                    <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '0.875rem', color: '#475569', lineHeight: 1.6 }}>
-                      {prog.suitableFor.map((item, idx) => (
-                        <li key={idx}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Faculty Conducting */}
-                <div style={{ marginBottom: '24px', paddingTop: '16px', borderTop: `1px solid ${prog.borderColor}` }}>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: '8px' }}>
-                    👨‍⚕️ Conducted By Senior Specialists:
-                  </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                    {prog.conductedBy.map((fac, idx) => (
-                      <div key={idx} style={{ backgroundColor: '#FFFFFF', padding: '8px 14px', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '0.813rem' }}>
-                        <strong style={{ color: '#0E0E10' }}>{fac.name}</strong>
-                        <div style={{ fontSize: '0.75rem', color: '#64748B' }}>{fac.role}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
-
-              {/* Action Button */}
-              <button 
-                className="btn-black"
-                onClick={() => onOpenBooking(`Enquiry for ${prog.title}`)}
-                style={{ width: '100%', padding: '14px', fontSize: '0.938rem', backgroundColor: '#0E0E10', borderColor: '#0E0E10' }}
-              >
-                <Calendar size={18} />
-                <span>Register / Enroll in Program</span>
-              </button>
             </div>
           ))}
         </div>
