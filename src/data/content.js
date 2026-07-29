@@ -305,6 +305,15 @@ export const TESTIMONIALS = [
     quote: "The cognitive rehabilitation program restored my father's memory and executive planning abilities significantly after his stroke. Forever grateful to the team.",
     text: "The cognitive rehabilitation program restored my father's memory and executive planning abilities significantly after his stroke. Forever grateful to the team.",
     rating: 5
+  },
+  {
+    id: 5,
+    image: "/images/testimonials/test_1.png",
+    name: "Sunita & Rajesh Mohanty",
+    role: "Parents of Adolescent & Family Client",
+    quote: "Finding MANODAYA was a true turning point for our family. The clinical evaluation, compassionate guidance, and therapeutic support gave our child confidence and clarity. Highly recommended for pediatric and family psychological care!",
+    text: "Finding MANODAYA was a true turning point for our family. The clinical evaluation, compassionate guidance, and therapeutic support gave our child confidence and clarity. Highly recommended for pediatric and family psychological care!",
+    rating: 5
   }
 ];
 

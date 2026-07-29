@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArchTestimonialGraphic } from './EditorialIllustrations';
-import { Heart, ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
+import { Heart, ChevronLeft, ChevronRight, Star, Pause, Play } from 'lucide-react';
 import { TESTIMONIALS } from '../data/content';
 
 export const TestimonialsSection = ({ currentMode }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const currentTestimonial = TESTIMONIALS[currentIndex];
+  const currentTestimonial = TESTIMONIALS[currentIndex] || TESTIMONIALS[0];
+
+  // Auto-advance testimonials every 5 seconds unless paused on hover/interaction
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length);
@@ -16,8 +26,16 @@ export const TestimonialsSection = ({ currentMode }) => {
     setCurrentIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
   };
 
+  // Duplicate testimonials array for seamless continuous infinite marquee scrolling
+  const marqueeItems = [...TESTIMONIALS, ...TESTIMONIALS];
+
   return (
-    <section className="section-padding" style={{ backgroundColor: '#FFFFFF', textAlign: 'center' }}>
+    <section 
+      className="section-padding" 
+      style={{ backgroundColor: '#FFFFFF', textAlign: 'center' }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="container">
         {/* Curved Arch Graphic with Cute Icons */}
         <div className="reveal-element is-visible" style={{ maxWidth: '640px', margin: '0 auto -20px auto' }}>
@@ -25,7 +43,7 @@ export const TestimonialsSection = ({ currentMode }) => {
         </div>
 
         {/* Section Header */}
-        <div className="reveal-element is-visible" style={{ maxWidth: '640px', margin: '0 auto 36px auto' }}>
+        <div className="reveal-element is-visible" style={{ maxWidth: '640px', margin: '0 auto 28px auto' }}>
           <span className="section-badge" style={{ backgroundColor: '#FFE4EC', color: '#FF497C' }}>
             <Heart size={14} fill="#FF497C" /> Patient & Family Experiences
           </span>
@@ -37,43 +55,41 @@ export const TestimonialsSection = ({ currentMode }) => {
           </p>
         </div>
 
-        {/* Testimonial Avatars Row Selector */}
-        <div 
-          style={{
-            display: 'flex',
-            justify: 'center',
-            alignItems: 'center',
-            gap: '20px',
-            marginBottom: '32px',
-            flexWrap: 'wrap'
-          }}
-        >
-          {TESTIMONIALS.map((item, idx) => (
-            <button
-              key={item.id}
-              onClick={() => setCurrentIndex(idx)}
-              style={{
-                width: idx === currentIndex ? '88px' : '64px',
-                height: idx === currentIndex ? '88px' : '64px',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                border: idx === currentIndex ? '3px solid #8A4FFF' : '2px solid #E2E8F0',
-                boxShadow: idx === currentIndex ? '0 8px 24px rgba(138, 79, 255, 0.3)' : 'none',
-                transform: idx === currentIndex ? 'scale(1.1)' : 'scale(1)',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                cursor: 'pointer',
-                backgroundColor: '#FFF8FC',
-                padding: 0
-              }}
-              title={item.name}
-            >
-              <img 
-                src={item.image} 
-                alt={item.name}
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-              />
-            </button>
-          ))}
+        {/* Continuous Animated Scrolling Marquee for Testimonial Avatar Images */}
+        <div className="testimonial-marquee-wrapper">
+          <div className="testimonial-marquee-track">
+            {marqueeItems.map((item, idx) => {
+              const realIdx = idx % TESTIMONIALS.length;
+              const isSelected = realIdx === currentIndex;
+              return (
+                <button
+                  key={`${item.id}-${idx}`}
+                  onClick={() => setCurrentIndex(realIdx)}
+                  style={{
+                    width: isSelected ? '84px' : '64px',
+                    height: isSelected ? '84px' : '64px',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: isSelected ? '3.5px solid #FF497C' : '2px solid #E2E8F0',
+                    boxShadow: isSelected ? '0 8px 24px rgba(255, 73, 124, 0.35)' : '0 4px 12px rgba(0,0,0,0.04)',
+                    transform: isSelected ? 'scale(1.1)' : 'scale(1)',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                    cursor: 'pointer',
+                    backgroundColor: '#FFF8FC',
+                    padding: 0,
+                    flexShrink: 0
+                  }}
+                  title={`${item.name} - Click to view review`}
+                >
+                  <img 
+                    src={item.image} 
+                    alt={item.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                  />
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Featured Testimonial Card */}

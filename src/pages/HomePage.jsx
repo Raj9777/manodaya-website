@@ -216,7 +216,12 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
             </div>
 
             <div className="reveal-element is-visible" style={{ textAlign: 'center' }}>
-              <HeadphonesListeningIllustration />
+              <img 
+                src="/images/elements/child_and_adolescents.png" 
+                alt="MANODAYA Pediatric & Adolescent Care Spotlight" 
+                className="interactive-element-graphic"
+                style={{ maxWidth: '540px', width: '100%', height: 'auto' }}
+              />
             </div>
           </div>
         </div>

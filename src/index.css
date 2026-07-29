@@ -578,4 +578,42 @@ img, svg, video, canvas, iframe {
   }
 }
 
+/* ==========================================================================
+   CONTINUOUS TESTIMONIAL MARQUEE SCROLLING ANIMATION
+   ========================================================================== */
+
+@keyframes continuousMarqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.testimonial-marquee-wrapper {
+  overflow: hidden;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 32px auto;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  padding: 12px 0;
+}
+
+.testimonial-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: max-content;
+  animation: continuousMarqueeScroll 28s linear infinite;
+  will-change: transform;
+}
+
+.testimonial-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+
 
