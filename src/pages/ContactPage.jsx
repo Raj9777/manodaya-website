@@ -125,16 +125,50 @@ export const ContactPage = () => {
             </div>
 
             {/* Google Map Embed */}
-            <div style={{ borderRadius: '20px', overflow: 'hidden', height: '260px', border: '1px solid #E2E8F0' }}>
-              <iframe 
-                src={CLINIC_INFO.mapEmbedUrl}
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen="" 
-                loading="lazy"
-                title="MANODAYA Map"
-              ></iframe>
+            <div style={{ marginTop: '32px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0E0E10' }}>
+                  📍 Interactive Location Map
+                </h4>
+                <a 
+                  href="https://maps.app.goo.gl/fEXm6e8tnSZoybdV6" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '0.813rem',
+                    fontWeight: 700,
+                    color: '#8A4FFF',
+                    backgroundColor: '#EDE9FE',
+                    padding: '6px 14px',
+                    borderRadius: '9999px'
+                  }}
+                >
+                  Get Directions ↗
+                </a>
+              </div>
+
+              <div 
+                style={{ 
+                  borderRadius: '24px', 
+                  overflow: 'hidden', 
+                  height: '380px', 
+                  border: '1.5px solid #E2E8F0',
+                  boxShadow: '0 12px 32px rgba(0, 0, 0, 0.06)' 
+                }}
+              >
+                <iframe 
+                  src={CLINIC_INFO.mapEmbedUrl}
+                  width="100%" 
+                  height="100%" 
+                  style={{ border: 0, display: 'block' }} 
+                  allowFullScreen="" 
+                  loading="lazy"
+                  title="MANODAYA Map"
+                ></iframe>
+              </div>
             </div>
           </div>
 
