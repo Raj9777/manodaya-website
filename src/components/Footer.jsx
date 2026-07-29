@@ -7,24 +7,24 @@ import { CLINIC_INFO } from '../data/content';
 export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
   return (
     <>
-      {/* Pre-Footer Holding Hands Banner */}
+      {/* Pre-Footer Banner */}
       <section 
         style={{
           backgroundColor: 'var(--bg-secondary)',
           paddingTop: '56px',
-          paddingBottom: 0,
+          paddingBottom: '56px',
           textAlign: 'center',
           position: 'relative',
           overflow: 'hidden'
         }}
       >
-        <div className="container" style={{ marginBottom: '32px' }}>
+        <div className="container">
           <h2 
             style={{
               fontSize: 'clamp(2rem, 4vw, 3.25rem)',
               fontWeight: 900,
               color: 'var(--text-main)',
-              marginBottom: '16px',
+              marginBottom: '20px',
               letterSpacing: '-0.03em'
             }}
           >
@@ -35,11 +35,6 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
             <Calendar size={18} />
             <span>Book an Appointment</span>
           </button>
-        </div>
-
-        {/* 5 Characters Holding Hands Banner */}
-        <div style={{ maxWidth: '880px', margin: '0 auto' }}>
-          <HoldingHandsBannerIllustration />
         </div>
       </section>
 

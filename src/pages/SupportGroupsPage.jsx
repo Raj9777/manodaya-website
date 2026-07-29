@@ -40,10 +40,6 @@ export const SupportGroupsPage = ({ onOpenBooking }) => {
             </div>
           ))}
         </div>
-
-        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-          <HoldingHandsBannerIllustration />
-        </div>
       </div>
     </div>
   );
