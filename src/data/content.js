@@ -6,7 +6,7 @@ export const CLINIC_INFO = {
   location: "Plot No. 124, Near Lingaraj Temple Road, Old Town, Bhubaneswar, Odisha 751002",
   phone: "+91 98765 43210",
   whatsapp: "+919876543210",
-  email: "care@manodaya.in",
+  email: "manodaya.psych@gmail.com",
   timings: "Monday – Saturday: 9:00 AM – 7:30 PM | Sunday: By Prior Appointment",
   mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14972.164344400767!2d85.8239!3d20.2443!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19a793a388b1f5%3A0xb3a8247df6070624!2sOld%20Town%2C%20Bhubaneswar%2C%20Odisha!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
 };

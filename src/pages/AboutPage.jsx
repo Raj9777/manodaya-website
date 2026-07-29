@@ -31,7 +31,20 @@ export const AboutPage = ({ onOpenBooking }) => {
           }}
         >
           <div className="reveal-element is-visible">
-            <SafeSpaceIllustration />
+            <div 
+              style={{ 
+                borderRadius: '24px', 
+                overflow: 'hidden', 
+                boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+                border: '3px solid #FFFFFF'
+              }}
+            >
+              <img 
+                src="/images/section/therapy_room.jpeg" 
+                alt="MANODAYA Therapy & Assessment Room" 
+                style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }} 
+              />
+            </div>
           </div>
 
           <div className="reveal-element is-visible">

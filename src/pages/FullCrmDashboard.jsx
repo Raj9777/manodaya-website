@@ -291,7 +291,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       `⏰ Time: ${lead.time}\n` +
       `📍 Type: ${lead.type}\n\n` +
       `Please arrive 10 minutes early. If you need to reschedule, contact us on WhatsApp or call us.\n\n` +
-      `Warm regards,\nMANODAYA Clinical Team\ncare@manodaya.in`
+      `Warm regards,\nMANODAYA Clinical Team\nmanodaya.psych@gmail.com`
     );
     window.open(`mailto:${lead.email}?subject=${subject}&body=${body}`, '_blank');
   };

@@ -69,6 +69,24 @@ export const ContactPage = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '48px' }}>
           {/* Left: Contact Info & Map */}
           <div className="reveal-element">
+            {/* Featured Contact Photo */}
+            <div 
+              style={{ 
+                borderRadius: '20px', 
+                overflow: 'hidden', 
+                marginBottom: '24px',
+                border: '1px solid #E2E8F0',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.05)',
+                maxHeight: '260px'
+              }}
+            >
+              <img 
+                src="/images/section/contact.jpeg" 
+                alt="MANODAYA Clinical Center & Reception" 
+                style={{ width: '100%', height: '260px', display: 'block', objectFit: 'cover' }}
+              />
+            </div>
+
             <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#0E0E10', fontWeight: 900 }}>
               Centre Location & Timings
             </h3>
