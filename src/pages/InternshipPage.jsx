@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { GraduationCap, BookOpen, CheckCircle2, Calendar, Award, ArrowRight, UserCheck, Sparkles } from 'lucide-react';
 import { InternshipWorkshopModal } from '../components/InternshipWorkshopModal';
 import { INITIAL_WORKSHOPS } from './FullCrmDashboard';
+import { db } from '../firebase';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 
 export const InternshipPage = ({ onOpenBooking }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -10,12 +12,33 @@ export const InternshipPage = ({ onOpenBooking }) => {
   const [upcomingWorkshops, setUpcomingWorkshops] = useState([]);
 
   useEffect(() => {
-    const savedWorkshops = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
-    if (savedWorkshops && savedWorkshops.length > 0) {
-      setUpcomingWorkshops(savedWorkshops);
-    } else {
-      setUpcomingWorkshops(INITIAL_WORKSHOPS);
+    let unsub;
+    try {
+      const wsRef = collection(db, 'workshops');
+      unsub = onSnapshot(
+        query(wsRef, orderBy('createdAt', 'desc')),
+        (snap) => {
+          if (!snap.empty) {
+            const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            setUpcomingWorkshops(list);
+            localStorage.setItem('manodaya_workshops', JSON.stringify(list));
+          } else {
+            const savedWorkshops = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
+            setUpcomingWorkshops(savedWorkshops || INITIAL_WORKSHOPS);
+          }
+        },
+        (err) => {
+          console.warn('Firestore offline/error in InternshipPage:', err);
+          const savedWorkshops = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
+          setUpcomingWorkshops(savedWorkshops || INITIAL_WORKSHOPS);
+        }
+      );
+    } catch {
+      const savedWorkshops = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
+      setUpcomingWorkshops(savedWorkshops || INITIAL_WORKSHOPS);
     }
+
+    return () => unsub?.();
   }, []);
 
   const handleOpenModal = (type = 'Clinical Internship', track = '') => {

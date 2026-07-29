@@ -15,14 +15,36 @@ import { ContactPage } from './pages/ContactPage';
 import { FullCrmDashboard } from './pages/FullCrmDashboard';
 
 export function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [activePage, setActivePage] = useState('home');
+  const getInitialPage = () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) return hash;
+    const saved = localStorage.getItem('manodaya_active_page');
+    if (saved) return saved;
+    return 'home';
+  };
+
+  const [activePage, setActivePage] = useState(getInitialPage);
+  const [isLoading, setIsLoading] = useState(() => getInitialPage() !== 'dashboard');
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [initialService, setInitialService] = useState('');
 
-  // Scroll to top on page change
+  // Sync hash changes (e.g. browser back/forward buttons or direct URL)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        setActivePage(hash);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Scroll to top on page change & update URL hash/localStorage
   const handleNavigate = (pageKey) => {
     setActivePage(pageKey);
+    window.location.hash = '#' + pageKey;
+    localStorage.setItem('manodaya_active_page', pageKey);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

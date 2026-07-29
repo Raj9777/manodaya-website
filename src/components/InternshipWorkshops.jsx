@@ -1,8 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { GraduationCap, BookOpen, Calendar, Award, CheckCircle, ArrowRight } from 'lucide-react';
 import { INTERNSHIPS_WORKSHOPS } from '../data/content';
+import { db } from '../firebase';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 
 export const InternshipWorkshops = ({ onApplyInternship }) => {
+  const [workshopsList, setWorkshopsList] = useState(INTERNSHIPS_WORKSHOPS.workshops);
+
+  useEffect(() => {
+    let unsub;
+    try {
+      const wsRef = collection(db, 'workshops');
+      unsub = onSnapshot(
+        query(wsRef, orderBy('createdAt', 'desc')),
+        (snap) => {
+          if (!snap.empty) {
+            setWorkshopsList(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+          } else {
+            const saved = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
+            if (saved && saved.length > 0) setWorkshopsList(saved);
+          }
+        },
+        () => {
+          const saved = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
+          if (saved && saved.length > 0) setWorkshopsList(saved);
+        }
+      );
+    } catch {
+      const saved = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
+      if (saved && saved.length > 0) setWorkshopsList(saved);
+    }
+    return () => unsub?.();
+  }, []);
   return (
     <section id="internships" className="section-padding" style={{ backgroundColor: '#E2EBE4' }}>
       <div className="container">
@@ -94,7 +123,7 @@ export const InternshipWorkshops = ({ onApplyInternship }) => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
-              {INTERNSHIPS_WORKSHOPS.workshops.map((ws, index) => (
+              {workshopsList.map((ws, index) => (
                 <div 
                   key={index}
                   style={{
