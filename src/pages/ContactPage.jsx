@@ -301,6 +301,7 @@ export const ContactPage = () => {
               borderRadius: '24px', 
               overflow: 'hidden', 
               height: '460px', 
+              minHeight: '460px',
               border: '1.5px solid #E2E8F0',
               boxShadow: '0 16px 40px rgba(0, 0, 0, 0.08)',
               width: '100%'
@@ -308,9 +309,10 @@ export const ContactPage = () => {
           >
             <iframe 
               src={CLINIC_INFO.mapEmbedUrl}
+              className="map-iframe-embed"
               width="100%" 
               height="100%" 
-              style={{ border: 0, display: 'block' }} 
+              style={{ border: 0, display: 'block', width: '100%', height: '100%', minHeight: '460px' }} 
               allowFullScreen="" 
               loading="lazy"
               title="MANODAYA Interactive Location Map"
