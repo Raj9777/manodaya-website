@@ -268,7 +268,7 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
                 }}
               >
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
+                  <div style={{ marginBottom: '12px' }}>
                     <span 
                       className="badge-status"
                       style={{
@@ -278,10 +278,6 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
                       }}
                     >
                       {item.badge}
-                    </span>
-
-                    <span style={{ fontSize: '0.75rem', color: '#6B7280', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                      <Clock size={12} /> {item.duration}
                     </span>
                   </div>
 
