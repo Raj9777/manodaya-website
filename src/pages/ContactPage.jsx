@@ -1,25 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Phone, Mail, Clock, Calendar, CheckCircle2, MessageSquare, Info, Loader2 } from 'lucide-react';
-import { CLINIC_INFO } from '../data/content';
+import { CLINIC_INFO, CLINIC_TIME_SLOTS } from '../data/content';
 import { SERVICE_DESCRIPTIONS } from '../components/BookingModal';
 import confetti from 'canvas-confetti';
 import { db } from '../firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, onSnapshot } from 'firebase/firestore';
 
 export const ContactPage = () => {
+  const todayStr = new Date().toISOString().split('T')[0];
+
   const [formData, setFormData] = useState({
     patientName: '',
     phone: '',
     email: '',
     service: 'Comprehensive Neuropsychological Assessment',
     type: 'In-Person Consultation',
-    date: '',
-    time: '10:30 AM',
+    date: todayStr,
+    time: CLINIC_TIME_SLOTS[0],
     notes: ''
   });
 
   const [submittedLead, setSubmittedLead] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [allLeads, setAllLeads] = useState([]);
+
+  // Subscribe to real-time leads to monitor booked time slots
+  useEffect(() => {
+    let unsub;
+    try {
+      unsub = onSnapshot(collection(db, 'leads'), (snap) => {
+        const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        setAllLeads(list);
+      }, () => {
+        const saved = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
+        setAllLeads(saved);
+      });
+    } catch {
+      const saved = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
+      setAllLeads(saved);
+    }
+    return () => unsub?.();
+  }, []);
+
+  // Compute booked slots for selected date
+  const selectedDate = formData.date || todayStr;
+  const bookedSlots = allLeads
+    .filter(l => l.date === selectedDate && l.status !== 'Cancelled')
+    .map(l => l.time);
+
+  // Auto-select first available slot if currently selected time is booked or is lunch
+  useEffect(() => {
+    const isCurrentLunch = formData.time.includes('Lunch Break');
+    const isCurrentBooked = bookedSlots.includes(formData.time);
+
+    if (isCurrentLunch || isCurrentBooked) {
+      const firstAvail = CLINIC_TIME_SLOTS.find(s => !s.includes('Lunch Break') && !bookedSlots.includes(s));
+      if (firstAvail) {
+        setFormData(prev => ({ ...prev, time: firstAvail }));
+      }
+    }
+  }, [selectedDate, allLeads]);
 
   const currentDescription = SERVICE_DESCRIPTIONS[formData.service] || 
     "Comprehensive evidence-based psychological consultation and clinical care.";
@@ -262,6 +302,30 @@ export const ContactPage = () => {
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                     />
+                  </div>
+
+                  <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                    <label className="form-label">Time Slot (1 Patient per Slot)</label>
+                    <select 
+                      className="form-select"
+                      value={formData.time}
+                      onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                    >
+                      {CLINIC_TIME_SLOTS.map((slot) => {
+                        const isLunch = slot.includes('Lunch Break');
+                        const isTaken = bookedSlots.includes(slot);
+                        const isDisabled = isLunch || isTaken;
+                        let label = slot;
+                        if (isLunch) label = "01:00 PM - 02:00 PM 🔒 (Lunch Break)";
+                        else if (isTaken) label = `${slot} ❌ (Already Booked)`;
+
+                        return (
+                          <option key={slot} value={slot} disabled={isDisabled}>
+                            {label}
+                          </option>
+                        );
+                      })}
+                    </select>
                   </div>
                 </div>
 

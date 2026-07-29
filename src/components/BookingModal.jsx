@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, CheckCircle2, MessageSquare, Info, Loader2 } from 'lucide-react';
+import { X, Calendar, CheckCircle2, MessageSquare, Info, Loader2, Clock } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { db } from '../firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, onSnapshot } from 'firebase/firestore';
+import { CLINIC_TIME_SLOTS } from '../data/content';
 
 export const SERVICE_DESCRIPTIONS = {
   "ADHD & Attention Assessment": "Standardized 3-session clinical focus & hyperactivity profiling using Vanderbilt & Conners batteries.",
@@ -20,6 +21,8 @@ export const SERVICE_DESCRIPTIONS = {
 };
 
 export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
+  const todayStr = new Date().toISOString().split('T')[0];
+
   const [formData, setFormData] = useState({
     patientName: '',
     phone: '',
@@ -28,19 +31,57 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
     age: '',
     service: initialService || 'Comprehensive Neuropsychological Assessment',
     type: 'In-Person Consultation',
-    date: '',
-    time: '10:30 AM',
+    date: todayStr,
+    time: CLINIC_TIME_SLOTS[0],
     notes: ''
   });
 
   const [submittedLead, setSubmittedLead] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [allLeads, setAllLeads] = useState([]);
+
+  // Subscribe to real-time leads to monitor booked time slots
+  useEffect(() => {
+    let unsub;
+    try {
+      unsub = onSnapshot(collection(db, 'leads'), (snap) => {
+        const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        setAllLeads(list);
+      }, () => {
+        const saved = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
+        setAllLeads(saved);
+      });
+    } catch {
+      const saved = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
+      setAllLeads(saved);
+    }
+    return () => unsub?.();
+  }, []);
 
   useEffect(() => {
     if (initialService) {
       setFormData(prev => ({ ...prev, service: initialService }));
     }
   }, [initialService]);
+
+  // Compute booked slots for selected date
+  const selectedDate = formData.date || todayStr;
+  const bookedSlots = allLeads
+    .filter(l => l.date === selectedDate && l.status !== 'Cancelled')
+    .map(l => l.time);
+
+  // Auto-select first available slot if currently selected time is booked or is lunch
+  useEffect(() => {
+    const isCurrentLunch = formData.time.includes('Lunch Break');
+    const isCurrentBooked = bookedSlots.includes(formData.time);
+
+    if (isCurrentLunch || isCurrentBooked) {
+      const firstAvail = CLINIC_TIME_SLOTS.find(s => !s.includes('Lunch Break') && !bookedSlots.includes(s));
+      if (firstAvail) {
+        setFormData(prev => ({ ...prev, time: firstAvail }));
+      }
+    }
+  }, [selectedDate, allLeads]);
 
   if (!isOpen) return null;
 
@@ -275,16 +316,26 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Time</label>
+                  <label className="form-label">Time Slot (1 Patient per Slot)</label>
                   <select 
                     className="form-select"
                     value={formData.time}
                     onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                   >
-                    <option value="10:00 AM">10:00 AM</option>
-                    <option value="11:30 AM">11:30 AM</option>
-                    <option value="03:00 PM">03:00 PM</option>
-                    <option value="05:30 PM">05:30 PM</option>
+                    {CLINIC_TIME_SLOTS.map((slot) => {
+                      const isLunch = slot.includes('Lunch Break');
+                      const isTaken = bookedSlots.includes(slot);
+                      const isDisabled = isLunch || isTaken;
+                      let label = slot;
+                      if (isLunch) label = "01:00 PM - 02:00 PM 🔒 (Lunch Break)";
+                      else if (isTaken) label = `${slot} ❌ (Already Booked)`;
+
+                      return (
+                        <option key={slot} value={slot} disabled={isDisabled}>
+                          {label}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
               </div>
