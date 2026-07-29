@@ -180,6 +180,7 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
 
             {/* Filter Pills */}
             <div 
+              className="filter-pills-container"
               style={{
                 display: 'inline-flex',
                 gap: '8px',

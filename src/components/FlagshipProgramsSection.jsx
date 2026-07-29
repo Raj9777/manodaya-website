@@ -122,7 +122,7 @@ export const FlagshipProgramsSection = ({ onOpenBooking }) => {
               <div 
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
                   gap: '36px',
                   alignItems: 'center'
                 }}
@@ -219,7 +219,7 @@ export const FlagshipProgramsSection = ({ onOpenBooking }) => {
                     </p>
 
                     {/* Highlights breakdown side-by-side in right column */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px', marginBottom: '24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '18px', marginBottom: '24px' }}>
                       <div style={{ backgroundColor: '#FFFFFF', padding: '16px 20px', borderRadius: '18px', border: `1px solid ${prog.borderColor}` }}>
                         <div style={{ fontSize: '0.781rem', fontWeight: 800, color: prog.accentColor, textTransform: 'uppercase', marginBottom: '8px' }}>
                           ✨ What the Program Covers:

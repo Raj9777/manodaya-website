@@ -405,8 +405,33 @@ button {
 }
 
 /* ==========================================================================
-   RESPONSIVE MEDIA QUERIES (Mobile, Tablet, Desktop Optimizations)
+   RESPONSIVE MEDIA QUERIES & UTILITY CLASSES (Mobile, Tablet, Desktop)
    ========================================================================== */
+
+/* Universal Media Safeguards */
+img, svg, video, canvas, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Dynamic Grid Utilities */
+.responsive-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 24px;
+}
+
+.responsive-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 24px;
+}
+
+.responsive-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 20px;
+}
 
 @media (max-width: 1040px) {
   .desktop-only { display: none !important; }
@@ -419,17 +444,19 @@ button {
   }
 
   .section-padding {
-    padding: 56px 0;
+    padding: 48px 0;
   }
 
   .reference-card, .minimal-card {
-    padding: 24px;
-    border-radius: 20px;
+    padding: 22px 18px;
+    border-radius: 18px;
   }
 
   .modal-content {
-    padding: 24px 20px;
+    padding: 24px 18px;
     border-radius: 20px;
+    max-width: 95vw;
+    max-height: 90vh;
   }
 
   /* Form auto-stacking on mobile */
@@ -437,30 +464,75 @@ button {
     grid-template-columns: 1fr !important;
   }
 
-  .btn-black, .btn-pink, .btn-outline-theme {
+  /* Touch-friendly full-width buttons on mobile */
+  .btn-black, .btn-pink, .btn-outline-theme, .btn-purple, .btn-accent {
     width: 100%;
     padding: 12px 20px;
     font-size: 0.875rem;
+    justify-content: center;
   }
+
+  /* CRM Table scroll wrapper */
+  .crm-table-container {
+    -webkit-overflow-scrolling: touch;
+    border-radius: 14px;
+  }
+
+  /* Typography Fluid Scaling */
+  h1 { font-size: clamp(1.85rem, 6.5vw, 2.75rem) !important; }
+  h2 { font-size: clamp(1.5rem, 5.5vw, 2.15rem) !important; }
+  h3 { font-size: clamp(1.2rem, 4.5vw, 1.5rem) !important; }
 }
 
 @media (max-width: 480px) {
   html {
-    font-size: 15px;
+    font-size: 14.5px;
+  }
+
+  .container {
+    padding: 0 12px;
   }
 
   .section-header {
-    margin-bottom: 36px;
+    margin-bottom: 28px;
   }
 
   .section-badge {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     padding: 4px 12px;
+    gap: 4px;
   }
 
-  /* Small phone button text centering */
-  .btn-black, .btn-pink, .btn-outline-theme {
-    justify-content: center;
+  /* Small phone card padding */
+  .reference-card, .minimal-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  /* Horizontal scrollable filter pills on small phones */
+  .filter-pills-container {
+    display: flex !important;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .filter-pills-container button {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  html {
+    font-size: 14px;
+  }
+
+  .btn-black, .btn-pink, .btn-outline-theme, .btn-purple, .btn-accent {
+    padding: 10px 14px;
+    font-size: 0.813rem;
   }
 }
 
@@ -505,4 +577,5 @@ button {
     transform: translateY(-10px) rotate(0.6deg);
   }
 }
+
 
