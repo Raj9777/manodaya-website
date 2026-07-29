@@ -84,14 +84,20 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       unsubLeads = onSnapshot(
         query(leadsRef, orderBy('createdAt', 'desc')),
         (snap) => {
-          if (snap.empty) {
-            // Seed with initial leads if Firestore is empty
+          const isInitialized = localStorage.getItem('manodaya_leads_initialized');
+          if (snap.empty && !isInitialized) {
+            // Seed ONCE on initial deployment
+            localStorage.setItem('manodaya_leads_initialized', 'true');
             INITIAL_CRM_LEADS.forEach(async (lead) => {
               await setDoc(doc(db, 'leads', lead.id), lead);
             });
             setLeads(INITIAL_CRM_LEADS);
+            localStorage.setItem('manodaya_crm_leads', JSON.stringify(INITIAL_CRM_LEADS));
           } else {
-            setLeads(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+            localStorage.setItem('manodaya_leads_initialized', 'true');
+            const fetched = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            setLeads(fetched);
+            localStorage.setItem('manodaya_crm_leads', JSON.stringify(fetched));
           }
           setFirebaseOnline(true);
         },
@@ -99,7 +105,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
           console.warn('Firestore unavailable, using localStorage:', err.message);
           setFirebaseOnline(false);
           const saved = JSON.parse(localStorage.getItem('manodaya_crm_leads') || 'null');
-          setLeads(saved || INITIAL_CRM_LEADS);
+          setLeads(saved !== null ? saved : INITIAL_CRM_LEADS);
         }
       );
 
@@ -190,10 +196,12 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     if (!window.confirm(`Are you sure you want to permanently delete submission for "${patientName || 'Patient'}" (Ref: ${id})?`)) return;
     const updated = leads.filter(l => l.id !== id);
     setLeads(updated);
+    localStorage.setItem('manodaya_crm_leads', JSON.stringify(updated));
+    localStorage.setItem('manodaya_leads_initialized', 'true');
     try {
       await deleteDoc(doc(db, 'leads', id));
-    } catch {
-      localStorage.setItem('manodaya_crm_leads', JSON.stringify(updated));
+    } catch (err) {
+      console.warn('Firestore delete lead error:', err);
     }
   };
 
