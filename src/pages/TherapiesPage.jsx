@@ -23,8 +23,8 @@ export const TherapiesPage = ({ onOpenBooking }) => {
           {THERAPIES.map((t) => (
             <div key={t.id} className="reference-card reveal-element" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
-                <span className="badge-status" style={{ backgroundColor: t.category === 'child' ? '#FFE4EC' : '#EDE9FE', color: t.category === 'child' ? '#FF5E8E' : '#7C3AED', marginBottom: '12px' }}>
-                  {t.category === 'child' ? 'Pediatric & Parent' : 'Adult & Individual'}
+                <span className="badge-status" style={{ backgroundColor: t.category === 'child' ? '#FFE4EC' : t.category === 'both' ? '#D1FAE5' : '#EDE9FE', color: t.category === 'child' ? '#FF5E8E' : t.category === 'both' ? '#059669' : '#7C3AED', marginBottom: '12px' }}>
+                  {t.category === 'child' ? 'Pediatric & Parent' : t.category === 'both' ? 'All Ages' : 'Adult & Individual'}
                 </span>
                 <h3 style={{ fontSize: '1.35rem', margin: '8px 0 10px 0', color: '#0E0E10' }}>{t.title}</h3>
                 <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '20px', lineHeight: 1.5 }}>{t.description}</p>

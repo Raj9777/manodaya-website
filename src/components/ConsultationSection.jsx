@@ -1,6 +1,5 @@
 import React from 'react';
-import { HeadphonesListeningIllustration } from './EditorialIllustrations';
-import { Calendar, ArrowRight, Heart } from 'lucide-react';
+import { Calendar, Heart } from 'lucide-react';
 
 export const ConsultationSection = ({ onOpenBooking }) => {
   return (
@@ -8,13 +7,12 @@ export const ConsultationSection = ({ onOpenBooking }) => {
       <div className="container">
         <div 
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '56px',
-            alignItems: 'center'
+            maxWidth: '720px',
+            margin: '0 auto',
+            textAlign: 'center'
           }}
         >
-          {/* Left Column: Copy & CTA matching Reference Section 4 */}
+          {/* Copy & CTA */}
           <div className="reveal-element">
             <span className="section-badge" style={{ backgroundColor: '#D1FAE5', color: '#059669' }}>
               <Heart size={14} fill="#059669" /> Empathetic Listening
@@ -45,11 +43,6 @@ export const ConsultationSection = ({ onOpenBooking }) => {
               <Calendar size={18} />
               <span>Book an Appointment</span>
             </button>
-          </div>
-
-          {/* Right Column: Headphones Seated Illustration matching Reference Image */}
-          <div className="reveal-element">
-            <HeadphonesListeningIllustration />
           </div>
         </div>
       </div>

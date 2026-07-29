@@ -25,7 +25,7 @@ export const Hero = ({ onOpenBooking, currentMode }) => {
           {/* Left Column: Copy & CTAs */}
           <div className="reveal-element">
             <span className="section-badge">
-              <Sparkles size={14} /> Lifespan Neuropsychological Care
+              <Sparkles size={14} /> Lifespan Psychological Care
             </span>
 
             <h1 
@@ -38,7 +38,7 @@ export const Hero = ({ onOpenBooking, currentMode }) => {
                 color: 'var(--text-main)'
               }}
             >
-              Advanced Neuropsychological & Cognitive Care
+              Healing Mind – Empowering Lives
             </h1>
 
             <p 

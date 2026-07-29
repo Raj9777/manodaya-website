@@ -4,11 +4,8 @@ import { THERAPIES } from '../data/content';
 import { TherapyIllustration } from './EditorialIllustrations';
 
 export const TherapiesSection = ({ currentMode, onSelectTherapy }) => {
-  const filteredTherapies = THERAPIES.filter(item => {
-    if (currentMode === 'child') return item.category === 'child';
-    if (currentMode === 'adult') return item.category === 'adult';
-    return true;
-  });
+  // Show all therapies regardless of mode
+  const filteredTherapies = THERAPIES;
 
   return (
     <section id="therapies" className="section-padding" style={{ backgroundColor: '#FFFFFF' }}>
@@ -66,15 +63,14 @@ export const TherapiesSection = ({ currentMode, onSelectTherapy }) => {
               }}
             >
               <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
                   <span 
                     className="badge-status" 
                     style={{ 
-                      backgroundColor: therapy.category === 'child' ? '#EDE9FE' : '#FFD2DF',
-                      color: therapy.category === 'child' ? '#7C3AED' : '#FF497C'
+                      backgroundColor: therapy.category === 'child' ? '#EDE9FE' : therapy.category === 'both' ? '#D1FAE5' : '#FFD2DF',
+                      color: therapy.category === 'child' ? '#7C3AED' : therapy.category === 'both' ? '#059669' : '#FF497C'
                     }}
                   >
-                    {therapy.category === 'child' ? 'Pediatric & Parent' : 'Adult & Individual'}
+                    {therapy.category === 'child' ? 'Pediatric & Parent' : therapy.category === 'both' ? 'All Ages' : 'Adult & Individual'}
                   </span>
                 </div>
 

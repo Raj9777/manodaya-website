@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { X, GraduationCap, CheckCircle2, MessageSquare, Info, Calendar } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { db } from '../firebase';
+import { addDoc, collection } from 'firebase/firestore';
 
 export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinical Internship', initialWorkshopTitle = '' }) => {
   const [formData, setFormData] = useState({
@@ -18,7 +20,7 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const appId = `INT-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -36,8 +38,13 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
       createdAt: new Date().toLocaleString('en-IN')
     };
 
-    const existingApps = JSON.parse(localStorage.getItem('manodaya_crm_internships') || '[]');
-    localStorage.setItem('manodaya_crm_internships', JSON.stringify([newApp, ...existingApps]));
+    // Write to Firestore (primary) + localStorage (fallback)
+    try {
+      await addDoc(collection(db, 'internships'), newApp);
+    } catch (err) {
+      const existingApps = JSON.parse(localStorage.getItem('manodaya_crm_internships') || '[]');
+      localStorage.setItem('manodaya_crm_internships', JSON.stringify([newApp, ...existingApps]));
+    }
 
     try {
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });

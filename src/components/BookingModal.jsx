@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { X, Calendar, CheckCircle2, MessageSquare, Info } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { db } from '../firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 export const SERVICE_DESCRIPTIONS = {
   "ADHD & Attention Assessment": "Standardized 3-session clinical focus & hyperactivity profiling using Vanderbilt & Conners batteries.",
@@ -44,7 +46,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
   const currentDescription = SERVICE_DESCRIPTIONS[formData.service] || 
     "Comprehensive evidence-based psychological consultation and clinical care.";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const bookingId = `MAN-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -64,8 +66,14 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
       createdAt: new Date().toLocaleString('en-IN')
     };
 
-    const existingLeads = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
-    localStorage.setItem('manodaya_crm_leads', JSON.stringify([newLead, ...existingLeads]));
+    // Save to Firestore (primary) + localStorage (fallback)
+    try {
+      await setDoc(doc(db, 'leads', bookingId), newLead);
+    } catch (err) {
+      // Firestore unavailable — save to localStorage
+      const existingLeads = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
+      localStorage.setItem('manodaya_crm_leads', JSON.stringify([newLead, ...existingLeads]));
+    }
 
     try {
       confetti({ particleCount: 75, spread: 65, origin: { y: 0.6 } });

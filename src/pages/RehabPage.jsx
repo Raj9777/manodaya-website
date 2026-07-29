@@ -60,7 +60,15 @@ export const RehabPage = ({ onOpenBooking }) => {
                   {item.audience}
                 </span>
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '10px', color: '#0E0E10' }}>{item.title}</h3>
-                <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: '20px' }}>{item.description}</p>
+                <p style={{ fontSize: '0.938rem', color: '#6B7280', marginBottom: item.extendedDescription ? '16px' : '20px' }}>{item.description}</p>
+                {item.extendedDescription && (
+                  <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '14px', padding: '14px 16px', marginBottom: '20px' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#15803D', textTransform: 'uppercase', marginBottom: '6px' }}>
+                      ✦ Evidence-Based Cognitive Remediation & Attention Training
+                    </div>
+                    <p style={{ fontSize: '0.844rem', color: '#166534', lineHeight: 1.6, margin: 0 }}>{item.extendedDescription}</p>
+                  </div>
+                )}
               </div>
 
               <button className="btn-black" onClick={() => onOpenBooking(item.title)} style={{ width: '100%' }}>
@@ -70,6 +78,7 @@ export const RehabPage = ({ onOpenBooking }) => {
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );

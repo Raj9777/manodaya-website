@@ -22,7 +22,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
             {/* Left Headline */}
             <div className="reveal-element is-visible">
               <span className="section-badge" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF' }}>
-                <Sparkles size={14} /> Lifespan Neuropsychological Care
+                <Sparkles size={14} /> Lifespan Psychological Care
               </span>
 
               <h1 
@@ -35,7 +35,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
                   color: '#0E0E10'
                 }}
               >
-                Advanced Neuropsychological & Cognitive Care
+                Healing Mind – Empowering Lives
               </h1>
 
               <p 

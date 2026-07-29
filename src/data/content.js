@@ -93,7 +93,7 @@ export const ASSESSMENTS = [
     title: "Autism Spectrum Assessment / Screening",
     badge: "Child & Adolescent",
     description: "Comprehensive diagnostic screening for social communication difficulties, repetitive behaviors, and sensory processing differences.",
-    tools: "ADOS-2, CARS-2, M-CHAT-R/F, Social Communication Questionnaire (SCQ)",
+    tools: "CARS-2, M-CHAT-R/F, Social Communication Questionnaire (SCQ)",
     duration: "2 - 4 Sessions"
   },
   {
@@ -102,7 +102,7 @@ export const ASSESSMENTS = [
     title: "IQ & Developmental (DQ) Assessment",
     badge: "Child & Adolescent",
     description: "Formal cognitive capacity profiling and developmental quotient evaluation for toddlers, children, and young adolescents.",
-    tools: "WISC-V, VSMS, Development Assessment Scales for Indian Infants (DASII)",
+    tools: "MISIC, SFBT, BHATIA BATTERY, NIMHANS Neuropsychological Child Battery",
     duration: "2 Sessions"
   },
   {
@@ -111,7 +111,7 @@ export const ASSESSMENTS = [
     title: "Specific Learning Disability (SLD) Assessment",
     badge: "Child & Adolescent",
     description: "Diagnostic assessment for Dyslexia (Reading), Dysgraphia (Writing), and Dyscalculia (Maths) to secure academic accommodations.",
-    tools: "NIMHANS Index for SLD, WRAT-5, Diagnostic Test for Learning Disability (DTLD)",
+    tools: "NIMHANS Index for SLD, Diagnostic Test for Learning Disability (DTLD)",
     duration: "3 Sessions"
   },
   {
@@ -120,7 +120,7 @@ export const ASSESSMENTS = [
     title: "Behavioural & Emotional Assessment",
     badge: "Child & Adolescent",
     description: "In-depth screening for oppositionality, emotional regulation challenges, separation anxiety, and school refusal.",
-    tools: "Child Behavior Checklist (CBCL), BASC-3, Screen for Child Anxiety (SCARED)",
+    tools: "CBCL, CAT, SCT, DAP",
     duration: "2 Sessions"
   },
   {
@@ -129,7 +129,7 @@ export const ASSESSMENTS = [
     title: "Comprehensive Neuropsychological Assessment",
     badge: "Adult & Geriatric",
     description: "Detailed profiling of brain-behavior relationships, memory systems, executive functioning, and perceptual abilities.",
-    tools: "NIMHANS Neuropsychological Battery, PGI Battery, Luria-Nebraska Test",
+    tools: "NIMHANS Neuropsychological Battery, PGI-BBD",
     duration: "3 Sessions"
   },
   {
@@ -147,7 +147,7 @@ export const ASSESSMENTS = [
     title: "Dementia & Mild Cognitive Impairment (MCI) Screening",
     badge: "Adult & Geriatric",
     description: "Early identification of age-related memory decline, Alzheimer's risk factors, and vascular dementia screening.",
-    tools: "MoCA, MMSE, ACE-III, Clinical Dementia Rating (CDR)",
+    tools: "MoCA, MMSE, ACE-III",
     duration: "2 Sessions"
   },
   {
@@ -156,7 +156,7 @@ export const ASSESSMENTS = [
     title: "Cognitive Assessment for Epilepsy & Post-Stroke Care",
     badge: "Adult & Geriatric",
     description: "Pre/post surgical cognitive mapping for epilepsy and functional loss assessment following cerebrovascular events.",
-    tools: "WMS-IV, Token Test, Boston Naming Test, Reaction Time Batteries",
+    tools: "WCST, NIMHANS BATTERY, MMSE",
     duration: "2 - 3 Sessions"
   },
   {
@@ -165,7 +165,7 @@ export const ASSESSMENTS = [
     title: "Personality & Psychodiagnostic Assessment",
     badge: "Adult & Geriatric",
     description: "Clarification of mood disorders, anxiety syndromes, personality traits, and differential diagnostic formulation.",
-    tools: "MMPI-2 / MMPI-3, MCMI-IV, Rorschach Inkblot Method, TAT",
+    tools: "MMPI-2, MCMI-IV, 16PF, Rorschach Inkblot Method, TAT",
     duration: "3 Sessions"
   }
 ];
@@ -173,17 +173,59 @@ export const ASSESSMENTS = [
 export const THERAPIES = [
   {
     id: "cbt",
-    category: "adult",
+    category: "both",
     title: "Cognitive Behaviour Therapy (CBT)",
-    description: "Gold-standard structured therapy targeting unhelpful thought patterns and behavioral responses in depression and anxiety.",
-    highlights: ["Automatic Thought Restructuring", "Behavioral Activation", "Core Belief Modification"]
+    description: "Gold-standard structured therapy targeting unhelpful thought patterns and behavioral responses in depression, anxiety, OCD, phobias, and mood disorders.",
+    highlights: ["Automatic Thought Restructuring", "Behavioral Activation", "Core Belief Modification", "Problem-Solving Skills"]
   },
   {
     id: "dbt",
-    category: "adult",
+    category: "both",
     title: "Dialectical Behaviour Therapy (DBT)",
-    description: "Mindfulness-based emotional regulation, distress tolerance, and interpersonal effectiveness modules.",
-    highlights: ["Emotion Regulation", "Distress Tolerance", "Mindfulness Practices"]
+    description: "Mindfulness-based emotional regulation, distress tolerance, and interpersonal effectiveness modules for borderline personality, self-harm, and emotional dysregulation.",
+    highlights: ["Emotion Regulation", "Distress Tolerance", "Mindfulness Practices", "Interpersonal Effectiveness"]
+  },
+  {
+    id: "cbt-erp-ocd",
+    category: "both",
+    title: "CBT & ERP for OCD",
+    description: "Exposure and Response Prevention (ERP) combined with CBT — the most effective evidence-based protocol for Obsessive-Compulsive Disorder across all age groups.",
+    highlights: ["Exposure & Response Prevention (ERP)", "Hierarchy-Based Exposure", "OCD Psychoeducation", "Relapse Prevention Planning"]
+  },
+  {
+    id: "behavioural-therapy",
+    category: "both",
+    title: "Behavioural Therapy",
+    description: "Structured behavioral interventions targeting maladaptive patterns through systematic desensitization, operant conditioning, and habit reversal training.",
+    highlights: ["Systematic Desensitization", "Habit Reversal Training", "Positive Reinforcement", "Behavioral Activation"]
+  },
+  {
+    id: "pmt",
+    category: "child",
+    title: "Parent Management Training (PMT)",
+    description: "Evidence-based parent coaching programme equipping caregivers with structured behavior management strategies for children with ADHD, ODD, and developmental concerns.",
+    highlights: ["Positive Behavior Support", "Consistent Consequence Systems", "Behavioral Charting", "Home-School Coordination"]
+  },
+  {
+    id: "neurocog-rehab",
+    category: "both",
+    title: "Neurocognitive Rehabilitation",
+    description: "Structured neuro-restorative interventions targeting attention, working memory, executive function, and processing speed following neurological illness or injury.",
+    highlights: ["Attention Retraining", "Working Memory Expansion", "Executive Function Drills", "Progress Monitoring"]
+  },
+  {
+    id: "marital-couple",
+    category: "adult",
+    title: "Marital / Couple Therapy",
+    description: "Dyadic therapeutic sessions helping couples navigate communication breakdowns, conflict, intimacy concerns, parenting differences, and relationship distress.",
+    highlights: ["Communication Skills Training", "Conflict Resolution", "Emotional Validation", "Intimacy & Trust Rebuilding"]
+  },
+  {
+    id: "mbct",
+    category: "both",
+    title: "Mindfulness-Based Cognitive Therapy (MBCT)",
+    description: "An evidence-based integration of mindfulness meditation practices with core CBT principles to prevent depression relapse and manage anxiety and stress.",
+    highlights: ["Mindfulness Meditation", "Cognitive Defusion", "Relapse Prevention", "Body Scan & Breathing Practices"]
   }
 ];
 
@@ -191,7 +233,8 @@ export const REHABILITATION = [
   {
     id: "rehab-adhd",
     title: "Attention & Executive Training",
-    description: "Restorative cognitive retraining for focus, planning, organization, and working memory."
+    description: "Restorative cognitive retraining for focus, planning, organization, and working memory.",
+    extendedDescription: "MANODAYA Cogmed Working Memory Training is a scientifically validated, individualized cognitive training protocol focused on enhancing working memory capacity, processing speed, and executive control. The programme covers sustained attention & focus retention, cognitive flexibility & task switching, impulse control & self-regulation, and learning & academic performance enhancement. Suitable for ADHD, learning difficulties, poor concentration, and neurological rehabilitation support."
   },
   {
     id: "rehab-stroke",
@@ -206,12 +249,23 @@ export const SUPPORT_GROUPS = [
   {
     id: "sg-adhd",
     title: "Adult ADHD & Neurodivergent Circle",
-    schedule: "Bi-weekly Saturdays @ 5:00 PM"
+    schedule: "Bi-weekly Saturdays @ 5:00 PM",
+    audience: "Adults with ADHD & Neurodivergent Profiles",
+    description: "A facilitated peer support circle for adults living with ADHD, autism, and other neurodivergent profiles. Sessions focus on self-regulation strategies, workplace coping, unmasking, and shared lived experience in a safe, non-judgmental space."
   },
   {
     id: "sg-parents",
     title: "Parents of Neurodivergent Children Circle",
-    schedule: "Monthly Sundays @ 11:00 AM"
+    schedule: "Monthly Sundays @ 11:00 AM",
+    audience: "Parents & Caregivers",
+    description: "A compassionate monthly gathering for parents and caregivers of children with ADHD, autism, learning disabilities, or developmental concerns. Guided by clinical experts to share strategies, reduce caregiver burnout, and build community."
+  },
+  {
+    id: "sg-ocd",
+    title: "OCD Care Group",
+    schedule: "Bi-weekly Fridays @ 6:00 PM",
+    audience: "Adults & Adolescents with OCD",
+    description: "A safe, clinician-facilitated peer circle for individuals managing Obsessive-Compulsive Disorder. Sessions offer psychoeducation on OCD cycles, shared ERP practice insights, coping strategies, and peer solidarity — reducing shame and isolation associated with OCD."
   }
 ];
 
