@@ -185,6 +185,30 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     }
   };
 
+  // ─── Delete Lead / Booking Submission (Firestore + localStorage fallback) ──
+  const handleDeleteLead = async (id, patientName) => {
+    if (!window.confirm(`Are you sure you want to permanently delete submission for "${patientName || 'Patient'}" (Ref: ${id})?`)) return;
+    const updated = leads.filter(l => l.id !== id);
+    setLeads(updated);
+    try {
+      await deleteDoc(doc(db, 'leads', id));
+    } catch {
+      localStorage.setItem('manodaya_crm_leads', JSON.stringify(updated));
+    }
+  };
+
+  // ─── Delete Internship / Workshop Submission (Firestore + localStorage fallback)
+  const handleDeleteInternship = async (id, applicantName) => {
+    if (!window.confirm(`Are you sure you want to permanently delete application for "${applicantName || 'Applicant'}" (Ref: ${id})?`)) return;
+    const updated = internships.filter(a => a.id !== id);
+    setInternships(updated);
+    try {
+      await deleteDoc(doc(db, 'internships', id));
+    } catch {
+      localStorage.setItem('manodaya_crm_internships', JSON.stringify(updated));
+    }
+  };
+
   // ─── Workshop Save / Edit ──────────────────────────────────────────────────
   const handleSaveWorkshop = async (e) => {
     e.preventDefault();
@@ -439,6 +463,12 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                             style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#3B82F6', color: '#FFF', padding: '6px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
                             <Mail size={12} /> Email
                           </button>
+                          {/* Remove Submission Option */}
+                          <button onClick={() => handleDeleteLead(lead.id, lead.patientName)}
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#FEE2E2', color: '#EF4444', padding: '6px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, border: '1px solid #FCA5A5', cursor: 'pointer' }}
+                            title="Remove submission">
+                            <Trash2 size={12} /> Remove
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -519,6 +549,11 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                             <button onClick={() => { const s = encodeURIComponent(`Your ${app.applicationType} Application – MANODAYA`); const b = encodeURIComponent(`Dear ${app.applicantName},\n\nThank you for applying to MANODAYA. Your application for ${app.applicationType} is currently under review.\n\nWe will get back to you shortly.\n\nWarm regards,\nMANODAYA Team`); window.open(`mailto:${app.email}?subject=${s}&body=${b}`, '_blank'); }}
                               style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#3B82F6', color: '#FFF', padding: '6px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
                               <Mail size={12} /> Email
+                            </button>
+                            <button onClick={() => handleDeleteInternship(app.id, app.applicantName)}
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#FEE2E2', color: '#EF4444', padding: '6px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, border: '1px solid #FCA5A5', cursor: 'pointer' }}
+                              title="Remove application">
+                              <Trash2 size={12} /> Remove
                             </button>
                           </div>
                         </td>
@@ -651,7 +686,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                 <thead>
                   <tr>
                     <th>Ref ID</th><th>Patient Name</th><th>Phone</th>
-                    <th>Service Provided</th><th>Status</th>
+                    <th>Service Provided</th><th>Status</th><th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -662,6 +697,21 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                       <td>{lead.phone}</td>
                       <td>{lead.service}</td>
                       <td><span className="badge-status" style={{ backgroundColor: '#D1FAE5', color: '#059669' }}>Completed</span></td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                          <select value={lead.status} onChange={(e) => handleUpdateStatus(lead.id, e.target.value)}
+                            style={{ padding: '4px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 800, border: '1px solid #CBD5E1', backgroundColor: '#F1F5F9' }}>
+                            <option value="Completed Archive">Completed Archive</option>
+                            <option value="New">Restore to Active</option>
+                            <option value="Scheduled">Scheduled</option>
+                          </select>
+                          <button onClick={() => handleDeleteLead(lead.id, lead.patientName)}
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#FEE2E2', color: '#EF4444', padding: '6px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, border: '1px solid #FCA5A5', cursor: 'pointer' }}
+                            title="Remove from archives">
+                            <Trash2 size={12} /> Remove
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
