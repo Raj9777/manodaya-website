@@ -356,9 +356,6 @@ export const AssessmentsSection = ({ currentMode, onSelectAssessment }) => {
               <div style={{ color: '#8A4FFF', fontWeight: 700, fontSize: '0.938rem' }}>
                 {activeModalItem.tools}
               </div>
-              <div style={{ marginTop: '10px', fontSize: '0.813rem', color: '#64748B' }}>
-                Expected Duration: <strong>{activeModalItem.duration}</strong>
-              </div>
             </div>
 
             <div style={{ display: 'flex', gap: '12px' }}>
