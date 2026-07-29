@@ -23,12 +23,15 @@ export const Hero = ({ onOpenBooking, currentMode }) => {
           }}
         >
           {/* Left Column: Copy & CTAs */}
-          <div className="reveal-element">
-            <span className="section-badge">
-              <Sparkles size={14} /> Lifespan Psychological Care
-            </span>
+          <div>
+            <div className="hero-animate-badge">
+              <span className="section-badge">
+                <Sparkles size={14} /> Lifespan Psychological Care
+              </span>
+            </div>
 
             <h1 
+              className="hero-animate-title"
               style={{
                 fontSize: 'clamp(2.5rem, 5vw, 4.25rem)',
                 fontWeight: 900,
@@ -42,6 +45,7 @@ export const Hero = ({ onOpenBooking, currentMode }) => {
             </h1>
 
             <p 
+              className="hero-animate-subtext"
               style={{
                 fontSize: '1.125rem',
                 color: 'var(--text-muted)',
@@ -54,7 +58,7 @@ export const Hero = ({ onOpenBooking, currentMode }) => {
             </p>
 
             {/* Bullets */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '32px' }}>
+            <div className="hero-animate-bullets" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '32px' }}>
               <span className="badge-status" style={{ backgroundColor: '#D1FAE5', color: '#059669', padding: '8px 16px', fontSize: '0.875rem' }}>
                 ✓ Child, Adolescent, Adult & Geriatric Services
               </span>
@@ -64,7 +68,7 @@ export const Hero = ({ onOpenBooking, currentMode }) => {
             </div>
 
             {/* Two Aesthetic Action Buttons */}
-            <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <div className="hero-animate-buttons" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
               <button className="btn-black" onClick={() => onOpenBooking('In-Person Consultation')} style={{ padding: '14px 28px', fontSize: '0.938rem', fontWeight: 800 }}>
                 <Calendar size={18} />
                 <span>Book In-Person Consultation</span>
@@ -78,7 +82,7 @@ export const Hero = ({ onOpenBooking, currentMode }) => {
           </div>
 
           {/* Right Column: Hero Illustration */}
-          <div className="reveal-element" style={{ textAlign: 'center' }}>
+          <div className="hero-animate-image" style={{ textAlign: 'center' }}>
             <div style={{ maxWidth: '480px', margin: '0 auto' }}>
               <HeroIllustration />
             </div>

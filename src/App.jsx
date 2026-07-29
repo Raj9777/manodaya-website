@@ -71,7 +71,7 @@ export function App() {
     setBookingModalOpen(true);
   };
 
-  // Setup Bi-directional Scroll In & Out IntersectionObserver
+  // Setup Bi-directional Scroll In & Out IntersectionObserver (Triggers both UP & DOWN scroll)
   useEffect(() => {
     if (isLoading) return;
 
@@ -87,8 +87,8 @@ export function App() {
 
     const observerOptions = {
       root: null,
-      rootMargin: '-20px 0px -20px 0px',
-      threshold: 0.12
+      rootMargin: '-10px 0px -10px 0px',
+      threshold: 0.08
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);

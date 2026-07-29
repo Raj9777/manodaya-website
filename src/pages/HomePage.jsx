@@ -20,12 +20,15 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
             }}
           >
             {/* Left Headline */}
-            <div className="reveal-element is-visible">
-              <span className="section-badge" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF' }}>
-                <Sparkles size={14} /> Lifespan Psychological Care
-              </span>
+            <div>
+              <div className="hero-animate-badge">
+                <span className="section-badge" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF' }}>
+                  <Sparkles size={14} /> Lifespan Psychological Care
+                </span>
+              </div>
 
               <h1 
+                className="hero-animate-title"
                 style={{
                   fontSize: 'clamp(2.5rem, 5vw, 4rem)',
                   fontWeight: 900,
@@ -39,6 +42,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               </h1>
 
               <p 
+                className="hero-animate-subtext"
                 style={{
                   fontSize: '1.125rem',
                   color: '#6B7280',
@@ -51,7 +55,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               </p>
 
               {/* Bullets */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '32px' }}>
+              <div className="hero-animate-bullets" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '32px' }}>
                 <span className="badge-status" style={{ backgroundColor: '#D1FAE5', color: '#059669', padding: '8px 16px', fontSize: '0.875rem' }}>
                   ✓ Child, Adolescent, Adult & Geriatric Services
                 </span>
@@ -61,7 +65,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
               </div>
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <div className="hero-animate-buttons" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
                 <button 
                   className="btn-black" 
                   onClick={() => onOpenBooking('In-Person Consultation')} 
@@ -83,7 +87,7 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
             </div>
 
             {/* Right Lifespan Progression Graphic (Home.png) - 100% Transparent & Interactive */}
-            <div className="reveal-element is-visible" style={{ textAlign: 'center' }}>
+            <div className="hero-animate-image" style={{ textAlign: 'center' }}>
               <img 
                 src="/images/elements/Home.png" 
                 alt="MANODAYA Lifespan Neuropsychological Care" 

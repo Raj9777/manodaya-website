@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { ArchTestimonialGraphic } from './EditorialIllustrations';
 import { Heart, ChevronLeft, ChevronRight, Star, Pause, Play } from 'lucide-react';
 import { TESTIMONIALS } from '../data/content';
 
@@ -37,11 +36,6 @@ export const TestimonialsSection = ({ currentMode }) => {
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className="container">
-        {/* Curved Arch Graphic with Cute Icons */}
-        <div className="reveal-element is-visible" style={{ maxWidth: '640px', margin: '0 auto -20px auto' }}>
-          <ArchTestimonialGraphic />
-        </div>
-
         {/* Section Header */}
         <div className="reveal-element is-visible" style={{ maxWidth: '640px', margin: '0 auto 28px auto' }}>
           <span className="section-badge" style={{ backgroundColor: '#FFE4EC', color: '#FF497C' }}>

@@ -144,17 +144,68 @@ button {
   transform: scale(0.96) translateY(0);
 }
 
-/* Bi-directional Scroll In & Out Animations */
+/* Bi-directional Scroll In & Out Animations (Triggers on UP and DOWN scroll) */
 .reveal-element {
   opacity: 0;
-  transform: translateY(32px) scale(0.94);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(36px) scale(0.95);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), filter 0.75s ease;
   will-change: opacity, transform;
 }
 
 .reveal-element.is-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+/* Hero Pop & Slide Entrance Animations (Triggered Post Loading) */
+@keyframes heroPopEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(44px) scale(0.94);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroImageFloatEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(56px) scale(0.9) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+.hero-animate-badge {
+  animation: heroPopEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.hero-animate-title {
+  animation: heroPopEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.hero-animate-subtext {
+  animation: heroPopEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+.hero-animate-bullets {
+  animation: heroPopEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+}
+
+.hero-animate-buttons {
+  animation: heroPopEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
+}
+
+.hero-animate-image {
+  animation: heroImageFloatEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both, gentleFloat 5s ease-in-out infinite 1.55s;
 }
 
 /* Continuous Keyframe Animations */
