@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, CheckCircle2, MessageSquare, Info } from 'lucide-react';
+import { X, Calendar, CheckCircle2, MessageSquare, Info, Loader2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
@@ -34,6 +34,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
   });
 
   const [submittedLead, setSubmittedLead] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (initialService) {
@@ -48,6 +49,8 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     const bookingId = `MAN-${Math.floor(1000 + Math.random() * 9000)}`;
     const newLead = {
@@ -79,6 +82,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
       confetti({ particleCount: 75, spread: 65, origin: { y: 0.6 } });
     } catch (err) {}
 
+    setIsSubmitting(false);
     setSubmittedLead(newLead);
   };
 
@@ -288,9 +292,23 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
               <button 
                 className="btn-black" 
                 type="submit" 
-                style={{ width: '100%', marginTop: '8px', border: '2px solid #0E0E10' }}
+                disabled={isSubmitting}
+                style={{ 
+                  width: '100%', 
+                  marginTop: '8px', 
+                  border: '2px solid #0E0E10',
+                  opacity: isSubmitting ? 0.8 : 1,
+                  cursor: isSubmitting ? 'wait' : 'pointer'
+                }}
               >
-                Submit Appointment Request
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Sending Appointment Request...</span>
+                  </>
+                ) : (
+                  <span>Submit Appointment Request</span>
+                )}
               </button>
             </form>
           </div>

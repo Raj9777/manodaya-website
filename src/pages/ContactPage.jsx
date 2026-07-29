@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Calendar, CheckCircle2, MessageSquare, Info } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Calendar, CheckCircle2, MessageSquare, Info, Loader2 } from 'lucide-react';
 import { CLINIC_INFO } from '../data/content';
 import { SERVICE_DESCRIPTIONS } from '../components/BookingModal';
 import confetti from 'canvas-confetti';
+import { db } from '../firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 export const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -17,12 +19,15 @@ export const ContactPage = () => {
   });
 
   const [submittedLead, setSubmittedLead] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentDescription = SERVICE_DESCRIPTIONS[formData.service] || 
     "Comprehensive evidence-based psychological consultation and clinical care.";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     const bookingId = `MAN-${Math.floor(1000 + Math.random() * 9000)}`;
     const newLead = {
@@ -41,13 +46,18 @@ export const ContactPage = () => {
       createdAt: new Date().toLocaleString('en-IN')
     };
 
-    const existing = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
-    localStorage.setItem('manodaya_crm_leads', JSON.stringify([newLead, ...existing]));
+    try {
+      await setDoc(doc(db, 'leads', bookingId), newLead);
+    } catch {
+      const existingLeads = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
+      localStorage.setItem('manodaya_crm_leads', JSON.stringify([newLead, ...existingLeads]));
+    }
 
     try {
       confetti({ particleCount: 75, spread: 65, origin: { y: 0.6 } });
     } catch (err) {}
 
+    setIsSubmitting(false);
     setSubmittedLead(newLead);
   };
 
@@ -266,8 +276,25 @@ export const ContactPage = () => {
                   ></textarea>
                 </div>
 
-                <button className="btn-black" type="submit" style={{ width: '100%', border: '2px solid #0E0E10' }}>
-                  Submit Appointment Request
+                <button 
+                  className="btn-black" 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  style={{ 
+                    width: '100%', 
+                    border: '2px solid #0E0E10',
+                    opacity: isSubmitting ? 0.8 : 1,
+                    cursor: isSubmitting ? 'wait' : 'pointer'
+                  }}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={18} className="animate-spin" />
+                      <span>Sending Appointment Request...</span>
+                    </>
+                  ) : (
+                    <span>Submit Appointment Request</span>
+                  )}
                 </button>
               </form>
             )}

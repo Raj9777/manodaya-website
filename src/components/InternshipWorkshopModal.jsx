@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, GraduationCap, CheckCircle2, MessageSquare, Info, Calendar } from 'lucide-react';
+import { X, GraduationCap, CheckCircle2, MessageSquare, Info, Calendar, Loader2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { db } from '../firebase';
 import { addDoc, collection } from 'firebase/firestore';
@@ -17,11 +17,14 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
   });
 
   const [submittedApp, setSubmittedApp] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     const appId = `INT-${Math.floor(1000 + Math.random() * 9000)}`;
     const newApp = {
@@ -50,6 +53,7 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
     } catch (err) {}
 
+    setIsSubmitting(false);
     setSubmittedApp(newApp);
   };
 
@@ -236,9 +240,23 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
               <button 
                 className="btn-purple" 
                 type="submit" 
-                style={{ width: '100%', marginTop: '8px', border: '2px solid #8A4FFF' }}
+                disabled={isSubmitting}
+                style={{ 
+                  width: '100%', 
+                  marginTop: '8px', 
+                  border: '2px solid #8A4FFF',
+                  opacity: isSubmitting ? 0.8 : 1,
+                  cursor: isSubmitting ? 'wait' : 'pointer'
+                }}
               >
-                Submit Application
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Submitting Application...</span>
+                  </>
+                ) : (
+                  <span>Submit Application</span>
+                )}
               </button>
             </form>
           </div>

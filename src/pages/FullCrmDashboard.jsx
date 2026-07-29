@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, Lock, Search, Download, LogOut, CheckCircle2, 
-  Clock, MessageSquare, Mail, Home, Users, Calendar, PlusCircle, Sparkles, GraduationCap, Edit3, Trash2, Key, Settings, AlertCircle, RefreshCw, Wifi, WifiOff
+  Clock, MessageSquare, Mail, Home, Users, Calendar, PlusCircle, Sparkles, GraduationCap, Edit3, Trash2, Key, Settings, AlertCircle, RefreshCw, Wifi, WifiOff, FileText
 } from 'lucide-react';
 import { INITIAL_CRM_LEADS } from '../data/content';
 import { db } from '../firebase';
@@ -291,33 +291,195 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     setPasscodeForm({ currentPass: '', newPass: '', confirmPass: '' });
   };
 
-  // ─── CSV Export ────────────────────────────────────────────────────────────
+  // ─── CSV Export (Fixed Alignment & Header Matching) ─────────────────────────
+  const formatCSVCell = (val) => {
+    if (val === null || val === undefined) return '""';
+    const str = String(val).replace(/"/g, '""');
+    return `"${str}"`;
+  };
+
   const handleExportCSV = (dataList, filename) => {
-    if (!dataList.length) return;
-    const headers = Object.keys(dataList[0]).join(',');
-    const rows = dataList.map(obj => Object.values(obj).map(v => `"${v}"`).join(','));
-    const csvContent = "data:text/csv;charset=utf-8," + [headers, ...rows].join("\n");
+    if (!dataList || dataList.length === 0) return;
+
+    let headers = [];
+    let rows = [];
+
+    if (filename.toLowerCase().includes('internship')) {
+      headers = ["Ref ID", "Applicant Name", "Phone", "Email", "Institution / University", "Qualification", "Application Type", "Track / Workshop", "Status", "Submitted Date", "Clinical Notes"];
+      rows = dataList.map(app => [
+        app.id || '',
+        app.applicantName || '',
+        app.phone || '',
+        app.email || '',
+        app.institution || '',
+        app.qualification || '',
+        app.applicationType || '',
+        app.workshopTrack || '',
+        app.status || '',
+        app.createdAt || '',
+        app.notes || ''
+      ].map(formatCSVCell).join(','));
+    } else {
+      headers = ["Ref ID", "Patient Name", "Phone", "Email", "Category", "Age", "Service Requested", "Consultation Type", "Preferred Date", "Preferred Time", "Status", "Submitted Date", "Clinical Notes"];
+      rows = dataList.map(lead => [
+        lead.id || '',
+        lead.patientName || '',
+        lead.phone || '',
+        lead.email || '',
+        lead.category || '',
+        lead.age || '',
+        lead.service || '',
+        lead.type || '',
+        lead.date || '',
+        lead.time || '',
+        lead.status || '',
+        lead.createdAt || '',
+        lead.notes || ''
+      ].map(formatCSVCell).join(','));
+    }
+
+    const csvData = [headers.map(formatCSVCell).join(','), ...rows].join("\r\n");
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", encodeURI(csvContent));
-    link.setAttribute("download", `${filename}.csv`);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${filename}_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
-  // ─── Email Reminder ────────────────────────────────────────────────────────
+  // ─── PDF Export Feature ───────────────────────────────────────────────────
+  const handleExportPDF = (dataList, title) => {
+    if (!dataList || dataList.length === 0) return;
+
+    const printWindow = window.open('', '_blank', 'width=1050,height=800');
+    if (!printWindow) return;
+
+    const isInternship = title.toLowerCase().includes('internship');
+
+    const tableHeaders = isInternship
+      ? `<th>Ref ID</th><th>Applicant Name</th><th>Phone & Email</th><th>Institution</th><th>Qualification</th><th>Type & Track</th><th>Status</th>`
+      : `<th>Ref ID</th><th>Patient Name</th><th>Phone & Email</th><th>Category & Age</th><th>Service Requested</th><th>Date & Time</th><th>Status</th>`;
+
+    const tableRows = dataList.map(item => {
+      if (isInternship) {
+        return `
+          <tr>
+            <td><strong>${item.id || ''}</strong></td>
+            <td><strong>${item.applicantName || ''}</strong><br/><small style="color:#64748B">${item.createdAt || ''}</small></td>
+            <td>${item.phone || ''}<br/><small style="color:#64748B">${item.email || ''}</small></td>
+            <td>${item.institution || 'N/A'}</td>
+            <td>${item.qualification || 'N/A'}</td>
+            <td><strong>${item.applicationType || ''}</strong><br/><small style="color:#8A4FFF">${item.workshopTrack || ''}</small></td>
+            <td><span class="status-pill">${item.status || ''}</span></td>
+          </tr>
+        `;
+      } else {
+        return `
+          <tr>
+            <td><strong>${item.id || ''}</strong></td>
+            <td><strong>${item.patientName || ''}</strong><br/><small style="color:#64748B">${item.createdAt || ''}</small></td>
+            <td>${item.phone || ''}<br/><small style="color:#64748B">${item.email || ''}</small></td>
+            <td>${item.category || ''} (${item.age || 'N/A'})</td>
+            <td><strong>${item.service || ''}</strong><br/><small style="color:#64748B">${item.type || ''}</small></td>
+            <td>${item.date || ''} @ ${item.time || ''}</td>
+            <td><span class="status-pill">${item.status || ''}</span></td>
+          </tr>
+        `;
+      }
+    }).join('');
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>${title} - MANODAYA Clinical Report</title>
+          <style>
+            body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; padding: 32px; color: #0E0E10; }
+            .header { border-bottom: 3px solid #8A4FFF; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+            .logo-title { font-size: 24px; font-weight: 900; color: #0E0E10; letter-spacing: -0.02em; }
+            .subtitle { font-size: 14px; color: #64748B; margin-top: 4px; font-weight: 600; }
+            .meta { font-size: 12px; text-align: right; color: #64748B; }
+            table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 12px; }
+            th { background-color: #F8FAFC; color: #0E0E10; font-weight: 800; text-align: left; padding: 10px 12px; border-bottom: 2px solid #CBD5E1; text-transform: uppercase; font-size: 11px; }
+            td { padding: 10px 12px; border-bottom: 1px solid #E2E8F0; vertical-align: top; }
+            tr:nth-child(even) { background-color: #FAFAFD; }
+            .status-pill { background: #EDE9FE; color: #7C3AED; padding: 3px 10px; border-radius: 99px; font-weight: 800; font-size: 11px; display: inline-block; }
+            .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #E2E8F0; font-size: 11px; color: #94A3B8; text-align: center; }
+            @media print {
+              body { padding: 0; }
+              @page { margin: 1.5cm; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="logo-title">🧠 MANODAYA Clinical Care & CRM Report</div>
+              <div class="subtitle">${title}</div>
+            </div>
+            <div class="meta">
+              <div><strong>Date Generated:</strong> ${new Date().toLocaleDateString('en-IN')}</div>
+              <div><strong>Total Records:</strong> ${dataList.length}</div>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>${tableHeaders}</tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+
+          <div class="footer">
+            MANODAYA Advanced Neuropsychological Care & Therapy Clinic | Confidential Staff Report | manodaya.psych@gmail.com
+          </div>
+
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+              }, 400);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
+  // ─── Email Action (Direct Gmail Web Compose Link) ─────────────────────────
   const handleEmailReminder = (lead) => {
-    const subject = encodeURIComponent(`Appointment Reminder – ${lead.service} at MANODAYA`);
+    const targetEmail = lead.email && lead.email !== 'N/A' ? lead.email : '';
+    const subject = encodeURIComponent(`MANODAYA Appointment Confirmation – Ref ${lead.id}`);
     const body = encodeURIComponent(
-      `Dear ${lead.patientName},\n\nThis is a friendly reminder from MANODAYA Psychological & Neuropsychological Care Centre regarding your upcoming appointment:\n\n` +
-      `📋 Service: ${lead.service}\n` +
-      `📅 Date: ${lead.date}\n` +
-      `⏰ Time: ${lead.time}\n` +
-      `📍 Type: ${lead.type}\n\n` +
-      `Please arrive 10 minutes early. If you need to reschedule, contact us on WhatsApp or call us.\n\n` +
-      `Warm regards,\nMANODAYA Clinical Team\nmanodaya.psych@gmail.com`
+      `Dear ${lead.patientName},\n\n` +
+      `This is an official confirmation from MANODAYA – Advanced Neuropsychological Care & Therapy Clinic regarding your appointment booking request.\n\n` +
+      `📌 APPOINTMENT DETAILS:\n` +
+      `• Reference ID: ${lead.id}\n` +
+      `• Patient Name: ${lead.patientName}\n` +
+      `• Category & Age: ${lead.category || 'N/A'} (${lead.age || 'N/A'})\n` +
+      `• Service Requested: ${lead.service}\n` +
+      `• Consultation Mode: ${lead.type}\n` +
+      `• Date & Time: ${lead.date} at ${lead.time}\n` +
+      `• Current Status: ${lead.status}\n` +
+      `• Presenting Concerns: ${lead.notes || 'N/A'}\n\n` +
+      `📍 CLINIC LOCATION & DIRECTIONS:\n` +
+      `MANODAYA Clinic, Plot No. 1206/2082, Phase II, Bhimatangi, Bhubaneswar, Odisha 751002\n` +
+      `Google Maps: https://maps.app.goo.gl/fEXm6e8tnSZoybdV6\n\n` +
+      `Contact Phone: +91 82496 05244\n` +
+      `Clinic Email: manodaya.psych@gmail.com\n\n` +
+      `Please arrive 10 minutes prior to your scheduled time. If you need to modify or reschedule, kindly inform us on WhatsApp or call us.\n\n` +
+      `Warm regards,\n` +
+      `MANODAYA Clinical Team`
     );
-    window.open(`mailto:${lead.email}?subject=${subject}&body=${body}`, '_blank');
+
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(targetEmail)}&su=${subject}&body=${body}`;
+    window.open(gmailUrl, '_blank');
   };
 
   // ─── WhatsApp Reminder ─────────────────────────────────────────────────────
@@ -407,9 +569,14 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                 <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Patient Clinical Leads</h2>
                 <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Manage incoming appointment submissions. Send WhatsApp or Email reminders.</p>
               </div>
-              <button onClick={() => handleExportCSV(activeLeads, 'Patient_Leads')} className="btn-outline-theme" style={{ fontSize: '0.813rem', padding: '8px 16px' }}>
-                <Download size={14} /> Export CSV
-              </button>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <button onClick={() => handleExportCSV(activeLeads, 'Active_Patient_Leads')} className="btn-outline-theme" style={{ fontSize: '0.813rem', padding: '8px 16px' }}>
+                  <Download size={14} /> Export CSV
+                </button>
+                <button onClick={() => handleExportPDF(activeLeads, 'Active Patient Leads')} className="btn-black" style={{ fontSize: '0.813rem', padding: '8px 16px' }}>
+                  <FileText size={14} /> Export PDF
+                </button>
+              </div>
             </div>
 
             <div className="crm-table-container">
@@ -487,9 +654,14 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                 <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Psychology Student Applications</h2>
                 <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Review applications for clinical internships, observerships, and workshops.</p>
               </div>
-              <button onClick={() => handleExportCSV(internships, 'Internship_Applications')} className="btn-outline-theme" style={{ fontSize: '0.813rem', padding: '8px 16px' }}>
-                <Download size={14} /> Export CSV
-              </button>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <button onClick={() => handleExportCSV(internships, 'Internship_Applications')} className="btn-outline-theme" style={{ fontSize: '0.813rem', padding: '8px 16px' }}>
+                  <Download size={14} /> Export CSV
+                </button>
+                <button onClick={() => handleExportPDF(internships, 'Student Internship & Workshop Applications')} className="btn-black" style={{ fontSize: '0.813rem', padding: '8px 16px' }}>
+                  <FileText size={14} /> Export PDF
+                </button>
+              </div>
             </div>
 
             {internships.length === 0 ? (
@@ -677,9 +849,19 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
         {/* TAB 4: COMPLETED ARCHIVES */}
         {activeTab === 'archives' && (
           <div>
-            <div style={{ marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Completed Patient History Archives</h2>
-              <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Archived records marked as Completed.</p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Completed Patient History Archives</h2>
+                <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Archived records marked as Completed.</p>
+              </div>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <button onClick={() => handleExportCSV(archivedLeads, 'Completed_Patient_Archives')} className="btn-outline-theme" style={{ fontSize: '0.813rem', padding: '8px 16px' }}>
+                  <Download size={14} /> Export CSV
+                </button>
+                <button onClick={() => handleExportPDF(archivedLeads, 'Completed Patient History Archives')} className="btn-black" style={{ fontSize: '0.813rem', padding: '8px 16px' }}>
+                  <FileText size={14} /> Export PDF
+                </button>
+              </div>
             </div>
             <div className="crm-table-container">
               <table className="crm-table">
