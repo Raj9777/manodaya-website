@@ -40,6 +40,24 @@ export function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
+  // Update document.title dynamically for page-level SEO
+  useEffect(() => {
+    const titles = {
+      home: "MANODAYA | Healing Mind – Empowering Lives | Psychological Care Bhubaneswar",
+      about: "About Us | MANODAYA Clinical Psychology & Neuropsychology Centre",
+      assessments: "Psychological & Neuropsychological Assessments | ADHD, Autism, IQ | MANODAYA",
+      therapies: "Evidence-Based Psychotherapy | CBT, DBT, ERP for OCD, PMT | MANODAYA",
+      rehab: "Cognitive Rehabilitation & Working Memory Training | MANODAYA",
+      support: "Facilitated Support Groups | OCD, ADHD & Neurodivergent Circles | MANODAYA",
+      internship: "Psychology Clinical Internships & Professional Workshops | MANODAYA",
+      contact: "Book Consultation & Contact Us | MANODAYA Bhubaneswar",
+      dashboard: "Staff Portal & CRM Dashboard | MANODAYA"
+    };
+    if (titles[activePage]) {
+      document.title = titles[activePage];
+    }
+  }, [activePage]);
+
   // Scroll to top on page change & update URL hash/localStorage
   const handleNavigate = (pageKey) => {
     setActivePage(pageKey);
