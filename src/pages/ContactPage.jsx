@@ -123,53 +123,6 @@ export const ContactPage = () => {
                 </div>
               </div>
             </div>
-
-            {/* Google Map Embed */}
-            <div style={{ marginTop: '32px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
-                <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0E0E10' }}>
-                  📍 Interactive Location Map
-                </h4>
-                <a 
-                  href="https://maps.app.goo.gl/fEXm6e8tnSZoybdV6" 
-                  target="_blank" 
-                  rel="noreferrer"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '0.813rem',
-                    fontWeight: 700,
-                    color: '#8A4FFF',
-                    backgroundColor: '#EDE9FE',
-                    padding: '6px 14px',
-                    borderRadius: '9999px'
-                  }}
-                >
-                  Get Directions ↗
-                </a>
-              </div>
-
-              <div 
-                style={{ 
-                  borderRadius: '24px', 
-                  overflow: 'hidden', 
-                  height: '380px', 
-                  border: '1.5px solid #E2E8F0',
-                  boxShadow: '0 12px 32px rgba(0, 0, 0, 0.06)' 
-                }}
-              >
-                <iframe 
-                  src={CLINIC_INFO.mapEmbedUrl}
-                  width="100%" 
-                  height="100%" 
-                  style={{ border: 0, display: 'block' }} 
-                  allowFullScreen="" 
-                  loading="lazy"
-                  title="MANODAYA Map"
-                ></iframe>
-              </div>
-            </div>
           </div>
 
           {/* Right: Modern Minimal Appointment Booking Form */}
@@ -318,6 +271,50 @@ export const ContactPage = () => {
                 </button>
               </form>
             )}
+          </div>
+        </div>
+
+        {/* Full-Width Google Map Section (100% Container Width) */}
+        <div className="reveal-element" style={{ marginTop: '56px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+            <div>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#0E0E10', margin: 0 }}>
+                📍 Interactive Location Map
+              </h3>
+              <p style={{ color: '#64748B', fontSize: '0.875rem', marginTop: '4px', margin: 0 }}>
+                {CLINIC_INFO.location}
+              </p>
+            </div>
+            <a 
+              href="https://maps.app.goo.gl/fEXm6e8tnSZoybdV6" 
+              target="_blank" 
+              rel="noreferrer"
+              className="btn-purple"
+              style={{ padding: '8px 20px', fontSize: '0.844rem' }}
+            >
+              Get Directions in Google Maps ↗
+            </a>
+          </div>
+
+          <div 
+            style={{ 
+              borderRadius: '24px', 
+              overflow: 'hidden', 
+              height: '460px', 
+              border: '1.5px solid #E2E8F0',
+              boxShadow: '0 16px 40px rgba(0, 0, 0, 0.08)',
+              width: '100%'
+            }}
+          >
+            <iframe 
+              src={CLINIC_INFO.mapEmbedUrl}
+              width="100%" 
+              height="100%" 
+              style={{ border: 0, display: 'block' }} 
+              allowFullScreen="" 
+              loading="lazy"
+              title="MANODAYA Interactive Location Map"
+            ></iframe>
           </div>
         </div>
       </div>
