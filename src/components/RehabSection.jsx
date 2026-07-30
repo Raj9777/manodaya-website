@@ -1,10 +1,5 @@
 import React from 'react';
 import { ArrowRight, Sparkles, Activity } from 'lucide-react';
-import { 
-  LiveVideoToolkitIllustration, 
-  MoodTrackingToolkitIllustration, 
-  YogaToolkitIllustration 
-} from './EditorialIllustrations';
 
 export const RehabSection = ({ onSelectRehab }) => {
   return (
@@ -41,7 +36,12 @@ export const RehabSection = ({ onSelectRehab }) => {
             }}
           >
             <div style={{ marginBottom: '24px' }}>
-              <LiveVideoToolkitIllustration />
+              <img 
+                src="/images/elements/Live Video & Tele-Rehab.png" 
+                alt="Live Video & Tele-Rehab" 
+                className="interactive-element-graphic"
+                style={{ maxHeight: '200px', width: '100%', objectFit: 'contain' }}
+              />
             </div>
 
             <h3 style={{ fontSize: '1.5rem', marginBottom: '10px', color: '#0E0E10' }}>
@@ -78,7 +78,12 @@ export const RehabSection = ({ onSelectRehab }) => {
             }}
           >
             <div style={{ marginBottom: '24px' }}>
-              <MoodTrackingToolkitIllustration />
+              <img 
+                src="/images/elements/Progress Tracking.png" 
+                alt="Progress Tracking" 
+                className="interactive-element-graphic"
+                style={{ maxHeight: '200px', width: '100%', objectFit: 'contain' }}
+              />
             </div>
 
             <h3 style={{ fontSize: '1.5rem', marginBottom: '10px', color: '#0E0E10' }}>
@@ -115,7 +120,12 @@ export const RehabSection = ({ onSelectRehab }) => {
             }}
           >
             <div style={{ marginBottom: '24px' }}>
-              <YogaToolkitIllustration />
+              <img 
+                src="/images/elements/Cognitive Exercises.png" 
+                alt="Cognitive Exercises" 
+                className="interactive-element-graphic"
+                style={{ maxHeight: '200px', width: '100%', objectFit: 'contain' }}
+              />
             </div>
 
             <h3 style={{ fontSize: '1.5rem', marginBottom: '10px', color: '#0E0E10' }}>

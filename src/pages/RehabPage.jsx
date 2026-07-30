@@ -1,7 +1,6 @@
 import React from 'react';
 import { Activity, ArrowRight, Zap } from 'lucide-react';
 import { REHABILITATION } from '../data/content';
-import { YogaToolkitIllustration, MoodTrackingToolkitIllustration, LiveVideoToolkitIllustration } from '../components/EditorialIllustrations';
 
 export const RehabPage = ({ onOpenBooking }) => {
   return (
@@ -33,19 +32,34 @@ export const RehabPage = ({ onOpenBooking }) => {
         {/* 3 Toolkit Highlights */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '28px', marginBottom: '64px' }}>
           <div className="reference-card reveal-element" style={{ textAlign: 'center' }}>
-            <LiveVideoToolkitIllustration />
+            <img 
+              src="/images/elements/Live Video & Tele-Rehab.png" 
+              alt="Live Video & Tele-Rehab" 
+              className="interactive-element-graphic"
+              style={{ maxHeight: '200px', width: '100%', objectFit: 'contain' }}
+            />
             <h3 style={{ fontSize: '1.35rem', margin: '16px 0 8px 0' }}>Live Video & Tele-Rehab</h3>
             <p style={{ fontSize: '0.938rem', color: '#6B7280' }}>Encrypted online tele-health cognitive exercises guided by specialists.</p>
           </div>
 
           <div className="reference-card reveal-element" style={{ textAlign: 'center' }}>
-            <MoodTrackingToolkitIllustration />
+            <img 
+              src="/images/elements/Progress Tracking.png" 
+              alt="Progress Tracking" 
+              className="interactive-element-graphic"
+              style={{ maxHeight: '200px', width: '100%', objectFit: 'contain' }}
+            />
             <h3 style={{ fontSize: '1.35rem', margin: '16px 0 8px 0' }}>Progress Tracking</h3>
             <p style={{ fontSize: '0.938rem', color: '#6B7280' }}>Objective quantitative tracking of cognitive recovery milestones.</p>
           </div>
 
           <div className="reference-card reveal-element" style={{ textAlign: 'center' }}>
-            <YogaToolkitIllustration />
+            <img 
+              src="/images/elements/Cognitive Exercises.png" 
+              alt="Cognitive Exercises" 
+              className="interactive-element-graphic"
+              style={{ maxHeight: '200px', width: '100%', objectFit: 'contain' }}
+            />
             <h3 style={{ fontSize: '1.35rem', margin: '16px 0 8px 0' }}>Cognitive Exercises</h3>
             <p style={{ fontSize: '0.938rem', color: '#6B7280' }}>Targeted dual-task N-back, executive function, and motor planning drills.</p>
           </div>
