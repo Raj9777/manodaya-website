@@ -1,45 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { GraduationCap, BookOpen, CheckCircle2, Calendar, Award, ArrowRight, UserCheck, Sparkles } from 'lucide-react';
 import { InternshipWorkshopModal } from '../components/InternshipWorkshopModal';
-import { INITIAL_WORKSHOPS } from './FullCrmDashboard';
-import { db } from '../firebase';
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { UpcomingWorkshopsSection } from '../components/UpcomingWorkshopsSection';
 
 export const InternshipPage = ({ onOpenBooking }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedType, setSelectedType] = useState('Clinical Internship');
   const [selectedTrack, setSelectedTrack] = useState('');
-  const [upcomingWorkshops, setUpcomingWorkshops] = useState([]);
-
-  useEffect(() => {
-    let unsub;
-    try {
-      const wsRef = collection(db, 'workshops');
-      unsub = onSnapshot(
-        query(wsRef, orderBy('createdAt', 'desc')),
-        (snap) => {
-          if (!snap.empty) {
-            const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            setUpcomingWorkshops(list);
-            localStorage.setItem('manodaya_workshops', JSON.stringify(list));
-          } else {
-            const savedWorkshops = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
-            setUpcomingWorkshops(savedWorkshops || INITIAL_WORKSHOPS);
-          }
-        },
-        (err) => {
-          console.warn('Firestore offline/error in InternshipPage:', err);
-          const savedWorkshops = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
-          setUpcomingWorkshops(savedWorkshops || INITIAL_WORKSHOPS);
-        }
-      );
-    } catch {
-      const savedWorkshops = JSON.parse(localStorage.getItem('manodaya_workshops') || 'null');
-      setUpcomingWorkshops(savedWorkshops || INITIAL_WORKSHOPS);
-    }
-
-    return () => unsub?.();
-  }, []);
 
   const handleOpenModal = (type = 'Clinical Internship', track = '') => {
     setSelectedType(type);
@@ -78,72 +45,11 @@ export const InternshipPage = ({ onOpenBooking }) => {
         </div>
       </section>
 
+      {/* Section 1: Live Upcoming Workshops Feed with Flyers (Posted by Staff in CRM) */}
+      <UpcomingWorkshopsSection />
+
       {/* Main Content */}
       <div className="container" style={{ paddingTop: '56px' }}>
-        {/* Section 1: Live Upcoming Workshops Feed (Posted by Staff in CRM) */}
-        <div style={{ marginBottom: '64px' }}>
-          <div className="section-header" style={{ marginBottom: '36px', textAlign: 'left', maxWidth: '100%' }}>
-            <span className="section-badge" style={{ backgroundColor: '#FEF3C7', color: '#D97706' }}>
-              <Calendar size={14} /> Staff Announcements
-            </span>
-            <h2 style={{ fontSize: '2rem', fontWeight: 900, color: '#0E0E10' }}>
-              Upcoming Clinical Workshops & Masterclasses
-            </h2>
-            <p style={{ color: '#64748B', fontSize: '0.938rem' }}>
-              Intensive hands-on training sessions conducted by certified clinical neuropsychologists.
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
-            {upcomingWorkshops.map((ws) => (
-              <div 
-                key={ws.id} 
-                className="reference-card"
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  borderTop: '4px solid #8A4FFF',
-                  backgroundColor: '#FFFFFF'
-                }}
-              >
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                    <span className="badge-status" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF' }}>
-                      {ws.mode}
-                    </span>
-                    <span style={{ fontSize: '0.813rem', fontWeight: 800, color: '#D97706' }}>
-                      {ws.seats}
-                    </span>
-                  </div>
-
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#0E0E10', marginBottom: '10px' }}>
-                    {ws.title}
-                  </h3>
-
-                  <div style={{ backgroundColor: '#FAFAFD', padding: '10px 14px', borderRadius: '12px', marginBottom: '16px', fontSize: '0.813rem', color: '#475569', border: '1px solid #F1F1F5' }}>
-                    <div style={{ fontWeight: 700, color: '#0E0E10' }}>📅 Date: {ws.date}</div>
-                    <div>⏰ Time: {ws.time}</div>
-                    <div style={{ color: '#8A4FFF', fontWeight: 800, marginTop: '2px' }}>🏷️ Fee: {ws.fee}</div>
-                  </div>
-
-                  <p style={{ fontSize: '0.875rem', color: '#64748B', lineHeight: 1.5, marginBottom: '20px' }}>
-                    {ws.description}
-                  </p>
-                </div>
-
-                <button 
-                  className="btn-purple"
-                  onClick={() => handleOpenModal('Specialized Workshop', ws.title)}
-                  style={{ width: '100%', justifyContent: 'center' }}
-                >
-                  <span>Register for Workshop</span>
-                  <ArrowRight size={16} />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* Section 2: Clinical Internship Programs */}
         <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>

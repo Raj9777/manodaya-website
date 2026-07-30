@@ -62,7 +62,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     title: '', date: '', time: '',
     mode: 'In-Person (Bhubaneswar Clinic)',
     instructor: 'MANODAYA Clinical Faculty',
-    fee: '', seats: '15 Seats', description: ''
+    fee: '', seats: '15 Seats', description: '', flyerUrl: ''
   });
   const [workshopNotice, setWorkshopNotice] = useState('');
 
@@ -247,19 +247,43 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     }
 
     setEditingWorkshopId(null);
-    setNewWorkshop({ title: '', date: '', time: '', mode: 'In-Person (Bhubaneswar Clinic)', instructor: 'MANODAYA Clinical Faculty', fee: '', seats: '15 Seats', description: '' });
+    setNewWorkshop({ title: '', date: '', time: '', mode: 'In-Person (Bhubaneswar Clinic)', instructor: 'MANODAYA Clinical Faculty', fee: '', seats: '15 Seats', description: '', flyerUrl: '' });
     setTimeout(() => setWorkshopNotice(''), 4000);
+  };
+
+  const handleFlyerFileUpload = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image file size should be under 5MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setNewWorkshop(prev => ({ ...prev, flyerUrl: reader.result }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleStartEditWorkshop = (ws) => {
     setEditingWorkshopId(ws.id);
-    setNewWorkshop({ title: ws.title || '', date: ws.date || '', time: ws.time || '', mode: ws.mode || 'In-Person (Bhubaneswar Clinic)', instructor: ws.instructor || 'MANODAYA Clinical Faculty', fee: ws.fee || '', seats: ws.seats || '15 Seats', description: ws.description || '' });
+    setNewWorkshop({ 
+      title: ws.title || '', 
+      date: ws.date || '', 
+      time: ws.time || '', 
+      mode: ws.mode || 'In-Person (Bhubaneswar Clinic)', 
+      instructor: ws.instructor || 'MANODAYA Clinical Faculty', 
+      fee: ws.fee || '', 
+      seats: ws.seats || '15 Seats', 
+      description: ws.description || '',
+      flyerUrl: ws.flyerUrl || ''
+    });
     window.scrollTo({ top: 200, behavior: 'smooth' });
   };
 
   const handleCancelEditWorkshop = () => {
     setEditingWorkshopId(null);
-    setNewWorkshop({ title: '', date: '', time: '', mode: 'In-Person (Bhubaneswar Clinic)', instructor: 'MANODAYA Clinical Faculty', fee: '', seats: '15 Seats', description: '' });
+    setNewWorkshop({ title: '', date: '', time: '', mode: 'In-Person (Bhubaneswar Clinic)', instructor: 'MANODAYA Clinical Faculty', fee: '', seats: '15 Seats', description: '', flyerUrl: '' });
   };
 
   // ─── Delete Workshop (Firestore + fallback) ────────────────────────────────
@@ -817,6 +841,47 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                     <label className="form-label">Workshop Description</label>
                     <textarea className="form-textarea" rows={3} placeholder="Describe what students will learn..." value={newWorkshop.description} onChange={(e) => setNewWorkshop({ ...newWorkshop, description: e.target.value })} />
                   </div>
+
+                  {/* Flyer / Image Upload Section */}
+                  <div className="form-group" style={{ backgroundColor: '#F8FAFC', padding: '16px', borderRadius: '16px', border: '1px dashed #CBD5E1', marginBottom: '20px' }}>
+                    <label className="form-label" style={{ fontWeight: 800, color: '#0E0E10' }}>🖼️ Workshop Flyer / Banner Image</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handleFlyerFileUpload}
+                        style={{ fontSize: '0.844rem' }}
+                      />
+                      <div style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 600 }}>
+                        Or enter direct Image URL below:
+                      </div>
+                      <input 
+                        type="url" 
+                        className="form-input" 
+                        placeholder="https://example.com/flyer-image.jpg" 
+                        value={newWorkshop.flyerUrl} 
+                        onChange={(e) => setNewWorkshop({ ...newWorkshop, flyerUrl: e.target.value })} 
+                      />
+                      {newWorkshop.flyerUrl && (
+                        <div style={{ marginTop: '8px', padding: '10px', backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                          <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10B981', marginBottom: '6px' }}>✓ Flyer Image Preview:</div>
+                          <img 
+                            src={newWorkshop.flyerUrl} 
+                            alt="Flyer Preview" 
+                            style={{ maxHeight: '160px', maxWidth: '100%', borderRadius: '8px', objectFit: 'cover' }} 
+                          />
+                          <button 
+                            type="button"
+                            onClick={() => setNewWorkshop({ ...newWorkshop, flyerUrl: '' })}
+                            style={{ display: 'block', marginTop: '8px', color: '#EF4444', fontSize: '0.75rem', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer' }}
+                          >
+                            ✖ Remove Flyer Image
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   <button className="btn-pink" type="submit" style={{ width: '100%', padding: '14px' }}>
                     <PlusCircle size={18} />
                     <span>{editingWorkshopId ? 'Update Workshop Live' : 'Post Workshop Live'}</span>
@@ -832,6 +897,11 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   {workshops.map((ws) => (
                     <div key={ws.id} style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '18px', border: editingWorkshopId === ws.id ? '2px solid #FF497C' : '1.5px solid #E2E8F0', position: 'relative' }}>
+                      {ws.flyerUrl && (
+                        <div style={{ marginBottom: '14px', borderRadius: '12px', overflow: 'hidden', maxHeight: '150px', backgroundColor: '#0F172A' }}>
+                          <img src={ws.flyerUrl} alt={`${ws.title} flyer`} style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
+                        </div>
+                      )}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                         <span className="badge-status" style={{ backgroundColor: '#EDE9FE', color: '#8A4FFF' }}>{ws.mode}</span>
                         <div style={{ display: 'flex', gap: '6px' }}>

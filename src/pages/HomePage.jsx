@@ -3,6 +3,7 @@ import { SafeSpaceIllustration, HeadphonesListeningIllustration } from '../compo
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import { ClinicalTeamSection } from '../components/ClinicalTeamSection';
 import { FlagshipProgramsSection } from '../components/FlagshipProgramsSection';
+import { UpcomingWorkshopsSection } from '../components/UpcomingWorkshopsSection';
 import { Calendar, Video, ArrowRight, CheckCircle2, Sparkles, Baby, HeartPulse, ClipboardCheck, Activity, GraduationCap } from 'lucide-react';
 
 export const HomePage = ({ onNavigate, onOpenBooking }) => {
@@ -233,6 +234,9 @@ export const HomePage = ({ onNavigate, onOpenBooking }) => {
 
       {/* 6. Full Interactive Client Feedback & Testimonials Section */}
       <TestimonialsSection currentMode="all" />
+
+      {/* 7. Upcoming Clinical Workshops & Masterclasses (Live Sync from CRM Dashboard) */}
+      <UpcomingWorkshopsSection onOpenBooking={onOpenBooking} />
     </div>
   );
 };
