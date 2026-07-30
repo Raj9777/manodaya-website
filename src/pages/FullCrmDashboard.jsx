@@ -503,7 +503,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       `📍 CLINIC LOCATION & DIRECTIONS:\n` +
       `MANODAYA Clinic, Plot No. 1206/2082, Phase II, Bhimatangi, Bhubaneswar, Odisha 751002\n` +
       `Google Maps: https://maps.app.goo.gl/fEXm6e8tnSZoybdV6\n\n` +
-      `Contact Phone: +91 82496 05244\n` +
+      `Contact Phone: +91 73288 34045\n` +
       `Clinic Email: manodaya.psych@gmail.com\n\n` +
       `Please arrive 10 minutes prior to your scheduled time. If you need to modify or reschedule, kindly inform us on WhatsApp or call us.\n\n` +
       `Warm regards,\n` +

@@ -171,7 +171,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
 
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <a 
-                href={`https://wa.me/919876543210?text=Hello%20MANODAYA,%20I%20just%20booked%20an%20appointment%20(Ref:%20${submittedLead.id}).`}
+                href={`https://wa.me/917328834045?text=Hello%20MANODAYA,%20I%20just%20booked%20an%20appointment%20(Ref:%20${submittedLead.id}).`}
                 target="_blank"
                 rel="noreferrer"
                 className="btn-black"
@@ -219,7 +219,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
                     type="tel" 
                     required 
                     className="form-input"
-                    placeholder="+91 98765 43210" 
+                    placeholder="+91 73288 34045" 
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   />

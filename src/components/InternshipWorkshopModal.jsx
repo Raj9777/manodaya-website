@@ -101,7 +101,7 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
 
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <a 
-                href={`https://wa.me/919876543210?text=Hello%20MANODAYA,%20I%20just%20submitted%20my%20${submittedApp.applicationType}%20application%20(Ref:%20${submittedApp.id}).`}
+                href={`https://wa.me/917328834045?text=Hello%20MANODAYA,%20I%20just%20submitted%20my%20${submittedApp.applicationType}%20application%20(Ref:%20${submittedApp.id}).`}
                 target="_blank"
                 rel="noreferrer"
                 className="btn-black"
@@ -149,7 +149,7 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
                     type="tel" 
                     required 
                     className="form-input"
-                    placeholder="+91 98765 43210" 
+                    placeholder="+91 73288 34045" 
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   />

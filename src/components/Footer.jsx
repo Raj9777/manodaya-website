@@ -242,7 +242,7 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
           </a>
 
           <a 
-            href="https://wa.me/919876543210?text=Hello%20MANODAYA,%20I%20would%20like%20to%20book%20an%20appointment."
+            href="https://wa.me/917328834045?text=Hello%20MANODAYA,%20I%20would%20like%20to%20book%20an%20appointment."
             target="_blank"
             rel="noreferrer"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: '#25D366', fontSize: '0.75rem', fontWeight: 700 }}

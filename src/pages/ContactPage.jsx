@@ -188,7 +188,7 @@ export const ContactPage = () => {
                   Thank you, <strong>{submittedLead.patientName}</strong>. Our clinical team will review your booking for <strong>{submittedLead.service}</strong> and confirm shortly.
                 </p>
                 <a 
-                  href={`https://wa.me/919876543210?text=Hello%20MANODAYA,%20I%20booked%20appointment%20Ref:${submittedLead.id}.`}
+                  href={`https://wa.me/917328834045?text=Hello%20MANODAYA,%20I%20booked%20appointment%20Ref:${submittedLead.id}.`}
                   target="_blank"
                   rel="noreferrer"
                   className="btn-black"
@@ -220,7 +220,7 @@ export const ContactPage = () => {
                       type="tel" 
                       required 
                       className="form-input" 
-                      placeholder="+91 98765 43210"
+                      placeholder="+91 73288 34045"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     />
