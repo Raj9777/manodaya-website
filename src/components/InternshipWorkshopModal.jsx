@@ -3,6 +3,7 @@ import { X, GraduationCap, CheckCircle2, MessageSquare, Info, Calendar, Loader2 
 import confetti from 'canvas-confetti';
 import { db } from '../firebase';
 import { addDoc, collection } from 'firebase/firestore';
+import { sendStaffNotification } from '../utils/sendNotification';
 
 export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinical Internship', initialWorkshopTitle = '' }) => {
   const [formData, setFormData] = useState({
@@ -48,6 +49,19 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
       const existingApps = JSON.parse(localStorage.getItem('manodaya_crm_internships') || '[]');
       localStorage.setItem('manodaya_crm_internships', JSON.stringify([newApp, ...existingApps]));
     }
+
+    // Send automatic staff email notification (non-blocking)
+    sendStaffNotification('template_internship', {
+      reference_id: appId,
+      applicantName: formData.applicantName,
+      phone: formData.phone,
+      email: formData.email,
+      institution: formData.institution || 'N/A',
+      qualification: formData.qualification,
+      applicationType: formData.applicationType,
+      workshopTrack: formData.workshopTrack,
+      notes: formData.notes || 'N/A'
+    });
 
     try {
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });

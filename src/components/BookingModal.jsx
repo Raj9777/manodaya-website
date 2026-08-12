@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import { db } from '../firebase';
 import { doc, setDoc, collection, onSnapshot } from 'firebase/firestore';
 import { CLINIC_TIME_SLOTS } from '../data/content';
+import { sendStaffNotification } from '../utils/sendNotification';
 
 export const SERVICE_DESCRIPTIONS = {
   "ADHD & Attention Assessment": "Standardized 3-session clinical focus & hyperactivity profiling using Vanderbilt & Conners batteries.",
@@ -118,6 +119,24 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
       const existingLeads = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
       localStorage.setItem('manodaya_crm_leads', JSON.stringify([newLead, ...existingLeads]));
     }
+
+    // Send automatic staff email notification (non-blocking)
+    const isSupportGroup = (formData.service || '').toLowerCase().includes('support group');
+    const templateId = isSupportGroup ? 'template_support_group' : 'template_booking';
+    
+    sendStaffNotification(templateId, {
+      reference_id: bookingId,
+      patientName: formData.patientName,
+      phone: formData.phone,
+      email: formData.email || 'N/A',
+      category: formData.category,
+      age: formData.age || 'N/A',
+      service: formData.service,
+      type: formData.type,
+      date: formData.date || new Date().toISOString().split('T')[0],
+      time: formData.time,
+      notes: formData.notes || 'N/A'
+    });
 
     try {
       confetti({ particleCount: 75, spread: 65, origin: { y: 0.6 } });
