@@ -15,8 +15,15 @@ export async function sendStaffNotification(templateId, params) {
     return;
   }
 
+  const enrichedParams = {
+    to_email: 'manodaya.psych@gmail.com',
+    to_name: 'MANODAYA Clinic Team',
+    reply_to: params.email || '',
+    ...params
+  };
+
   try {
-    await emailjs.send(serviceId, templateId, params, publicKey);
+    await emailjs.send(serviceId, templateId, enrichedParams, publicKey);
   } catch (error) {
     console.error(`Failed to send EmailJS staff notification [Template: ${templateId}]:`, error);
   }
