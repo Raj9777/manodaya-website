@@ -7,7 +7,7 @@ import { INITIAL_CRM_LEADS } from '../data/content';
 import { db } from '../firebase';
 import {
   collection, doc, setDoc, deleteDoc, onSnapshot,
-  updateDoc, addDoc, getDocs, query, orderBy
+  updateDoc, addDoc, getDocs, getDoc, query, orderBy
 } from 'firebase/firestore';
 
 // Check if Firebase is configured
@@ -71,14 +71,30 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
 
   // ─── Firestore Real-Time Listeners ────────────────────────────────────────
   useEffect(() => {
-    // Passcode from localStorage (device-level security is fine)
+    // Passcode from localStorage as local fallback
     const savedPass = localStorage.getItem('manodaya_crm_passcode') || '1234';
     setCurrentSavedPasscode(savedPass);
 
     // Try Firestore listeners; fall back to localStorage if not configured
-    let unsubLeads, unsubInternships, unsubWorkshops;
+    let unsubLeads, unsubInternships, unsubWorkshops, unsubAuth;
 
     try {
+      // --- CRM Passcode Settings (Cloud-Synced across all devices) ---
+      const authDocRef = doc(db, 'settings', 'auth');
+      unsubAuth = onSnapshot(
+        authDocRef,
+        (snap) => {
+          if (snap.exists() && snap.data()?.passcode) {
+            const cloudPass = snap.data().passcode;
+            setCurrentSavedPasscode(cloudPass);
+            localStorage.setItem('manodaya_crm_passcode', cloudPass);
+          }
+        },
+        (err) => {
+          console.warn('Firestore auth settings listener error:', err.message);
+        }
+      );
+
       // --- Patient Leads ---
       const leadsRef = collection(db, 'leads');
       unsubLeads = onSnapshot(
@@ -157,12 +173,27 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       unsubLeads?.();
       unsubInternships?.();
       unsubWorkshops?.();
+      unsubAuth?.();
     };
   }, []);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (passcode === currentSavedPasscode) {
+    let validPass = currentSavedPasscode;
+
+    // Check directly with Firestore to ensure freshest passcode across devices
+    try {
+      const snap = await getDoc(doc(db, 'settings', 'auth'));
+      if (snap.exists() && snap.data()?.passcode) {
+        validPass = snap.data().passcode;
+        setCurrentSavedPasscode(validPass);
+        localStorage.setItem('manodaya_crm_passcode', validPass);
+      }
+    } catch {
+      // Offline fallback
+    }
+
+    if (passcode === validPass) {
       setIsAuthenticated(true);
       setPasscodeError(false);
     } else {
@@ -302,8 +333,8 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     setTimeout(() => setWorkshopNotice(''), 4000);
   };
 
-  // ─── Passcode Change ───────────────────────────────────────────────────────
-  const handleChangePasscode = (e) => {
+  // ─── Passcode Change (Firestore Cloud Sync + localStorage) ─────────────────
+  const handleChangePasscode = async (e) => {
     e.preventDefault();
     if (passcodeForm.currentPass !== currentSavedPasscode) {
       setPasscodeNotice({ type: 'error', msg: 'Current passcode is incorrect.' });
@@ -317,9 +348,22 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       setPasscodeNotice({ type: 'error', msg: 'New passcode and confirmation do not match.' });
       return;
     }
-    localStorage.setItem('manodaya_crm_passcode', passcodeForm.newPass);
-    setCurrentSavedPasscode(passcodeForm.newPass);
-    setPasscodeNotice({ type: 'success', msg: 'Dashboard passcode changed successfully!' });
+
+    const newPass = passcodeForm.newPass;
+
+    // Save to Firestore so every computer/system updates immediately
+    try {
+      await setDoc(doc(db, 'settings', 'auth'), {
+        passcode: newPass,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    } catch (err) {
+      console.warn('Could not sync passcode to Firestore cloud:', err);
+    }
+
+    localStorage.setItem('manodaya_crm_passcode', newPass);
+    setCurrentSavedPasscode(newPass);
+    setPasscodeNotice({ type: 'success', msg: 'Dashboard passcode changed successfully across all devices!' });
     setPasscodeForm({ currentPass: '', newPass: '', confirmPass: '' });
   };
 
