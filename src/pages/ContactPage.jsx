@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Phone, Mail, Clock, Calendar, CheckCircle2, MessageSquare, Info, Loader2 } from 'lucide-react';
-import { CLINIC_INFO, CLINIC_TIME_SLOTS } from '../data/content';
-import { SERVICE_DESCRIPTIONS } from '../components/BookingModal';
+import { CLINIC_INFO, CLINIC_TIME_SLOTS, SERVICE_DESCRIPTIONS } from '../data/content';
 import confetti from 'canvas-confetti';
 import { db } from '../firebase';
-import { doc, setDoc, collection, onSnapshot } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { sendStaffNotification } from '../utils/sendNotification';
 
 export const ContactPage = () => {
@@ -23,44 +22,16 @@ export const ContactPage = () => {
 
   const [submittedLead, setSubmittedLead] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [allLeads, setAllLeads] = useState([]);
 
-  // Subscribe to real-time leads to monitor booked time slots
+  // Exclude lunch break from default slot selection
   useEffect(() => {
-    let unsub;
-    try {
-      unsub = onSnapshot(collection(db, 'leads'), (snap) => {
-        const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        setAllLeads(list);
-      }, () => {
-        const saved = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
-        setAllLeads(saved);
-      });
-    } catch {
-      const saved = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
-      setAllLeads(saved);
-    }
-    return () => unsub?.();
-  }, []);
-
-  // Compute booked slots for selected date
-  const selectedDate = formData.date || todayStr;
-  const bookedSlots = allLeads
-    .filter(l => l.date === selectedDate && l.status !== 'Cancelled')
-    .map(l => l.time);
-
-  // Auto-select first available slot if currently selected time is booked or is lunch
-  useEffect(() => {
-    const isCurrentLunch = formData.time.includes('Lunch Break');
-    const isCurrentBooked = bookedSlots.includes(formData.time);
-
-    if (isCurrentLunch || isCurrentBooked) {
-      const firstAvail = CLINIC_TIME_SLOTS.find(s => !s.includes('Lunch Break') && !bookedSlots.includes(s));
+    if (formData.time.includes('Lunch Break')) {
+      const firstAvail = CLINIC_TIME_SLOTS.find(s => !s.includes('Lunch Break'));
       if (firstAvail) {
         setFormData(prev => ({ ...prev, time: firstAvail }));
       }
     }
-  }, [selectedDate, allLeads]);
+  }, [formData.time]);
 
   const currentDescription = SERVICE_DESCRIPTIONS[formData.service] || 
     "Comprehensive evidence-based psychological consultation and clinical care.";
@@ -68,14 +39,24 @@ export const ContactPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    const trimmedName = formData.patientName.trim();
+    const trimmedPhone = formData.phone.trim();
+    const trimmedEmail = formData.email.trim();
+
+    if (!trimmedName || !trimmedPhone) {
+      alert("Please provide valid patient name and contact phone number.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const bookingId = `MAN-${Math.floor(1000 + Math.random() * 9000)}`;
     const newLead = {
       id: bookingId,
-      patientName: formData.patientName,
-      phone: formData.phone,
-      email: formData.email || 'N/A',
+      patientName: trimmedName,
+      phone: trimmedPhone,
+      email: trimmedEmail || 'N/A',
       category: 'adult',
       age: 'N/A',
       service: formData.service,
@@ -83,7 +64,7 @@ export const ContactPage = () => {
       date: formData.date || new Date().toISOString().split('T')[0],
       time: formData.time,
       status: 'New',
-      notes: formData.notes || 'Submitted via contact page form.',
+      notes: formData.notes.trim() || 'Submitted via contact page form.',
       createdAt: new Date().toLocaleString('en-IN')
     };
 
@@ -100,16 +81,16 @@ export const ContactPage = () => {
     
     sendStaffNotification(templateId, {
       reference_id: bookingId,
-      patientName: formData.patientName,
-      phone: formData.phone,
-      email: formData.email || 'N/A',
+      patientName: trimmedName,
+      phone: trimmedPhone,
+      email: trimmedEmail || 'N/A',
       category: 'adult',
       age: 'N/A',
       service: formData.service,
       type: formData.type,
       date: formData.date || new Date().toISOString().split('T')[0],
       time: formData.time,
-      notes: formData.notes || 'N/A'
+      notes: formData.notes.trim() || 'N/A'
     });
 
     try {
@@ -119,6 +100,7 @@ export const ContactPage = () => {
     setIsSubmitting(false);
     setSubmittedLead(newLead);
   };
+
 
   return (
     <div className="page-wrapper section-padding" style={{ backgroundColor: '#FFFFFF' }}>
@@ -209,7 +191,7 @@ export const ContactPage = () => {
                 <a 
                   href={`https://wa.me/917328834045?text=Hello%20MANODAYA,%20I%20booked%20appointment%20Ref:${submittedLead.id}.`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="btn-black"
                   style={{ backgroundColor: '#25D366', border: '2px solid #25D366' }}
                 >
@@ -236,13 +218,13 @@ export const ContactPage = () => {
                   <div className="form-group">
                     <label className="form-label">Phone / WhatsApp *</label>
                     <input 
-                      type="tel" 
-                      required 
-                      className="form-input" 
-                      placeholder="+91 73288 34045"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    />
+                    type="tel" 
+                    required 
+                    className="form-input" 
+                    placeholder="+91 73288 34045"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  />
                   </div>
 
                   <div className="form-group">
@@ -332,14 +314,11 @@ export const ContactPage = () => {
                     >
                       {CLINIC_TIME_SLOTS.map((slot) => {
                         const isLunch = slot.includes('Lunch Break');
-                        const isTaken = bookedSlots.includes(slot);
-                        const isDisabled = isLunch || isTaken;
                         let label = slot;
                         if (isLunch) label = "01:00 PM - 02:00 PM 🔒 (Lunch Break)";
-                        else if (isTaken) label = `${slot} ❌ (Already Booked)`;
 
                         return (
-                          <option key={slot} value={slot} disabled={isDisabled}>
+                          <option key={slot} value={slot} disabled={isLunch}>
                             {label}
                           </option>
                         );
@@ -398,12 +377,13 @@ export const ContactPage = () => {
             <a 
               href="https://maps.app.goo.gl/fEXm6e8tnSZoybdV6" 
               target="_blank" 
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="btn-purple"
               style={{ padding: '8px 20px', fontSize: '0.844rem' }}
             >
               Get Directions in Google Maps ↗
             </a>
+
           </div>
 
           <div 

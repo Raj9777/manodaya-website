@@ -1,48 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  ShieldCheck, Lock, Search, Download, LogOut, CheckCircle2, 
-  Clock, MessageSquare, Mail, Home, Users, Calendar, PlusCircle, Sparkles, GraduationCap, Edit3, Trash2, Key, Settings, AlertCircle, RefreshCw, Wifi, WifiOff, FileText
+  ShieldCheck, Lock, Download, LogOut, CheckCircle2, 
+  MessageSquare, Mail, Home, Users, PlusCircle, GraduationCap, Edit3, Trash2, Key, Settings, AlertCircle, Wifi, WifiOff, FileText
 } from 'lucide-react';
-import { INITIAL_CRM_LEADS } from '../data/content';
+import { INITIAL_CRM_LEADS, INITIAL_WORKSHOPS } from '../data/content';
 import { db } from '../firebase';
 import {
   collection, doc, setDoc, deleteDoc, onSnapshot,
-  updateDoc, addDoc, getDocs, getDoc, query, orderBy
+  updateDoc, addDoc, query, orderBy
 } from 'firebase/firestore';
-
-// Check if Firebase is configured
-const isFirebaseConfigured = () => {
-  try {
-    return db && !window.__FIREBASE_UNCONFIGURED__;
-  } catch {
-    return false;
-  }
-};
-
-export const INITIAL_WORKSHOPS = [
-  {
-    id: "ws-101",
-    title: "Clinical Neuropsychology & Battery Administration Masterclass",
-    date: "15th August 2026",
-    time: "10:00 AM - 04:00 PM",
-    mode: "In-Person (Bhubaneswar Clinic)",
-    instructor: "Dr. Certified Neuropsychologist",
-    fee: "₹2,500",
-    seats: "15 Seats",
-    description: "Hands-on training in administering NIMHANS Battery, WISC-V, VSMS, and reporting clinical formulations for psychology students."
-  },
-  {
-    id: "ws-102",
-    title: "Pediatric Autism Screening Practicum",
-    date: "28th August 2026",
-    time: "02:00 PM - 06:00 PM",
-    mode: "Hybrid / Live Interactive",
-    instructor: "Senior Clinical Child Psychologist",
-    fee: "₹1,800",
-    seats: "20 Seats",
-    description: "Diagnostic screening protocols, behavioral observations, and CARS-2 scoring workshops for child developmental assessments."
-  }
-];
 
 export const FullCrmDashboard = ({ onNavigateHome }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -69,32 +35,19 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
   const [passcodeForm, setPasscodeForm] = useState({ currentPass: '', newPass: '', confirmPass: '' });
   const [passcodeNotice, setPasscodeNotice] = useState({ type: '', msg: '' });
 
-  // ─── Firestore Real-Time Listeners ────────────────────────────────────────
+  // Passcode from localStorage as local fallback
   useEffect(() => {
-    // Passcode from localStorage as local fallback
     const savedPass = localStorage.getItem('manodaya_crm_passcode') || '1234';
     setCurrentSavedPasscode(savedPass);
+  }, []);
 
-    // Try Firestore listeners; fall back to localStorage if not configured
-    let unsubLeads, unsubInternships, unsubWorkshops, unsubAuth;
+  // ─── Firestore Real-Time Listeners (Authenticated Session Only) ───────────
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    let unsubLeads, unsubInternships, unsubWorkshops;
 
     try {
-      // --- CRM Passcode Settings (Cloud-Synced across all devices) ---
-      const authDocRef = doc(db, 'settings', 'auth');
-      unsubAuth = onSnapshot(
-        authDocRef,
-        (snap) => {
-          if (snap.exists() && snap.data()?.passcode) {
-            const cloudPass = snap.data().passcode;
-            setCurrentSavedPasscode(cloudPass);
-            localStorage.setItem('manodaya_crm_passcode', cloudPass);
-          }
-        },
-        (err) => {
-          console.warn('Firestore auth settings listener error:', err.message);
-        }
-      );
-
       // --- Patient Leads ---
       const leadsRef = collection(db, 'leads');
       unsubLeads = onSnapshot(
@@ -102,7 +55,6 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
         (snap) => {
           const isInitialized = localStorage.getItem('manodaya_leads_initialized');
           if (snap.empty && !isInitialized) {
-            // Seed ONCE on initial deployment
             localStorage.setItem('manodaya_leads_initialized', 'true');
             INITIAL_CRM_LEADS.forEach(async (lead) => {
               await setDoc(doc(db, 'leads', lead.id), lead);
@@ -144,7 +96,6 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
         query(wsRef, orderBy('createdAt', 'desc')),
         (snap) => {
           if (snap.empty) {
-            // Seed initial workshops
             INITIAL_WORKSHOPS.forEach(async (ws) => {
               await setDoc(doc(db, 'workshops', ws.id), { ...ws, createdAt: new Date().toISOString() });
             });
@@ -158,7 +109,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
           setWorkshops(saved || INITIAL_WORKSHOPS);
         }
       );
-    } catch (err) {
+    } catch {
       console.warn('Firebase not configured. Running in localStorage mode.');
       setFirebaseOnline(false);
       const savedLeads = JSON.parse(localStorage.getItem('manodaya_crm_leads') || 'null');
@@ -173,33 +124,22 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       unsubLeads?.();
       unsubInternships?.();
       unsubWorkshops?.();
-      unsubAuth?.();
     };
-  }, []);
+  }, [isAuthenticated]);
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    let validPass = currentSavedPasscode;
+    const envPasscode = import.meta.env.VITE_CRM_ADMIN_PASSCODE;
+    const validPass = envPasscode || currentSavedPasscode || '1234';
 
-    // Check directly with Firestore to ensure freshest passcode across devices
-    try {
-      const snap = await getDoc(doc(db, 'settings', 'auth'));
-      if (snap.exists() && snap.data()?.passcode) {
-        validPass = snap.data().passcode;
-        setCurrentSavedPasscode(validPass);
-        localStorage.setItem('manodaya_crm_passcode', validPass);
-      }
-    } catch {
-      // Offline fallback
-    }
-
-    if (passcode === validPass) {
+    if (passcode.trim() === validPass.trim()) {
       setIsAuthenticated(true);
       setPasscodeError(false);
     } else {
       setPasscodeError(true);
     }
   };
+
 
   // ─── Update Lead Status (Firestore + localStorage fallback) ───────────────
   const handleUpdateStatus = async (id, newStatus) => {
@@ -256,7 +196,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
         await updateDoc(doc(db, 'workshops', editingWorkshopId), { ...newWorkshop });
         setWorkshopNotice('✓ Workshop updated live across all devices!');
       } else {
-        const wsRef = await addDoc(collection(db, 'workshops'), {
+        await addDoc(collection(db, 'workshops'), {
           ...newWorkshop,
           createdAt: new Date().toISOString()
         });
@@ -426,7 +366,17 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     URL.revokeObjectURL(url);
   };
 
-  // ─── PDF Export Feature ───────────────────────────────────────────────────
+  // ─── PDF Export Feature (With Sanitization against Stored XSS) ─────────────
+  const escapeHtml = (str) => {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+
   const handleExportPDF = (dataList, title) => {
     if (!dataList || dataList.length === 0) return;
 
@@ -443,35 +393,37 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       if (isInternship) {
         return `
           <tr>
-            <td><strong>${item.id || ''}</strong></td>
-            <td><strong>${item.applicantName || ''}</strong><br/><small style="color:#64748B">${item.createdAt || ''}</small></td>
-            <td>${item.phone || ''}<br/><small style="color:#64748B">${item.email || ''}</small></td>
-            <td>${item.institution || 'N/A'}</td>
-            <td>${item.qualification || 'N/A'}</td>
-            <td><strong>${item.applicationType || ''}</strong><br/><small style="color:#8A4FFF">${item.workshopTrack || ''}</small></td>
-            <td><span class="status-pill">${item.status || ''}</span></td>
+            <td><strong>${escapeHtml(item.id)}</strong></td>
+            <td><strong>${escapeHtml(item.applicantName)}</strong><br/><small style="color:#64748B">${escapeHtml(item.createdAt)}</small></td>
+            <td>${escapeHtml(item.phone)}<br/><small style="color:#64748B">${escapeHtml(item.email)}</small></td>
+            <td>${escapeHtml(item.institution || 'N/A')}</td>
+            <td>${escapeHtml(item.qualification || 'N/A')}</td>
+            <td><strong>${escapeHtml(item.applicationType)}</strong><br/><small style="color:#8A4FFF">${escapeHtml(item.workshopTrack)}</small></td>
+            <td><span class="status-pill">${escapeHtml(item.status)}</span></td>
           </tr>
         `;
       } else {
         return `
           <tr>
-            <td><strong>${item.id || ''}</strong></td>
-            <td><strong>${item.patientName || ''}</strong><br/><small style="color:#64748B">${item.createdAt || ''}</small></td>
-            <td>${item.phone || ''}<br/><small style="color:#64748B">${item.email || ''}</small></td>
-            <td>${item.category || ''} (${item.age || 'N/A'})</td>
-            <td><strong>${item.service || ''}</strong><br/><small style="color:#64748B">${item.type || ''}</small></td>
-            <td>${item.date || ''} @ ${item.time || ''}</td>
-            <td><span class="status-pill">${item.status || ''}</span></td>
+            <td><strong>${escapeHtml(item.id)}</strong></td>
+            <td><strong>${escapeHtml(item.patientName)}</strong><br/><small style="color:#64748B">${escapeHtml(item.createdAt)}</small></td>
+            <td>${escapeHtml(item.phone)}<br/><small style="color:#64748B">${escapeHtml(item.email)}</small></td>
+            <td>${escapeHtml(item.category || '')} (${escapeHtml(item.age || 'N/A')})</td>
+            <td><strong>${escapeHtml(item.service)}</strong><br/><small style="color:#64748B">${escapeHtml(item.type)}</small></td>
+            <td>${escapeHtml(item.date || '')} @ ${escapeHtml(item.time || '')}</td>
+            <td><span class="status-pill">${escapeHtml(item.status)}</span></td>
           </tr>
         `;
       }
     }).join('');
 
+    const safeTitle = escapeHtml(title);
+
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
         <head>
-          <title>${title} - MANODAYA Clinical Report</title>
+          <title>${safeTitle} - MANODAYA Clinical Report</title>
           <style>
             body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; padding: 32px; color: #0E0E10; }
             .header { border-bottom: 3px solid #8A4FFF; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
@@ -494,7 +446,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
           <div class="header">
             <div>
               <div class="logo-title">🧠 MANODAYA Clinical Care & CRM Report</div>
-              <div class="subtitle">${title}</div>
+              <div class="subtitle">${safeTitle}</div>
             </div>
             <div class="meta">
               <div><strong>Date Generated:</strong> ${new Date().toLocaleDateString('en-IN')}</div>
@@ -527,6 +479,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     `);
     printWindow.document.close();
   };
+
 
   // ─── Email Action (Direct Gmail Web Compose Link) ─────────────────────────
   const handleEmailReminder = (lead) => {
@@ -697,7 +650,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                       <td>
                         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                           {/* WhatsApp Reminder */}
-                          <a href={getWhatsAppReminderLink(lead)} target="_blank" rel="noreferrer"
+                          <a href={getWhatsAppReminderLink(lead)} target="_blank" rel="noopener noreferrer"
                             style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#25D366', color: '#FFF', padding: '6px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700 }}>
                             <MessageSquare size={12} /> WhatsApp
                           </a>
@@ -790,10 +743,11 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                         <td>
                           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                             <a href={`https://wa.me/${app.phone.replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(app.applicantName)},%20this%20is%20MANODAYA%20regarding%20your%20${encodeURIComponent(app.applicationType)}%20application.`}
-                              target="_blank" rel="noreferrer"
+                              target="_blank" rel="noopener noreferrer"
                               style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#25D366', color: '#FFF', padding: '6px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700 }}>
                               <MessageSquare size={12} /> WhatsApp
                             </a>
+
                             <button onClick={() => { const s = encodeURIComponent(`Your ${app.applicationType} Application – MANODAYA`); const b = encodeURIComponent(`Dear ${app.applicantName},\n\nThank you for applying to MANODAYA. Your application for ${app.applicationType} is currently under review.\n\nWe will get back to you shortly.\n\nWarm regards,\nMANODAYA Team`); window.open(`mailto:${app.email}?subject=${s}&body=${b}`, '_blank'); }}
                               style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#3B82F6', color: '#FFF', padding: '6px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
                               <Mail size={12} /> Email

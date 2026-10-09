@@ -1,25 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, CheckCircle2, MessageSquare, Info, Loader2, Clock } from 'lucide-react';
+import { X, Calendar, CheckCircle2, MessageSquare, Info, Loader2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { db } from '../firebase';
-import { doc, setDoc, collection, onSnapshot } from 'firebase/firestore';
-import { CLINIC_TIME_SLOTS } from '../data/content';
+import { doc, setDoc } from 'firebase/firestore';
+import { CLINIC_TIME_SLOTS, SERVICE_DESCRIPTIONS } from '../data/content';
 import { sendStaffNotification } from '../utils/sendNotification';
-
-export const SERVICE_DESCRIPTIONS = {
-  "ADHD & Attention Assessment": "Standardized 3-session clinical focus & hyperactivity profiling using Vanderbilt & Conners batteries.",
-  "Autism Spectrum Assessment / Screening": "Diagnostic social communication & sensory screening using ADOS-2, CARS-2, and SCQ batteries.",
-  "IQ & Developmental (DQ) Assessment": "Cognitive capacity profiling and developmental quotient evaluation for toddlers, children, and teens.",
-  "Specific Learning Disability Assessment": "Diagnostic evaluation for Dyslexia, Dysgraphia, and Dyscalculia with academic accommodation reporting.",
-  "Comprehensive Neuropsychological Assessment": "Detailed profiling of brain-behavior relationships, memory systems, executive functions, and spatial skills.",
-  "Cognitive Behaviour Therapy (CBT)": "Structured therapy targeting unhelpful thought patterns, behavioral activation, and anxiety reduction.",
-  "Dialectical Behaviour Therapy (DBT)": "Mindfulness-based emotional regulation, distress tolerance, and interpersonal effectiveness modules.",
-  "Post-Stroke Cognitive Rehabilitation": "Targeted restorative retraining for processing speed, executive planning, spatial neglect, and memory recovery.",
-  "Dementia & MCI Screening": "Early identification of age-related memory decline, Alzheimer's risk factors, and MoCA/ACE-III screening.",
-  "Support Group Registration": "Facilitated peer group circles fostering unmasking, shared coping strategies, and community support.",
-  "Psychology Internship Application": "Structured clinical observerships, case formulations, psychometric battery training, and certificates for students.",
-  "General Consultation & Guidance": "One-on-one intake consultation to determine appropriate assessment battery or therapeutic intervention."
-};
 
 export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
   const todayStr = new Date().toISOString().split('T')[0];
@@ -39,25 +24,6 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
 
   const [submittedLead, setSubmittedLead] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [allLeads, setAllLeads] = useState([]);
-
-  // Subscribe to real-time leads to monitor booked time slots
-  useEffect(() => {
-    let unsub;
-    try {
-      unsub = onSnapshot(collection(db, 'leads'), (snap) => {
-        const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        setAllLeads(list);
-      }, () => {
-        const saved = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
-        setAllLeads(saved);
-      });
-    } catch {
-      const saved = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
-      setAllLeads(saved);
-    }
-    return () => unsub?.();
-  }, []);
 
   useEffect(() => {
     if (initialService) {
@@ -65,24 +31,15 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
     }
   }, [initialService]);
 
-  // Compute booked slots for selected date
-  const selectedDate = formData.date || todayStr;
-  const bookedSlots = allLeads
-    .filter(l => l.date === selectedDate && l.status !== 'Cancelled')
-    .map(l => l.time);
-
-  // Auto-select first available slot if currently selected time is booked or is lunch
+  // Exclude lunch break from default slot selection
   useEffect(() => {
-    const isCurrentLunch = formData.time.includes('Lunch Break');
-    const isCurrentBooked = bookedSlots.includes(formData.time);
-
-    if (isCurrentLunch || isCurrentBooked) {
-      const firstAvail = CLINIC_TIME_SLOTS.find(s => !s.includes('Lunch Break') && !bookedSlots.includes(s));
+    if (formData.time.includes('Lunch Break')) {
+      const firstAvail = CLINIC_TIME_SLOTS.find(s => !s.includes('Lunch Break'));
       if (firstAvail) {
         setFormData(prev => ({ ...prev, time: firstAvail }));
       }
     }
-  }, [selectedDate, allLeads]);
+  }, [formData.time]);
 
   if (!isOpen) return null;
 
@@ -92,29 +49,39 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    const trimmedName = formData.patientName.trim();
+    const trimmedPhone = formData.phone.trim();
+    const trimmedEmail = formData.email.trim();
+
+    if (!trimmedName || !trimmedPhone) {
+      alert("Please provide valid patient name and contact phone number.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const bookingId = `MAN-${Math.floor(1000 + Math.random() * 9000)}`;
     const newLead = {
       id: bookingId,
-      patientName: formData.patientName,
-      phone: formData.phone,
-      email: formData.email || 'N/A',
+      patientName: trimmedName,
+      phone: trimmedPhone,
+      email: trimmedEmail || 'N/A',
       category: formData.category,
-      age: formData.age || 'N/A',
+      age: formData.age.trim() || 'N/A',
       service: formData.service,
       type: formData.type,
       date: formData.date || new Date().toISOString().split('T')[0],
       time: formData.time,
       status: 'New',
-      notes: formData.notes || 'Submitted via website form.',
+      notes: formData.notes.trim() || 'Submitted via website form.',
       createdAt: new Date().toLocaleString('en-IN')
     };
 
     // Save to Firestore (primary) + localStorage (fallback)
     try {
       await setDoc(doc(db, 'leads', bookingId), newLead);
-    } catch (err) {
+    } catch {
       // Firestore unavailable — save to localStorage
       const existingLeads = JSON.parse(localStorage.getItem('manodaya_crm_leads') || '[]');
       localStorage.setItem('manodaya_crm_leads', JSON.stringify([newLead, ...existingLeads]));
@@ -126,17 +93,18 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
     
     sendStaffNotification(templateId, {
       reference_id: bookingId,
-      patientName: formData.patientName,
-      phone: formData.phone,
-      email: formData.email || 'N/A',
+      patientName: trimmedName,
+      phone: trimmedPhone,
+      email: trimmedEmail || 'N/A',
       category: formData.category,
-      age: formData.age || 'N/A',
+      age: formData.age.trim() || 'N/A',
       service: formData.service,
       type: formData.type,
       date: formData.date || new Date().toISOString().split('T')[0],
       time: formData.time,
-      notes: formData.notes || 'N/A'
+      notes: formData.notes.trim() || 'N/A'
     });
+
 
     try {
       confetti({ particleCount: 75, spread: 65, origin: { y: 0.6 } });
@@ -192,7 +160,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
               <a 
                 href={`https://wa.me/917328834045?text=Hello%20MANODAYA,%20I%20just%20booked%20an%20appointment%20(Ref:%20${submittedLead.id}).`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="btn-black"
                 style={{ backgroundColor: '#25D366', color: '#FFF', border: '2px solid #25D366' }}
               >
@@ -343,14 +311,11 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
                   >
                     {CLINIC_TIME_SLOTS.map((slot) => {
                       const isLunch = slot.includes('Lunch Break');
-                      const isTaken = bookedSlots.includes(slot);
-                      const isDisabled = isLunch || isTaken;
                       let label = slot;
                       if (isLunch) label = "01:00 PM - 02:00 PM 🔒 (Lunch Break)";
-                      else if (isTaken) label = `${slot} ❌ (Already Booked)`;
 
                       return (
-                        <option key={slot} value={slot} disabled={isDisabled}>
+                        <option key={slot} value={slot} disabled={isLunch}>
                           {label}
                         </option>
                       );
@@ -358,6 +323,7 @@ export const BookingModal = ({ isOpen, onClose, initialService = '' }) => {
                   </select>
                 </div>
               </div>
+
 
               <button 
                 className="btn-black" 

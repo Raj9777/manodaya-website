@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Public Lead & Consultation Bookings
+    // Anyone can submit a consultation / lead request.
+    // Reading, updating, and deleting is restricted.
+    match /leads/{leadId} {
+      allow create: if request.resource.data.keys().hasAll(['patientName', 'phone', 'service'])
+                    && request.resource.data.patientName is string
+                    && request.resource.data.phone is string;
+      allow read, update, delete: if request.auth != null;
+    }
+    
+    // Internship & Workshop Applications
+    // Anyone can apply. Reading and management is restricted to staff.
+    match /internships/{internshipId} {
+      allow create: if request.resource.data.keys().hasAll(['applicantName', 'phone', 'email'])
+                    && request.resource.data.applicantName is string;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // Public Workshops Catalog
+    // Public can read upcoming workshops. Only staff can create/edit/delete workshops.
+    match /workshops/{workshopId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // System & Dashboard Auth Settings
+    // Strictly restricted to authenticated administrative staff.
+    match /settings/{settingId} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, ArrowRight, Sparkles, User, MapPin, Maximize2, X, Eye } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
-import { INITIAL_WORKSHOPS } from '../pages/FullCrmDashboard';
+import { INITIAL_WORKSHOPS } from '../data/content';
 import { InternshipWorkshopModal } from './InternshipWorkshopModal';
 
 export const UpcomingWorkshopsSection = ({ onOpenBooking, title = "Upcoming Clinical Workshops & Masterclasses", subtitle = "Intensive hands-on training sessions conducted by certified clinical neuropsychologists." }) => {

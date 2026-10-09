@@ -25,27 +25,37 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    const trimmedName = formData.applicantName.trim();
+    const trimmedPhone = formData.phone.trim();
+    const trimmedEmail = formData.email.trim();
+
+    if (!trimmedName || !trimmedPhone || !trimmedEmail) {
+      alert("Please provide valid applicant name, phone number, and email address.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const appId = `INT-${Math.floor(1000 + Math.random() * 9000)}`;
     const newApp = {
       id: appId,
-      applicantName: formData.applicantName,
-      phone: formData.phone,
-      email: formData.email,
-      institution: formData.institution || 'N/A',
+      applicantName: trimmedName,
+      phone: trimmedPhone,
+      email: trimmedEmail,
+      institution: formData.institution.trim() || 'N/A',
       qualification: formData.qualification,
       applicationType: formData.applicationType,
       workshopTrack: formData.workshopTrack,
       status: 'Pending Review',
-      notes: formData.notes || 'Submitted via internship/workshop application form.',
+      notes: formData.notes.trim() || 'Submitted via internship/workshop application form.',
       createdAt: new Date().toLocaleString('en-IN')
     };
 
     // Write to Firestore (primary) + localStorage (fallback)
     try {
       await addDoc(collection(db, 'internships'), newApp);
-    } catch (err) {
+    } catch {
       const existingApps = JSON.parse(localStorage.getItem('manodaya_crm_internships') || '[]');
       localStorage.setItem('manodaya_crm_internships', JSON.stringify([newApp, ...existingApps]));
     }
@@ -53,14 +63,14 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
     // Send automatic staff email notification (non-blocking)
     sendStaffNotification('template_internship', {
       reference_id: appId,
-      applicantName: formData.applicantName,
-      phone: formData.phone,
-      email: formData.email,
-      institution: formData.institution || 'N/A',
+      applicantName: trimmedName,
+      phone: trimmedPhone,
+      email: trimmedEmail,
+      institution: formData.institution.trim() || 'N/A',
       qualification: formData.qualification,
       applicationType: formData.applicationType,
       workshopTrack: formData.workshopTrack,
-      notes: formData.notes || 'N/A'
+      notes: formData.notes.trim() || 'N/A'
     });
 
     try {
@@ -117,12 +127,13 @@ export const InternshipWorkshopModal = ({ isOpen, onClose, initialType = 'Clinic
               <a 
                 href={`https://wa.me/917328834045?text=Hello%20MANODAYA,%20I%20just%20submitted%20my%20${submittedApp.applicationType}%20application%20(Ref:%20${submittedApp.id}).`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="btn-black"
                 style={{ backgroundColor: '#25D366', color: '#FFF', border: '2px solid #25D366' }}
               >
                 <MessageSquare size={18} /> Confirm via WhatsApp
               </a>
+
 
               <button className="btn-outline-theme" onClick={handleReset}>
                 Done

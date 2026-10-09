@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  ShieldCheck, Search, Filter, MessageSquare, Mail, Phone, Calendar, 
-  UserCheck, RefreshCw, X, PlusCircle, CheckCircle, Clock, Trash2, Send 
+  ShieldCheck, Search, MessageSquare, Mail, RefreshCw, X, Trash2, Lock, Calendar, Send
 } from 'lucide-react';
-import { INITIAL_CRM_LEADS, CLINIC_INFO } from '../data/content';
+import { INITIAL_CRM_LEADS } from '../data/content';
 
 export const CrmDashboard = ({ isOpen, onClose }) => {
   const [passcode, setPasscode] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // Default accessible for seamless testing
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passcodeError, setPasscodeError] = useState(false);
   const [leads, setLeads] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -18,22 +18,34 @@ export const CrmDashboard = ({ isOpen, onClose }) => {
   const [reminderTemplate, setReminderTemplate] = useState('appointment'); // appointment | followUp | custom
   const [customMessage, setCustomMessage] = useState('');
 
-  // Load leads from LocalStorage or seed defaults
+  // Load leads from LocalStorage or seed defaults when authenticated
   useEffect(() => {
+    if (!isOpen || !isAuthenticated) return;
     const storedLeads = localStorage.getItem('manodaya_crm_leads');
     if (storedLeads) {
       try {
         setLeads(JSON.parse(storedLeads));
-      } catch (e) {
+      } catch {
         setLeads(INITIAL_CRM_LEADS);
       }
     } else {
       localStorage.setItem('manodaya_crm_leads', JSON.stringify(INITIAL_CRM_LEADS));
       setLeads(INITIAL_CRM_LEADS);
     }
-  }, [isOpen]);
+  }, [isOpen, isAuthenticated]);
 
   if (!isOpen) return null;
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const validPass = import.meta.env.VITE_CRM_ADMIN_PASSCODE || localStorage.getItem('manodaya_crm_passcode') || '1234';
+    if (passcode.trim() === validPass.trim()) {
+      setIsAuthenticated(true);
+      setPasscodeError(false);
+    } else {
+      setPasscodeError(true);
+    }
+  };
 
   // Filtered leads calculation
   const filteredLeads = leads.filter(lead => {
@@ -77,16 +89,50 @@ export const CrmDashboard = ({ isOpen, onClose }) => {
   const handleTriggerWhatsApp = (lead) => {
     const cleanPhone = lead.phone.replace(/[^0-9]/g, '');
     const message = encodeURIComponent(getWhatsAppMessage(lead));
-    window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
+    window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank', 'noopener,noreferrer');
     setActiveReminderLead(null);
   };
 
   const handleTriggerEmail = (lead) => {
     const subject = encodeURIComponent(`MANODAYA Appointment Reminder - ${lead.service}`);
     const body = encodeURIComponent(getWhatsAppMessage(lead));
-    window.open(`mailto:${lead.email}?subject=${subject}&body=${body}`, '_blank');
+    window.open(`mailto:${lead.email}?subject=${subject}&body=${body}`, '_blank', 'noopener,noreferrer');
     setActiveReminderLead(null);
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="modal-overlay" style={{ zIndex: 2500 }}>
+        <div className="modal-content" style={{ maxWidth: '440px', width: '90%', padding: '36px', textAlign: 'center', background: '#FFFDF9' }}>
+          <button className="modal-close-btn" onClick={onClose}>
+            <X size={20} />
+          </button>
+          <div style={{ width: '56px', height: '56px', borderRadius: '50%', backgroundColor: '#EDE9FE', color: '#8A4FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px auto' }}>
+            <Lock size={28} />
+          </div>
+          <h3 style={{ fontSize: '1.4rem', fontWeight: 900, marginBottom: '8px' }}>Staff CRM Access</h3>
+          <p style={{ color: '#64748B', fontSize: '0.875rem', marginBottom: '20px' }}>Enter staff passcode to access patient leads.</p>
+          <form onSubmit={handleLogin}>
+            <input 
+              type="password" 
+              className="form-input" 
+              placeholder="Enter passcode" 
+              value={passcode} 
+              onChange={(e) => setPasscode(e.target.value)}
+              style={{ marginBottom: '12px', textAlign: 'center', fontSize: '1.1rem', letterSpacing: '4px' }}
+            />
+            {passcodeError && (
+              <p style={{ color: '#EF4444', fontSize: '0.813rem', marginBottom: '12px' }}>Incorrect passcode. Please try again.</p>
+            )}
+            <button type="submit" className="btn-black" style={{ width: '100%' }}>
+              Unlock Dashboard
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div className="modal-overlay" style={{ zIndex: 2500 }}>

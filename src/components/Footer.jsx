@@ -198,7 +198,7 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
               <a 
                 href="https://pixelexcellence.online" 
                 target="_blank" 
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 style={{ 
                   color: '#FFD166', 
                   fontWeight: 800, 
@@ -243,13 +243,14 @@ export const Footer = ({ currentMode, onOpenBooking, onOpenCrm }) => {
 
           <a 
             href="https://wa.me/917328834045?text=Hello%20MANODAYA,%20I%20would%20like%20to%20book%20an%20appointment."
-            target="_blank"
-            rel="noreferrer"
+            target="_blank" 
+            rel="noopener noreferrer"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: '#25D366', fontSize: '0.75rem', fontWeight: 700 }}
           >
             <MessageSquare size={20} color="#25D366" />
             <span>WhatsApp</span>
           </a>
+
 
           <button 
             onClick={onOpenBooking}

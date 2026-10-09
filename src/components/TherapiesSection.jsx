@@ -63,6 +63,7 @@ export const TherapiesSection = ({ currentMode, onSelectTherapy }) => {
               }}
             >
               <div>
+                <div style={{ marginBottom: '16px' }}>
                   <span 
                     className="badge-status" 
                     style={{ 

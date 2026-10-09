@@ -359,3 +359,45 @@ export const INITIAL_CRM_LEADS = [
     createdAt: "26/07/2026, 02:15 PM"
   }
 ];
+
+export const INITIAL_WORKSHOPS = [
+  {
+    id: "ws-101",
+    title: "Clinical Neuropsychology & Battery Administration Masterclass",
+    date: "15th August 2026",
+    time: "10:00 AM - 04:00 PM",
+    mode: "In-Person (Bhubaneswar Clinic)",
+    instructor: "Dr. Certified Neuropsychologist",
+    fee: "₹2,500",
+    seats: "15 Seats",
+    description: "Hands-on training in administering NIMHANS Battery, WISC-V, VSMS, and reporting clinical formulations for psychology students."
+  },
+  {
+    id: "ws-102",
+    title: "Pediatric Autism Screening Practicum",
+    date: "28th August 2026",
+    time: "02:00 PM - 06:00 PM",
+    mode: "Hybrid / Live Interactive",
+    instructor: "Senior Clinical Child Psychologist",
+    fee: "₹1,800",
+    seats: "20 Seats",
+    description: "Diagnostic screening protocols, behavioral observations, and CARS-2 scoring workshops for child developmental assessments."
+  }
+];
+
+export const SERVICE_DESCRIPTIONS = {
+  "ADHD & Attention Assessment": "Standardized 3-session clinical focus & hyperactivity profiling using Vanderbilt & Conners batteries.",
+  "Autism Spectrum Assessment / Screening": "Diagnostic social communication & sensory screening using ADOS-2, CARS-2, and SCQ batteries.",
+  "IQ & Developmental (DQ) Assessment": "Cognitive capacity profiling and developmental quotient evaluation for toddlers, children, and teens.",
+  "Specific Learning Disability Assessment": "Diagnostic evaluation for Dyslexia, Dysgraphia, and Dyscalculia with academic accommodation reporting.",
+  "Comprehensive Neuropsychological Assessment": "Detailed profiling of brain-behavior relationships, memory systems, executive functions, and spatial skills.",
+  "Cognitive Behaviour Therapy (CBT)": "Structured therapy targeting unhelpful thought patterns, behavioral activation, and anxiety reduction.",
+  "Dialectical Behaviour Therapy (DBT)": "Mindfulness-based emotional regulation, distress tolerance, and interpersonal effectiveness modules.",
+  "Post-Stroke Cognitive Rehabilitation": "Targeted restorative retraining for processing speed, executive planning, spatial neglect, and memory recovery.",
+  "Dementia & MCI Screening": "Early identification of age-related memory decline, Alzheimer's risk factors, and MoCA/ACE-III screening.",
+  "Support Group Registration": "Facilitated peer group circles fostering unmasking, shared coping strategies, and community support.",
+  "Psychology Internship Application": "Structured clinical observerships, case formulations, psychometric battery training, and certificates for students.",
+  "General Consultation & Guidance": "One-on-one intake consultation to determine appropriate assessment battery or therapeutic intervention."
+};
+
+
