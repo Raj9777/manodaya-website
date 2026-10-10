@@ -7,7 +7,7 @@ import { INITIAL_CRM_LEADS, INITIAL_WORKSHOPS } from '../data/content';
 import { db } from '../firebase';
 import {
   collection, doc, setDoc, deleteDoc, onSnapshot,
-  updateDoc, addDoc, query, orderBy
+  updateDoc, addDoc, getDoc, query, orderBy
 } from 'firebase/firestore';
 
 export const FullCrmDashboard = ({ onNavigateHome }) => {
@@ -15,6 +15,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
   const [passcode, setPasscode] = useState('');
   const [currentSavedPasscode, setCurrentSavedPasscode] = useState('1234');
   const [passcodeError, setPasscodeError] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [firebaseOnline, setFirebaseOnline] = useState(true);
 
   const [activeTab, setActiveTab] = useState('patients');
@@ -35,10 +36,22 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
   const [passcodeForm, setPasscodeForm] = useState({ currentPass: '', newPass: '', confirmPass: '' });
   const [passcodeNotice, setPasscodeNotice] = useState({ type: '', msg: '' });
 
-  // Passcode from localStorage as local fallback
+  // Sync latest passcode from Firestore Cloud on mount (with localStorage fallback)
   useEffect(() => {
     const savedPass = localStorage.getItem('manodaya_crm_passcode') || '1234';
     setCurrentSavedPasscode(savedPass);
+
+    getDoc(doc(db, 'settings', 'auth'))
+      .then((snap) => {
+        if (snap.exists() && snap.data()?.passcode) {
+          const cloudPass = snap.data().passcode;
+          setCurrentSavedPasscode(cloudPass);
+          localStorage.setItem('manodaya_crm_passcode', cloudPass);
+        }
+      })
+      .catch((err) => {
+        console.warn('Firestore cloud passcode fetch notice:', err.message);
+      });
   }, []);
 
   // ─── Firestore Real-Time Listeners (Authenticated Session Only) ───────────
@@ -127,10 +140,24 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
     };
   }, [isAuthenticated]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const envPasscode = import.meta.env.VITE_CRM_ADMIN_PASSCODE;
-    const validPass = envPasscode || currentSavedPasscode || '1234';
+    setIsLoggingIn(true);
+    let validPass = import.meta.env.VITE_CRM_ADMIN_PASSCODE || currentSavedPasscode || '1234';
+
+    // Verify against freshest cloud passcode in Firestore
+    try {
+      const snap = await getDoc(doc(db, 'settings', 'auth'));
+      if (snap.exists() && snap.data()?.passcode) {
+        validPass = snap.data().passcode;
+        setCurrentSavedPasscode(validPass);
+        localStorage.setItem('manodaya_crm_passcode', validPass);
+      }
+    } catch (err) {
+      console.warn('Offline fallback during passcode login:', err.message);
+    } finally {
+      setIsLoggingIn(false);
+    }
 
     if (passcode.trim() === validPass.trim()) {
       setIsAuthenticated(true);
@@ -139,6 +166,7 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
       setPasscodeError(true);
     }
   };
+
 
 
   // ─── Update Lead Status (Firestore + localStorage fallback) ───────────────
@@ -537,7 +565,9 @@ export const FullCrmDashboard = ({ onNavigateHome }) => {
                 style={{ width: '100%', padding: '14px 18px', borderRadius: '14px', border: passcodeError ? '2px solid #EF4444' : '1.5px solid #475569', backgroundColor: '#0F172A', color: '#FFFFFF', fontSize: '1rem', textAlign: 'center', letterSpacing: '0.2em' }} />
               {passcodeError && <div style={{ color: '#EF4444', fontSize: '0.813rem', marginTop: '6px', fontWeight: 600 }}>Incorrect Passcode. Contact administrator.</div>}
             </div>
-            <button className="btn-purple" type="submit" style={{ width: '100%', padding: '14px', borderRadius: '14px' }}>Unlock Dashboard</button>
+            <button className="btn-purple" type="submit" disabled={isLoggingIn} style={{ width: '100%', padding: '14px', borderRadius: '14px', opacity: isLoggingIn ? 0.7 : 1, cursor: isLoggingIn ? 'wait' : 'pointer' }}>
+              {isLoggingIn ? 'Checking Passcode...' : 'Unlock Dashboard'}
+            </button>
           </form>
           <button onClick={onNavigateHome} style={{ marginTop: '20px', color: '#94A3B8', fontSize: '0.813rem', display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', cursor: 'pointer' }}>
             <Home size={14} /> Back to Website

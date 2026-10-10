@@ -3,6 +3,8 @@ import {
   ShieldCheck, Search, MessageSquare, Mail, RefreshCw, X, Trash2, Lock, Calendar, Send
 } from 'lucide-react';
 import { INITIAL_CRM_LEADS } from '../data/content';
+import { db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 export const CrmDashboard = ({ isOpen, onClose }) => {
   const [passcode, setPasscode] = useState('');
@@ -36,9 +38,19 @@ export const CrmDashboard = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const validPass = import.meta.env.VITE_CRM_ADMIN_PASSCODE || localStorage.getItem('manodaya_crm_passcode') || '1234';
+    let validPass = import.meta.env.VITE_CRM_ADMIN_PASSCODE || localStorage.getItem('manodaya_crm_passcode') || '1234';
+    try {
+      const snap = await getDoc(doc(db, 'settings', 'auth'));
+      if (snap.exists() && snap.data()?.passcode) {
+        validPass = snap.data().passcode;
+        localStorage.setItem('manodaya_crm_passcode', validPass);
+      }
+    } catch {
+      // offline fallback
+    }
+
     if (passcode.trim() === validPass.trim()) {
       setIsAuthenticated(true);
       setPasscodeError(false);
@@ -46,6 +58,7 @@ export const CrmDashboard = ({ isOpen, onClose }) => {
       setPasscodeError(true);
     }
   };
+
 
   // Filtered leads calculation
   const filteredLeads = leads.filter(lead => {
